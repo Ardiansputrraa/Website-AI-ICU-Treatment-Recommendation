@@ -6,6 +6,9 @@ module.exports = {
     "./app/static/src/**/*.js",   
     "./node_modules/flowbite/**/*.js", 
   ],
+  daisyui: {
+    themes: [],
+  },
   theme: {
     extend: {},
   },
