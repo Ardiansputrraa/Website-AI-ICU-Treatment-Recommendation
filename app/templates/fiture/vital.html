@@ -1,0 +1,296 @@
+<!-- Vitals -->
+<section
+  class="col-span-1 md:col-span-2 lg:col-span-1 dark:bg-gray-900 bg-white p-4 rounded-lg"
+>
+  <!-- Heart Rate -->
+  <div class="mb-2">
+    <!-- Ikon dan Judul -->
+    <div class="flex items-center justify-between mb-4">
+      <!-- Tambahkan ikon MDI -->
+      <div class="flex flex-col items-start">
+        <i class="mdi mdi-heart-pulse text-4xl text-red-500"></i>
+        <p class="text-[12px] mt-2 text-gray-900 dark:text-gray-200">
+          HEART RATE
+        </p>
+      </div>
+
+      <!-- Value -->
+      <div class="flex items-baseline">
+        <p
+          class="text-4xl font-bold text-black dark:text-white"
+          id="heart-rate-value"
+        >
+          60
+        </p>
+        <p class="text-sm text-black dark:text-white ml-1">bpm</p>
+      </div>
+    </div>
+    <!-- Grafik -->
+    <div>
+      <canvas id="heartRate" class="w-full h-40"></canvas>
+    </div>
+  </div>
+
+  <!-- Oxygen Saturation -->
+  <div class="mb-2">
+    <!-- Ikon dan Judul -->
+    <div class="flex items-center justify-between mb-4">
+      <!-- Tambahkan ikon MDI -->
+      <div class="flex flex-col items-start">
+        <i class="mdi mdi-heart-plus-outline text-4xl text-red-500"></i>
+        <p class="text-[12px] mt-2 text-gray-900 dark:text-gray-200">
+          OXYGEN SATURATION
+        </p>
+      </div>
+
+      <!-- Value -->
+      <div class="flex items-baseline">
+        <p
+          class="text-4xl font-bold text-black dark:text-white"
+          id="heart-rate-value"
+        >
+          60
+        </p>
+        <p class="text-sm text-black dark:text-white ml-1">%</p>
+      </div>
+    </div>
+    <!-- Grafik -->
+    <div>
+      <canvas id="oxygenSaturation" class="w-full h-40"></canvas>
+    </div>
+  </div>
+
+  <!-- Respiratory Rate -->
+  <div class="mb-2">
+    <!-- Ikon dan Judul -->
+    <div class="flex items-center justify-between mb-4">
+      <!-- Tambahkan ikon MDI -->
+      <div class="flex flex-col items-start">
+        <i class="mdi mdi-lungs text-4xl text-red-500"></i>
+        <p class="text-[12px] mt-2 text-gray-900 dark:text-gray-200">
+          RESPIRATORY RATE
+        </p>
+      </div>
+      <!-- Value -->
+      <div class="flex items-baseline">
+        <p
+          class="text-4xl font-bold text-black dark:text-white"
+          id="heart-rate-value"
+        >
+          60
+        </p>
+        <p class="text-sm text-black dark:text-white ml-1">rpm</p>
+      </div>
+    </div>
+    <!-- Grafik -->
+    <div>
+      <canvas id="respiratoryRate" class="w-full h-40"></canvas>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Waktu untuk pembaruan data
+  let time = 0;
+
+  function generateHeartRateWaveform(t) {
+    const baseline = 75; // Rata-rata heart rate normal (bpm)
+    const amplitude = 5; // Fluktuasi kecil di sekitar baseline (5 bpm)
+    const frequency = 0.1; // Frekuensi gelombang lambat (1 siklus dalam 10 detik)
+    const smoothFactor = 0.02; // Faktor pergerakan yang halus untuk perubahan grafik
+    const noise = Math.random() * 0.5 - 0.25; // Variasi kecil (noise) untuk membuat grafik alami
+
+    // Membuat gelombang sinusoidal dengan pergerakan yang halus
+    const heartRate = baseline + amplitude * Math.sin(frequency * t) + noise;
+
+    // Menjaga pergerakan naik turun dengan transisi yang stabil
+    const smoothHeartRate =
+      heartRate * (1 - smoothFactor) + baseline * smoothFactor;
+
+    // Memastikan nilai berada di rentang yang wajar (50-120 bpm)
+    return Math.min(Math.max(smoothHeartRate, 50), 120);
+  }
+
+  // Fungsi untuk menghasilkan data Oxygen Saturation waveform
+  function generateOxygenSaturationWaveform(t) {
+    // Sesuaikan amplitudo, baseline, dan frekuensi
+    const amplitude = 2;
+    const baseline = 98;
+    const frequency = 0.2;
+    const noise = Math.random() * 0.5 - 0.25;
+
+    // Hubungkan fase dengan heart rate untuk sinkronisasi
+    return baseline + amplitude * Math.sin(frequency * t + Math.PI / 2) + noise;
+  }
+
+  // Fungsi untuk menghasilkan data Respiratory Rate waveform
+  function generateRespiratoryRateWaveform(t) {
+    const amplitude = 2; // Sesuaikan amplitudo
+    const baseline = 20; // Sesuaikan baseline
+    const frequency = 0.1; // Sesuaikan frekuensi
+    const noise = Math.random() * 1 - 0.5; // Noise acak
+
+    return baseline + amplitude * Math.sin(frequency * t) + noise;
+  }
+
+  function initializeChart() {
+    const heartRateCtx = document.getElementById("heartRate").getContext("2d");
+    const heartRateChart = new Chart(heartRateCtx, {
+      type: "line",
+      data: {
+        labels: Array.from({ length: 100 }, () => ""), // Label kosong
+        datasets: [
+          {
+            borderColor: "#9933FF",
+            borderWidth: 2,
+            fill: false,
+            tension: 0.4,
+            data: Array.from({ length: 100 }, (_, i) =>
+              generateHeartRateWaveform(i)
+            ),
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        animation: false,
+        plugins: {
+          legend: { display: false },
+        },
+        scales: {
+          x: { display: false },
+          y: { display: false },
+        },
+        elements: {
+          point: { radius: 0 },
+        },
+      },
+    });
+
+    const oxygenSaturationCtx = document
+      .getElementById("oxygenSaturation")
+      .getContext("2d");
+    const oxygenSaturationChart = new Chart(oxygenSaturationCtx, {
+      type: "line",
+      data: {
+        labels: Array.from({ length: 100 }, () => ""),
+        datasets: [
+          {
+            borderColor: "#9933FF",
+            borderWidth: 2,
+            fill: false,
+            tension: 0.4,
+            data: Array.from({ length: 100 }, (_, i) =>
+              generateOxygenSaturationWaveform(i)
+            ),
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        animation: false,
+        plugins: {
+          legend: { display: false },
+        },
+        scales: {
+          x: { display: false },
+          y: { display: false },
+        },
+        elements: {
+          point: { radius: 0 },
+        },
+      },
+    });
+
+    const respiratoryRateCtx = document
+      .getElementById("respiratoryRate")
+      .getContext("2d");
+    const respiratoryRateChart = new Chart(respiratoryRateCtx, {
+      type: "line",
+      data: {
+        labels: Array.from({ length: 100 }, () => ""),
+        datasets: [
+          {
+            borderColor: "#9933FF",
+            fill: false,
+            tension: 0.4,
+            data: Array.from({ length: 100 }, (_, i) =>
+              generateRespiratoryRateWaveform(i)
+            ),
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        animation: false,
+        plugins: {
+          legend: { display: false },
+        },
+        scales: {
+          x: { display: false },
+          y: { display: false },
+        },
+        elements: {
+          point: { radius: 0 },
+        },
+      },
+    });
+
+    return {
+      heartRateChart,
+      oxygenSaturationChart,
+      respiratoryRateChart,
+    };
+  }
+
+  window.onload = () => {
+    const { heartRateChart, oxygenSaturationChart, respiratoryRateChart } =
+      initializeChart();
+
+    // Cek apakah data sebelumnya ada di localStorage
+    let storedHeartRate =
+      JSON.parse(localStorage.getItem("heartRateData")) || [];
+    let storedOxygenSaturation =
+      JSON.parse(localStorage.getItem("oxygenSaturationData")) || [];
+    let storedRespiratoryRate =
+      JSON.parse(localStorage.getItem("respiratoryRateData")) || [];
+
+    // Update data setiap 100ms
+    setInterval(() => {
+      const heartRate = generateHeartRateWaveform(time++);
+      storedHeartRate.push(heartRate);
+      if (storedHeartRate.length > 100) {
+        storedHeartRate.shift(); // Menghapus data tertua
+      }
+      heartRateChart.data.datasets[0].data = storedHeartRate;
+      heartRateChart.update();
+
+      const oxygenSaturation = generateOxygenSaturationWaveform(time++);
+      storedOxygenSaturation.push(oxygenSaturation);
+      if (storedOxygenSaturation.length > 100) {
+        storedOxygenSaturation.shift(); // Menghapus data tertua
+      }
+      oxygenSaturationChart.data.datasets[0].data = storedOxygenSaturation;
+      oxygenSaturationChart.update();
+
+      const respiratoryRate = generateRespiratoryRateWaveform(time++);
+      storedRespiratoryRate.push(respiratoryRate);
+      if (storedRespiratoryRate.length > 100) {
+        storedRespiratoryRate.shift(); // Menghapus data tertua
+      }
+      respiratoryRateChart.data.datasets[0].data = storedRespiratoryRate;
+      respiratoryRateChart.update();
+
+      // Simpan data ke localStorage
+      localStorage.setItem("heartRateData", JSON.stringify(storedHeartRate));
+      localStorage.setItem(
+        "oxygenSaturationData",
+        JSON.stringify(storedOxygenSaturation)
+      );
+      localStorage.setItem(
+        "respiratoryRateData",
+        JSON.stringify(storedRespiratoryRate)
+      );
+    }, 100);
+  };
+</script>
