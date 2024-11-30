@@ -10,4 +10,4 @@ def home():
 
 @bed_selection_.route('/login')
 def login():   
-        return render_template('auth/login.html')
+        return render_template('auth/register.html')
