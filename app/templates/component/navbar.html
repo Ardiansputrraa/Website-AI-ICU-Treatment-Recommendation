@@ -1,4 +1,6 @@
-<nav class="bg-white dark:bg-gray-900">
+<nav
+  class="bg-white dark:bg-gray-900 border-b border-cyan-300 dark:border-cyan-800"
+>
   <div
     class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
   >
@@ -19,7 +21,7 @@
     >
       <button
         type="button"
-        class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+        class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-cyan-500 dark:focus:ring-cyan-500"
         id="user-menu-button"
         aria-expanded="false"
         data-dropdown-toggle="user-dropdown"
@@ -49,38 +51,42 @@
           <li>
             <a
               href="#"
-              class="block px-4 py-2 text-sm hover:bg-blue-700 hover:text-white dark:hover:bg-cyan-900 dark:hover:text-white dark:text-gray-200"
-              >My Profile</a
+              class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-cyan-500 hover:text-white dark:hover:bg-cyan-900 dark:text-gray-200 dark:hover:text-white"
+            >
+              <i class="mdi mdi-account text-lg me-2"></i>My Profile</a
             >
           </li>
           <li>
             <a
-              href="#"
-              class="block px-4 py-2 text-sm hover:bg-blue-700 hover:text-white dark:hover:bg-cyan-900 dark:hover:text-white dark:text-gray-200"
-              >Dashboard</a
+              href="/"
+              class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-cyan-500 hover:text-white dark:hover:bg-cyan-900 dark:text-gray-200 dark:hover:text-white"
+            >
+              <i class="mdi mdi-home text-lg me-2"></i>Home</a
             >
           </li>
         </ul>
         <div class="py-2">
           <button
             type="button"
-            class="block px-4 w-full text-left py-2 text-sm text-gray-700 hover:bg-blue-700 hover:text-white dark:hover:bg-cyan-900 dark:text-gray-200 dark:hover:text-white"
+            class="flex items-center px-4 w-full py-2 text-sm text-gray-700 hover:bg-cyan-500 hover:text-white dark:hover:bg-cyan-900 dark:text-gray-200 dark:hover:text-white"
           >
+            <i class="mdi mdi-logout text-lg me-2"></i>
             Sign out
           </button>
         </div>
         <div class="py-2">
           <a
             href="#"
-            class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-700 hover:text-white dark:hover:bg-cyan-900 dark:text-gray-200 dark:hover:text-white"
-            >Sign up</a
+            class="flex items-center px-4 w-full py-2 text-sm text-gray-700 hover:bg-cyan-500 hover:text-white dark:hover:bg-cyan-900 dark:text-gray-200 dark:hover:text-white"
+          >
+            <i class="mdi mdi-logout text-lg me-2"></i>Sign up</a
           >
         </div>
       </div>
       <button
         data-collapse-toggle="navbar-user"
         type="button"
-        class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-cyan-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
         aria-controls="navbar-user"
         aria-expanded="false"
       >
@@ -116,7 +122,7 @@
             class="inline-flex items-center justify-center p-2 w-full border-b-2 border-transparent rounded-t-lg hover:text-cyan-500 group transition duration-300 ease-in-out"
             type="button"
           >
-            ICU 501
+           ICU 501
             <svg
               class="w-4 h-4 ml-2"
               aria-hidden="true"
@@ -212,7 +218,7 @@
         <li class="me-1 px-2">
           <a
             href=""
-            class="inline-flex items-center justify-center p-2 border-b-2 border-transparent rounded-t-lg  group transition duration-300 ease-in-out cursor-not-allowed"
+            class="inline-flex items-center justify-center p-2 border-b-2 border-transparent rounded-t-lg group transition duration-300 ease-in-out cursor-not-allowed"
           >
             INFORMATION
           </a>
@@ -230,7 +236,7 @@
             href=""
             class="inline-flex items-center justify-center p-2 border-b-2 border-transparent rounded-t-lg hover:border-cyan-500 hover:text-cyan-500 group transition duration-300 ease-in-out"
           >
-          PREDICTION
+            PREDICTION
           </a>
         </li>
         <li class="me-1 px-2">
@@ -266,7 +272,7 @@
             <!-- Toggle circle -->
             <div
               id="toggle-circle"
-              class="w-6 h-6 bg-blue-500 dark:bg-cyan-400 rounded-full shadow-md transform transition-all duration-300"
+              class="w-6 h-6 bg-cyan-500 rounded-full shadow-md transform transition-all duration-300"
             >
               <!-- Add icon inside the circle -->
               <svg

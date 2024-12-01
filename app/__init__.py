@@ -13,7 +13,10 @@ def create_app():
     client = MongoClient(app.config['MONGODB_URI'])
     app.db = client[app.config['DBNAME']]
     
-    from .routes.bed_selection import bed_selection_
-    app.register_blueprint(bed_selection_)
+    from .routes.auth import auth_
+    app.register_blueprint(auth_)
+    
+    from .routes.bed_selection import home_
+    app.register_blueprint(home_)
     
     return app
