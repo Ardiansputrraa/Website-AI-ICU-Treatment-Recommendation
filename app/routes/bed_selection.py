@@ -2,12 +2,26 @@ from flask import Flask, request, render_template, current_app, Blueprint, jsoni
 import pandas as pd
 import jwt
 
-bed_selection_ = Blueprint('home', __name__)
+home_ = Blueprint('home', __name__)
 
-@bed_selection_.route('/')
-def home():   
+@home_.route('/')
+def dashboard():   
+    myToken = request.cookies.get("mytoken")
+    SECRET_KEY = current_app.config['SECRET_KEY']
+    try:
+        payload = jwt.decode(myToken, SECRET_KEY, algorithms=["HS256"])
+        user_info = current_app.db.users.find_one({"email": payload["id"]})
+        return render_template('main/bed-selection.html', user_info=user_info)
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("auth.sign_in", msg="Login time has expired!"))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("auth.sign_in", msg="Please login first!"))
+    
+
+@home_.route('/index')
+def index():   
         return render_template('main/index.html')
 
-@bed_selection_.route('/login')
+@home_.route('/login')
 def login():   
-        return render_template('auth/register.html')
+        return render_template('main/bed-selection.html')

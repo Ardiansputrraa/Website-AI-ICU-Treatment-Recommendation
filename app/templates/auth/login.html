@@ -3,7 +3,84 @@
   <head>
     {% include 'component/header.html'%}
 
-    
+    <script>
+      function login() {
+        let email = $("#email").val();
+        let password = $("#password").val();
+        if (email === "") {
+          $("#helpEmail")
+            .text("Please enter your email!")
+            .removeClass("is-safe")
+            .addClass("is-danger");
+          $("#email").focus();
+          return;
+        } else {
+          $("#helpEmail").text("").removeClass("is-safe").addClass("is-danger");
+        }
+        if (password === "") {
+          $("#helpPassword")
+            .text("Please enter password!")
+            .removeClass("is-safe")
+            .addClass("is-danger");
+          $("#password").focus();
+          return;
+        } else {
+          $("#helpPassword")
+            .text("")
+            .removeClass("is-safe")
+            .addClass("is-danger");
+        }
+        $.ajax({
+          type: "POST",
+          url: "/sign-in/check",
+          data: {
+            email: email,
+            password: password,
+          },
+          success: function (response) {
+            if (response["result"] === "success") {
+              Swal.fire({
+                title: "Login Succsess!",
+                text: "Login successfully!",
+                icon: "success",
+                confirmButtonText: "Oke",
+                customClass: {
+                  title: "text-xl font-bold text-black dark:text-white",
+                  content: "text-sm text-gray-700 dark:text-white",
+                  confirmButton:
+                    "px-6 py-2 rounded-lg text-white bg-cyan-500 hover:bg-blue-700 focus:outline-none dark:bg-cyan-900 dark:hover:bg-cyan-600 dark:focus:ring-cyan-900 dark:hover:text-white",
+                  popup:
+                    "bg-gray-100 dark:bg-gray-900 border-none rounded-lg shadow-lg",
+                },
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    document.cookie = "mytoken=" + response["token"] + "; path=/";
+                    window.location.replace("/bed-selection");
+                }
+              });
+            } else {
+              Swal.fire({
+                title: "Login Failed!",
+                text: response["msg"],
+                icon: "error",
+                confirmButtonText: "Oke",
+                customClass: {
+                  title: "text-xl font-bold text-black dark:text-white",
+                  content: "text-sm text-gray-700 dark:text-white",
+                  confirmButton:
+                    "px-6 py-2 rounded-lg text-white bg-cyan-500 hover:bg-blue-700 focus:outline-none dark:bg-cyan-900 dark:hover:bg-cyan-600 dark:focus:ring-cyan-900 dark:hover:text-white",
+                  popup:
+                    "bg-gray-100 dark:bg-gray-900 border-none rounded-lg shadow-lg",
+                },
+              }).then((result) => {
+                if (result.isConfirmed) {
+                }
+              });
+            }
+          },
+        });
+      }
+    </script>
     
   </head>
   <body>
