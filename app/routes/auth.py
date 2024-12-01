@@ -78,6 +78,30 @@ def sign_up_save():
         
     return jsonify({'exists': exists})
 
+@auth_.route('/forget-password-check', methods=["POST"])
+def forget_password_check():
+    email = request.form['email']
+    password = request.form['password']
+    password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+    
+    doc = {      
+        "email": email,                
+        "password": password_hash,                                                          
+    }
+    exists = bool(current_app.db.users.find_one({"email": email}))
+    if exists:
+        current_app.db.users.update_one(
+            {"email": email},  
+            {"$set": {"password": password_hash}}  
+        )
+        return jsonify({'result': 'success', 'msg': 'Password successfully changed!'})
+        
+    return jsonify({'result': 'failed', 'msg': 'Email does not match!'})
+    
+@auth_.route('/forget-password')
+def forget_password():
+    return render_template('auth/forget-password.html')
+
 @auth_.route("/logout", methods=["DELETE"])
 def logout():
     try:
