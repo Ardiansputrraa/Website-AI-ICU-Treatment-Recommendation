@@ -2,6 +2,194 @@
 <html lang="en">
   <head>
     {% include 'component/header.html'%}
+
+    <script>
+      function is_nickname(asValue) {
+        var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
+        return regExp.test(asValue);
+      }
+
+      function is_password(asValue) {
+        let regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
+        return regExp.test(asValue);
+      }
+
+      function register() {
+        let username = $("#username").val();
+        let email = $("#email").val();
+        let password = $("#password").val();
+        let confirmPassword = $("#confirmPassword").val();
+        let isChecked = $("#checkInput").prop("checked");
+
+        if (username === "") {
+          $("#helpUsername")
+            .text("Please enter your username!")
+            .removeClass("is-safe")
+            .addClass("is-danger");
+          $("#username").focus();
+          return;
+        }
+
+        if (username != "") {
+          $("#helpUsername")
+            .text("")
+            .removeClass("is-safe")
+            .addClass("is-danger");
+        }
+
+        if (email === "") {
+          $("#helpEmail")
+            .text("Please enter your email!")
+            .removeClass("is-safe")
+            .addClass("is-danger");
+          $("#email").focus();
+          return;
+        }
+
+        if (email != "") {
+          $("#helpEmail").text("").removeClass("is-safe").addClass("is-danger");
+        }
+
+        if (is_nickname(email)) {
+          $("#helpEmail")
+            .text("Please enter your email!")
+            .removeClass("is-safe")
+            .addClass("is-danger");
+          $("#email").focus();
+          return;
+        }
+
+        if (password === "") {
+          $("#helpPassword")
+            .text("Please enter your password!")
+            .removeClass("is-safe")
+            .addClass("is-danger");
+          $("#password").focus();
+          return;
+        }
+
+        if (password != "") {
+          $("#helpPassword")
+            .text("")
+            .removeClass("is-safe")
+            .addClass("is-danger");
+        }
+
+        if (!is_password(password)) {
+          $("#helpPassword")
+            .text(
+              "Password must be 8-20 characters, numbers, or special characters (!@#$%^&*)!"
+            )
+            .removeClass("is-safe")
+            .addClass("is-danger");
+          $("#password").focus();
+          return;
+        }
+
+        if (confirmPassword === "") {
+          $("#helpConfirmPassword")
+            .text("Please enter Confirm Password!")
+            .removeClass("is-safe")
+            .addClass("is-danger");
+          $("#confirmPassword").focus();
+          return;
+        }
+
+        if (confirmPassword != "") {
+          $("#helpConfirmPassword")
+            .text("")
+            .removeClass("is-safe")
+            .addClass("is-danger");
+        }
+
+        if (confirmPassword != password) {
+          $("#helpConfirmPassword")
+            .text("Password does not match!")
+            .removeClass("is-safe")
+            .addClass("is-danger");
+          $("#confirmPassword").focus();
+          return;
+        }
+
+        if (!isChecked) {
+          Swal.fire({
+            icon: "info",
+            title: "",
+            text: "Please click agree to terms & conditions",
+            confirmButtonText: "Oke",
+            customClass: {
+              title: "text-xl font-bold text-black dark:text-white",
+              content: "text-sm text-gray-700 dark:text-white",
+              confirmButton:
+                "px-6 py-2 rounded-lg text-white bg-cyan-500 hover:bg-cyan-600 focus:outline-none dark:bg-cyan-900 dark:hover:bg-cyan-600 dark:focus:ring-cyan-900 dark:hover:text-white",
+              popup:
+                "bg-gray-100 dark:bg-gray-900 border-none rounded-lg shadow-lg",
+            },
+          }).then(() => {
+            if (result.isConfirmed) {
+              return;
+            }
+          });
+          return;
+        }
+
+        $.ajax({
+          type: "POST",
+          url: "/sign-up/save",
+          data: {
+            username: username,
+            email: email,
+            password: password,
+          },
+          success: function (response) {
+            console.log(response["exists"]);
+            if (response["exists"]) {
+              Swal.fire({
+                title: "Register Failed!",
+                text: "Email has been used!",
+                icon: "info",
+                confirmButtonText: "Oke",
+                customClass: {
+                  title: "text-xl font-bold text-black dark:text-white",
+                  content: "text-sm text-gray-700 dark:text-white",
+                  confirmButton:
+                    "px-6 py-2 rounded-lg text-white bg-cyan-500 hover:bg-cyan-600 focus:outline-none dark:bg-cyan-900 dark:hover:bg-cyan-600 dark:focus:ring-cyan-900 dark:hover:text-white",
+                  popup:
+                    "bg-gray-100 dark:bg-gray-900 border-none rounded-lg shadow-lg",
+                },
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  $("#helpEmail")
+                    .text("Email has been used!")
+                    .removeClass("is-safe")
+                    .addClass("is-danger");
+                  $("#email").focus();
+                }
+              });
+            } else {
+              Swal.fire({
+                title: "Register Success",
+                text: `Account created successfully Username "${email}" Password "${password}"`,
+                icon: "success",
+                confirmButtonText: "Oke",
+                customClass: {
+                  title: "text-xl font-bold text-black dark:text-white",
+                  content: "text-sm text-gray-700 dark:text-white",
+                  confirmButton:
+                    "px-6 py-2 rounded-lg text-white bg-cyan-500 hover:bg-cyan-600 focus:outline-none dark:bg-cyan-900 dark:hover:bg-cyan-600 dark:focus:ring-cyan-900 dark:hover:text-white",
+                  popup:
+                    "bg-gray-100 dark:bg-gray-900 border-none rounded-lg shadow-lg",
+                },
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.replace("/sign-up");
+                }
+              });
+            }
+          },
+        });
+      }
+    </script>
   </head>
   <body>
     <div
@@ -135,7 +323,7 @@
             </button>
             <button
               type="button"
-              onclick="window.location.replace('/bed-selection')"
+              onclick="window.history.back()"
               class="w-full sm:w-auto text-cyan-500 border border-cyan-500 hover:border-cyan-700 hover:text-cyan-700 focus:ring-4 focus:outline-none focus:ring-cyan-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-cyan-700 dark:hover:text-cyan-500 dark:border-cyan-700 dark:hover:border-cyan-500 dark:focus:ring-cyan-700"
             >
               Back to menu

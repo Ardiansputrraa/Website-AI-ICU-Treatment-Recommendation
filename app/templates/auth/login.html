@@ -48,14 +48,14 @@
                   title: "text-xl font-bold text-black dark:text-white",
                   content: "text-sm text-gray-700 dark:text-white",
                   confirmButton:
-                    "px-6 py-2 rounded-lg text-white bg-cyan-500 hover:bg-blue-700 focus:outline-none dark:bg-cyan-900 dark:hover:bg-cyan-600 dark:focus:ring-cyan-900 dark:hover:text-white",
+                    "px-6 py-2 rounded-lg text-white bg-cyan-500 hover:bg-cyan-600 focus:outline-none dark:bg-cyan-900 dark:hover:bg-cyan-600 dark:focus:ring-cyan-900 dark:hover:text-white",
                   popup:
                     "bg-gray-100 dark:bg-gray-900 border-none rounded-lg shadow-lg",
                 },
               }).then((result) => {
                 if (result.isConfirmed) {
                     document.cookie = "mytoken=" + response["token"] + "; path=/";
-                    window.location.replace("/bed-selection");
+                    window.location.assign("/");
                 }
               });
             } else {
@@ -68,7 +68,7 @@
                   title: "text-xl font-bold text-black dark:text-white",
                   content: "text-sm text-gray-700 dark:text-white",
                   confirmButton:
-                    "px-6 py-2 rounded-lg text-white bg-cyan-500 hover:bg-blue-700 focus:outline-none dark:bg-cyan-900 dark:hover:bg-cyan-600 dark:focus:ring-cyan-900 dark:hover:text-white",
+                    "px-6 py-2 rounded-lg text-white bg-cyan-500 hover:bg-cyan-600 focus:outline-none dark:bg-cyan-900 dark:hover:bg-cyan-600 dark:focus:ring-cyan-900 dark:hover:text-white",
                   popup:
                     "bg-gray-100 dark:bg-gray-900 border-none rounded-lg shadow-lg",
                 },

@@ -21,7 +21,7 @@
     >
       <button
         type="button"
-        class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-cyan-500 dark:focus:ring-cyan-500"
+        class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-cyan-500 dark:focus:ring-cyan-700"
         id="user-menu-button"
         aria-expanded="false"
         data-dropdown-toggle="user-dropdown"
@@ -68,6 +68,7 @@
         <div class="py-2">
           <button
             type="button"
+            onclick="logout()"
             class="flex items-center px-4 w-full py-2 text-sm text-gray-700 hover:bg-cyan-500 hover:text-white dark:hover:bg-cyan-900 dark:text-gray-200 dark:hover:text-white"
           >
             <i class="mdi mdi-logout text-lg me-2"></i>
@@ -76,10 +77,10 @@
         </div>
         <div class="py-2">
           <a
-            href="#"
+            href="/sign-up"
             class="flex items-center px-4 w-full py-2 text-sm text-gray-700 hover:bg-cyan-500 hover:text-white dark:hover:bg-cyan-900 dark:text-gray-200 dark:hover:text-white"
           >
-            <i class="mdi mdi-logout text-lg me-2"></i>Sign up</a
+            <i class="mdi mdi-account-plus-outline text-lg me-2"></i>Sign up</a
           >
         </div>
       </div>
@@ -122,7 +123,7 @@
             class="inline-flex items-center justify-center p-2 w-full border-b-2 border-transparent rounded-t-lg hover:text-cyan-500 group transition duration-300 ease-in-out"
             type="button"
           >
-           ICU 501
+            ICU 501
             <svg
               class="w-4 h-4 ml-2"
               aria-hidden="true"
@@ -299,3 +300,19 @@
     </div>
   </div>
 </nav>
+<script>
+  function logout() {
+    $.ajax({
+      url: "/logout",
+      type: "DELETE",
+      success: function (response) {
+        document.cookie =
+          "mytoken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        window.location.href = "/";
+      },
+      error: function (xhr, status, error) {
+        console.error(error);
+      },
+    });
+  }
+</script>

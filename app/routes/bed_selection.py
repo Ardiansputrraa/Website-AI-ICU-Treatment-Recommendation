@@ -5,7 +5,7 @@ import jwt
 home_ = Blueprint('home', __name__)
 
 @home_.route('/')
-def dashboard():   
+def home():   
     myToken = request.cookies.get("mytoken")
     SECRET_KEY = current_app.config['SECRET_KEY']
     try:
