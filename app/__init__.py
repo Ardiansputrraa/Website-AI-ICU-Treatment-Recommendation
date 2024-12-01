@@ -16,6 +16,9 @@ def create_app():
     from .routes.auth import auth_
     app.register_blueprint(auth_)
     
+    from .routes.profile import profile_
+    app.register_blueprint(profile_)
+    
     from .routes.bed_selection import home_
     app.register_blueprint(home_)
     
