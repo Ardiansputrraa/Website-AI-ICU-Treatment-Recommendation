@@ -1,0 +1,41 @@
+<html>
+  <head>
+    {% include 'component/header.html'%}
+  </head>
+  <body class="dark:bg-gray-950 bg-gray-200">
+    {% include 'component/navbar.html'%}
+
+    <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 p-4">
+      <!-- Patient Detail -->
+      {% include 'fiture/detail.html'%}
+
+      <!-- Vitals -->
+      {% include 'fiture/vital.html'%}
+
+      <!-- Prediction -->
+      <section
+        class="col-span-1 md:col-span-6 lg:col-span-4 bg-slate-300 dark:bg-slate-800 p-4 rounded-lg"
+      >
+        
+      </section>
+      
+    </main>
+
+    <footer class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4">
+      <!-- History -->
+      {% include 'fiture/history.html'%}
+
+      <!-- BLOOD PRESSURE -->
+      {% include 'fiture/blood-presurre.html'%}
+
+      <!-- SOFA Score -->
+      {% include 'fiture/sofa.html'%}
+
+      <!-- GCS -->
+      {% include 'fiture/gcs.html'%}
+
+      <!-- Recommendation -->
+      {% include 'fiture/recommendation.html'%}
+    </footer>
+  </body>
+</html>

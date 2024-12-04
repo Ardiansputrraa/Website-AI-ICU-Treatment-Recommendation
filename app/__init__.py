@@ -25,4 +25,10 @@ def create_app():
     from .routes.similarity import similarity_
     app.register_blueprint(similarity_)
     
+    from .routes.prediction import prediction_
+    app.register_blueprint(prediction_)
+    
+    from .routes.vital import vital_
+    app.register_blueprint(vital_)
+    
     return app
