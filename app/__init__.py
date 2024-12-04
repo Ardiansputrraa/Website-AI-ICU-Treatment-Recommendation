@@ -22,4 +22,7 @@ def create_app():
     from .routes.bed_selection import home_
     app.register_blueprint(home_)
     
+    from .routes.similarity import similarity_
+    app.register_blueprint(similarity_)
+    
     return app
