@@ -1,60 +1,34 @@
-<!-- GCS -->
 <section
   class="bg-cyan-500 dark:bg-cyan-900 text-white p-4 rounded-lg shadow-md h-[200px] flex flex-col"
 >
-  <h2 class="text-sm font-bold text-left mb-2">Glasgow Coma Scale</h2>
-
-  <div class="flex-1 flex flex-col items-start justify-between overflow-hidden">
+  <h2 class="text-base font-bold mb-2">Similar Patients</h2>
+  <div class="flex-1 flex flex-col items-center justify-center">
     <!-- Grafik -->
-    <div class="flex-1 flex items-center justify-center w-full">
-      <canvas id="systolicBP" class="w-[90%] h-[70px]"></canvas>
-    </div>
-
-    <!-- Ikon dan Nilai di sebelah kiri -->
-    <div class="flex items-center text-left mt-2">
-      <!-- Ikon Kesadaran Diri di sebelah kiri -->
-      <div class="flex items-center justify-start mr-4">
-        <p class="text-lg font-bold text-bl">GCS Value</p>
-      </div>
-
-      <!-- Nilai Systolic BP di sebelah kiri -->
-      <div class="flex items-baseline text-white">
-        <p class="text-2xl font-bold" id="systolic-bp-value">120</p>
-      </div>
+    <div class="w-full h-[100px]">
+      <canvas id="similarPatientsGraph"></canvas>
     </div>
   </div>
+  <p class="text-xs text-center mt-2">Diagnosis for diseases and illness</p>
 </section>
 
 <script>
   $(document).ready(function () {
-    // Cek apakah data systolicBP sudah ada di localStorage
-    let systolicBPData = JSON.parse(localStorage.getItem("systolicBPData")) || [
-      120, 122, 121, 123, 119, 121, 122,
-    ];
-    let timeLabels = JSON.parse(localStorage.getItem("timeLabels")) || [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-    ];
+    // Data Dummy untuk Grafik
+    const graphData = [30, 40, 35, 45, 38, 50, 42];
+    const graphLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
 
-    // Inisialisasi Grafik Systolic BP
-    const systolicBPCtx = $("#systolicBP")[0].getContext("2d");
-    const systolicBPChart = new Chart(systolicBPCtx, {
+    // Inisialisasi Grafik
+    const ctx = $("#similarPatientsGraph")[0].getContext("2d");
+    new Chart(ctx, {
       type: "line",
       data: {
-        labels: timeLabels,
+        labels: graphLabels,
         datasets: [
           {
-            label: "Systolic BP",
-            data: systolicBPData,
-            borderColor: "#9933FF",
-            backgroundColor: "rgba(77, 136, 255, 0.1)",
-            pointRadius: 3,
-            pointBackgroundColor: "#ffffff",
+            data: graphData,
+            borderColor: "white",
+            backgroundColor: "transparent",
+            pointRadius: 0,
             tension: 0.4,
           },
         ],
@@ -66,29 +40,14 @@
           legend: { display: false },
         },
         scales: {
-          x: { display: false },
-          y: { display: false },
+          x: {
+            display: false,
+          },
+          y: {
+            display: false,
+          },
         },
       },
     });
-
-    // Fungsi Update Data
-    function updateSystolicBP() {
-      const newValue = Math.floor(Math.random() * 10) + 110; // Nilai random 110-120
-      systolicBPData.push(newValue); // Tambah data baru
-      if (systolicBPData.length > 7) systolicBPData.shift(); // Hapus data lama
-      systolicBPChart.data.datasets[0].data = systolicBPData;
-      systolicBPChart.update();
-
-      // Update nilai di UI
-      $("#systolic-bp-value").text(newValue);
-
-      // Simpan data ke localStorage
-      localStorage.setItem("systolicBPData", JSON.stringify(systolicBPData));
-      localStorage.setItem("timeLabels", JSON.stringify(timeLabels));
-    }
-
-    // Update Grafik Setiap 2 Detik
-    setInterval(updateSystolicBP, 2000);
   });
 </script>
