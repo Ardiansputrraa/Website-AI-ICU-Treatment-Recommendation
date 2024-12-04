@@ -226,7 +226,7 @@
         </li>
         <li class="me-1 px-2">
           <a
-            href=""
+            href="/similarity/{{ bed_id }}"
             class="inline-flex items-center justify-center p-2 border-b-2 border-transparent rounded-t-lg hover:border-cyan-500 hover:text-cyan-500 group transition duration-300 ease-in-out"
           >
             SIMILARITY
@@ -234,7 +234,7 @@
         </li>
         <li class="me-1 px-2">
           <a
-            href=""
+            href="/prediction/{{ bed_id }}"
             class="inline-flex items-center justify-center p-2 border-b-2 border-transparent rounded-t-lg hover:border-cyan-500 hover:text-cyan-500 group transition duration-300 ease-in-out"
           >
             PREDICTION
@@ -301,6 +301,24 @@
   </div>
 </nav>
 <script>
+  $(document).ready(function () {
+    const currentPath = window.location.pathname;
+
+    $("#navbar-user a").each(function () {
+      const href = $(this).attr("href");
+
+      if (currentPath === href) {
+        $(this)
+          .addClass("text-cyan-500 border-cyan-500")
+          .removeClass("border-transparent");
+      } else {
+        $(this)
+          .removeClass("text-cyan-500 border-cyan-500")
+          .addClass("border-transparent");
+      }
+    });
+  });
+
   function logout() {
     $.ajax({
       url: "/logout",

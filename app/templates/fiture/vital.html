@@ -47,7 +47,7 @@
       <div class="flex items-baseline">
         <p
           class="text-4xl font-bold text-black dark:text-white"
-          id="heart-rate-value"
+          id="oxygen-saturation-value"
         >
           60
         </p>
@@ -75,7 +75,7 @@
       <div class="flex items-baseline">
         <p
           class="text-4xl font-bold text-black dark:text-white"
-          id="heart-rate-value"
+          id="respiratory-rate-value"
         >
           60
         </p>
@@ -100,36 +100,25 @@
     const smoothFactor = 0.02; // Faktor pergerakan yang halus untuk perubahan grafik
     const noise = Math.random() * 0.5 - 0.25; // Variasi kecil (noise) untuk membuat grafik alami
 
-    // Membuat gelombang sinusoidal dengan pergerakan yang halus
     const heartRate = baseline + amplitude * Math.sin(frequency * t) + noise;
-
-    // Menjaga pergerakan naik turun dengan transisi yang stabil
     const smoothHeartRate =
       heartRate * (1 - smoothFactor) + baseline * smoothFactor;
-
-    // Memastikan nilai berada di rentang yang wajar (50-120 bpm)
     return Math.min(Math.max(smoothHeartRate, 50), 120);
   }
 
-  // Fungsi untuk menghasilkan data Oxygen Saturation waveform
   function generateOxygenSaturationWaveform(t) {
-    // Sesuaikan amplitudo, baseline, dan frekuensi
     const amplitude = 2;
     const baseline = 98;
     const frequency = 0.2;
     const noise = Math.random() * 0.5 - 0.25;
-
-    // Hubungkan fase dengan heart rate untuk sinkronisasi
     return baseline + amplitude * Math.sin(frequency * t + Math.PI / 2) + noise;
   }
 
-  // Fungsi untuk menghasilkan data Respiratory Rate waveform
   function generateRespiratoryRateWaveform(t) {
-    const amplitude = 2; // Sesuaikan amplitudo
-    const baseline = 20; // Sesuaikan baseline
-    const frequency = 0.1; // Sesuaikan frekuensi
-    const noise = Math.random() * 1 - 0.5; // Noise acak
-
+    const amplitude = 2;
+    const baseline = 20;
+    const frequency = 0.1;
+    const noise = Math.random() * 1 - 0.5;
     return baseline + amplitude * Math.sin(frequency * t) + noise;
   }
 
@@ -138,7 +127,7 @@
     const heartRateChart = new Chart(heartRateCtx, {
       type: "line",
       data: {
-        labels: Array.from({ length: 100 }, () => ""), // Label kosong
+        labels: Array.from({ length: 100 }, () => ""),
         datasets: [
           {
             borderColor: "#9933FF",
@@ -212,6 +201,7 @@
         datasets: [
           {
             borderColor: "#9933FF",
+            borderWidth: 2,
             fill: false,
             tension: 0.4,
             data: Array.from({ length: 100 }, (_, i) =>
@@ -247,50 +237,46 @@
     const { heartRateChart, oxygenSaturationChart, respiratoryRateChart } =
       initializeChart();
 
-    // Cek apakah data sebelumnya ada di localStorage
-    let storedHeartRate =
-      JSON.parse(localStorage.getItem("heartRateData")) || [];
-    let storedOxygenSaturation =
-      JSON.parse(localStorage.getItem("oxygenSaturationData")) || [];
-    let storedRespiratoryRate =
-      JSON.parse(localStorage.getItem("respiratoryRateData")) || [];
+    let heartRateData = Array.from({ length: 100 }, () => 60);
+    let oxygenSaturationData = Array.from({ length: 100 }, () => 98);
+    let respiratoryRateData = Array.from({ length: 100 }, () => 20);
 
-    // Update data setiap 100ms
     setInterval(() => {
-      const heartRate = generateHeartRateWaveform(time++);
-      storedHeartRate.push(heartRate);
-      if (storedHeartRate.length > 100) {
-        storedHeartRate.shift(); // Menghapus data tertua
+      const heartRate = generateHeartRateWaveform(time);
+      heartRateData.push(heartRate);
+      if (heartRateData.length > 100) {
+        heartRateData.shift();
       }
-      heartRateChart.data.datasets[0].data = storedHeartRate;
+      heartRateChart.data.datasets[0].data = heartRateData;
       heartRateChart.update();
+      document.getElementById("heart-rate-value").innerText = Math.round(
+        heartRate
+      );
 
-      const oxygenSaturation = generateOxygenSaturationWaveform(time++);
-      storedOxygenSaturation.push(oxygenSaturation);
-      if (storedOxygenSaturation.length > 100) {
-        storedOxygenSaturation.shift(); // Menghapus data tertua
+      const oxygenSaturation = generateOxygenSaturationWaveform(time);
+      oxygenSaturationData.push(oxygenSaturation);
+      if (oxygenSaturationData.length > 100) {
+        oxygenSaturationData.shift();
       }
-      oxygenSaturationChart.data.datasets[0].data = storedOxygenSaturation;
+      oxygenSaturationChart.data.datasets[0].data = oxygenSaturationData;
       oxygenSaturationChart.update();
+      document.getElementById("oxygen-saturation-value").innerText = Math.round(
+        oxygenSaturation
+      );
 
-      const respiratoryRate = generateRespiratoryRateWaveform(time++);
-      storedRespiratoryRate.push(respiratoryRate);
-      if (storedRespiratoryRate.length > 100) {
-        storedRespiratoryRate.shift(); // Menghapus data tertua
+      const respiratoryRate = generateRespiratoryRateWaveform(time);
+      respiratoryRateData.push(respiratoryRate);
+      if (respiratoryRateData.length > 100) {
+        respiratoryRateData.shift();
       }
-      respiratoryRateChart.data.datasets[0].data = storedRespiratoryRate;
+      respiratoryRateChart.data.datasets[0].data = respiratoryRateData;
       respiratoryRateChart.update();
+      document.getElementById("respiratory-rate-value").innerText = Math.round(
+        respiratoryRate
+      );
 
-      // Simpan data ke localStorage
-      localStorage.setItem("heartRateData", JSON.stringify(storedHeartRate));
-      localStorage.setItem(
-        "oxygenSaturationData",
-        JSON.stringify(storedOxygenSaturation)
-      );
-      localStorage.setItem(
-        "respiratoryRateData",
-        JSON.stringify(storedRespiratoryRate)
-      );
+      time++;
     }, 100);
   };
 </script>
+
