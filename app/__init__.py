@@ -31,4 +31,7 @@ def create_app():
     from .routes.vital import vital_
     app.register_blueprint(vital_)
     
+    from .routes.treatments import treatments_
+    app.register_blueprint(treatments_)
+    
     return app

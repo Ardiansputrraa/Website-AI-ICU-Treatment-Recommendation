@@ -16,9 +16,253 @@
       <section
         class="col-span-1 md:col-span-6 lg:col-span-4 bg-slate-300 dark:bg-slate-800 p-4 rounded-lg"
       >
-        
+        <!-- Heart Rate -->
+        <div class="mb-2">
+          <!-- Ikon dan Judul -->
+          <div class="flex items-center justify-between mb-4">
+            <!-- Tambahkan ikon MDI -->
+            <div class="flex flex-col items-start">
+              <i class="mdi mdi-heart-pulse text-4xl text-red-500"></i>
+              <p class="text-[12px] mt-2 text-gray-900 dark:text-gray-200">
+                HEART RATE
+              </p>
+            </div>
+
+            <!-- Value -->
+            <div class="flex items-baseline">
+              <p
+                class="text-4xl font-bold text-black dark:text-white"
+                id="heart-rate-value"
+              >
+                60
+              </p>
+              <p class="text-sm text-black dark:text-white ml-1">bpm</p>
+            </div>
+          </div>
+          <!-- Grafik -->
+          <div>
+            <canvas id="heartRatePredict" class="w-full h-40"></canvas>
+          </div>
+        </div>
+
+        <!-- Oxygen Saturation -->
+        <div class="mb-2">
+          <!-- Ikon dan Judul -->
+          <div class="flex items-center justify-between mb-4">
+            <!-- Tambahkan ikon MDI -->
+            <div class="flex flex-col items-start">
+              <i class="mdi mdi-heart-plus-outline text-4xl text-red-500"></i>
+              <p class="text-[12px] mt-2 text-gray-900 dark:text-gray-200">
+                OXYGEN SATURATION
+              </p>
+            </div>
+
+            <!-- Value -->
+            <div class="flex items-baseline">
+              <p
+                class="text-4xl font-bold text-black dark:text-white"
+                id="oxygen-saturation-value"
+              >
+                60
+              </p>
+              <p class="text-sm text-black dark:text-white ml-1">%</p>
+            </div>
+          </div>
+          <!-- Grafik -->
+          <div>
+            <canvas id="oxygenSaturationPredict" class="w-full h-40"></canvas>
+          </div>
+        </div>
+
+        <!-- Respiratory Rate -->
+        <div class="mb-2">
+          <!-- Ikon dan Judul -->
+          <div class="flex items-center justify-between mb-4">
+            <!-- Tambahkan ikon MDI -->
+            <div class="flex flex-col items-start">
+              <i class="mdi mdi-lungs text-4xl text-red-500"></i>
+              <p class="text-[12px] mt-2 text-gray-900 dark:text-gray-200">
+                RESPIRATORY RATE
+              </p>
+            </div>
+            <!-- Value -->
+            <div class="flex items-baseline">
+              <p
+                class="text-4xl font-bold text-black dark:text-white"
+                id="respiratory-rate-value"
+              >
+                60
+              </p>
+              <p class="text-sm text-black dark:text-white ml-1">rpm</p>
+            </div>
+          </div>
+          <!-- Grafik -->
+          <div>
+            <canvas id="respiratoryRatePredict" class="w-full h-40"></canvas>
+          </div>
+        </div>
       </section>
+      <script>
+        // Waktu untuk pembaruan data
+        let time = 0;
       
+        function initializeChartPredict() {
+          const heartRatePredcitCtx = document.getElementById("heartRatePredict").getContext("2d");
+          const heartRatePredict = new Chart(heartRatePredcitCtx, {
+            type: "line",
+            data: {
+              labels: Array.from({ length: 100 }, () => ""),
+              datasets: [
+                {
+                  borderColor: "#9933FF",
+                  borderWidth: 2,
+                  fill: false,
+                  tension: 0.4,
+                  data: Array.from({ length: 100 }, (_, i) =>
+                    generateHeartRateWaveform(i)
+                  ),
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              animation: false,
+              plugins: {
+                legend: { display: false },
+              },
+              scales: {
+                x: { display: false },
+                y: { display: false },
+              },
+              elements: {
+                point: { radius: 0 },
+              },
+            },
+          });
+      
+          const oxygenSaturationCtx = document
+            .getElementById("oxygenSaturationPredict")
+            .getContext("2d");
+          const oxygenSaturationPredict = new Chart(oxygenSaturationCtx, {
+            type: "line",
+            data: {
+              labels: Array.from({ length: 100 }, () => ""),
+              datasets: [
+                {
+                  borderColor: "#9933FF",
+                  borderWidth: 2,
+                  fill: false,
+                  tension: 0.4,
+                  data: Array.from({ length: 100 }, (_, i) =>
+                    generateOxygenSaturationWaveform(i)
+                  ),
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              animation: false,
+              plugins: {
+                legend: { display: false },
+              },
+              scales: {
+                x: { display: false },
+                y: { display: false },
+              },
+              elements: {
+                point: { radius: 0 },
+              },
+            },
+          });
+      
+          const respiratoryRateCtx = document
+            .getElementById("respiratoryRatePredict")
+            .getContext("2d");
+          const respiratoryRatePredict = new Chart(respiratoryRateCtx, {
+            type: "line",
+            data: {
+              labels: Array.from({ length: 100 }, () => ""),
+              datasets: [
+                {
+                  borderColor: "#9933FF",
+                  borderWidth: 2,
+                  fill: false,
+                  tension: 0.4,
+                  data: Array.from({ length: 100 }, (_, i) =>
+                    generateRespiratoryRateWaveform(i)
+                  ),
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              animation: false,
+              plugins: {
+                legend: { display: false },
+              },
+              scales: {
+                x: { display: false },
+                y: { display: false },
+              },
+              elements: {
+                point: { radius: 0 },
+              },
+            },
+          });
+      
+          return {
+            heartRatePredict,
+            oxygenSaturationPredict,
+            respiratoryRatePredict,
+          };
+        }
+      
+        window.onload = () => {
+          const { heartRatePredict, oxygenSaturationPredict, respiratoryRatePredict } =
+            initializeChartPredict();
+      
+          let heartRateData = Array.from({ length: 100 }, () => 60);
+          let oxygenSaturationData = Array.from({ length: 100 }, () => 98);
+          let respiratoryRateData = Array.from({ length: 100 }, () => 20);
+      
+          setInterval(() => {
+            const heartRate = generateHeartRateWaveform(time);
+            heartRateData.push(heartRate);
+            if (heartRateData.length > 100) {
+              heartRateData.shift();
+            }
+            heartRatePredict.data.datasets[0].data = heartRateData;
+            heartRatePredict.update();
+            document.getElementById("heart-rate-value").innerText = Math.round(
+              heartRate
+            );
+      
+            const oxygenSaturation = generateOxygenSaturationWaveform(time);
+            oxygenSaturationData.push(oxygenSaturation);
+            if (oxygenSaturationData.length > 100) {
+              oxygenSaturationData.shift();
+            }
+            oxygenSaturationPredict.data.datasets[0].data = oxygenSaturationData;
+            oxygenSaturationPredict.update();
+            document.getElementById("oxygen-saturation-value").innerText = Math.round(
+              oxygenSaturation
+            );
+      
+            const respiratoryRate = generateRespiratoryRateWaveform(time);
+            respiratoryRateData.push(respiratoryRate);
+            if (respiratoryRateData.length > 100) {
+              respiratoryRateData.shift();
+            }
+            respiratoryRatePredict.data.datasets[0].data = respiratoryRateData;
+            respiratoryRatePredict.update();
+            document.getElementById("respiratory-rate-value").innerText = Math.round(
+              respiratoryRate
+            );
+      
+            time++;
+          }, 100);
+        };
+      </script>
     </main>
 
     <footer class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4">

@@ -5,7 +5,7 @@
     class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
   >
     <a
-      href="https://flowbite.com/"
+      href="/"
       class="flex items-center space-x-3 rtl:space-x-reverse"
     >
       <i
@@ -114,19 +114,18 @@
       id="navbar-user"
     >
       <ul
-        class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-2 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-900 md:dark:bg-gray-900 dark:border-gray-500 text-gray-700 dark:text-gray-300"
+        class="flex flex-col font-medium p-2 md:p-0 mt-2 border border-gray-100 rounded-lg bg-gray-50 md:space-x-1 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-900 md:dark:bg-gray-900 dark:border-gray-500 text-gray-600 dark:text-gray-300"
       >
-        <li class="me-1 px-2 relative">
+        <li class="me-1 px-1 relative">
           <button
             id="dropdownNavbarButton"
             data-dropdown-toggle="dropdownNavbar"
-            class="inline-flex items-center justify-center p-2 w-full border-b-2 border-transparent rounded-t-lg hover:text-cyan-500 group transition duration-300 ease-in-out"
+            class="inline-flex items-center justify-center p-1 text-sm w-full border-b-2 border-transparent hover:text-cyan-500 group transition duration-300 ease-in-out"
             type="button"
           >
             ICU 501
             <svg
-              class="w-4 h-4 ml-2"
-              aria-hidden="true"
+              class="w-3 h-3 ml-1"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -146,13 +145,13 @@
             class="absolute z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-950 dark:divide-gray-600"
           >
             <ul
-              class="py-2 text-sm text-gray-800 dark:text-gray-300"
+              class="py-1 text-xs text-gray-800 dark:text-gray-300"
               aria-labelledby="dropdownNavbarButton"
             >
               <li>
                 <a
                   href="#"
-                  class="block px-4 py-2 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
+                  class="block px-3 py-1 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
                 >
                   Bed 50100001
                 </a>
@@ -160,7 +159,7 @@
               <li>
                 <a
                   href="#"
-                  class="block px-4 py-2 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
+                  class="block px-3 py-1 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
                 >
                   Bed 50100002
                 </a>
@@ -168,7 +167,7 @@
               <li>
                 <a
                   href="#"
-                  class="block px-4 py-2 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
+                  class="block px-3 py-1 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
                 >
                   Bed 50100003
                 </a>
@@ -176,7 +175,7 @@
               <li>
                 <a
                   href="#"
-                  class="block px-4 py-2 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
+                  class="block px-3 py-1 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
                 >
                   Bed 50100004
                 </a>
@@ -184,7 +183,7 @@
               <li>
                 <a
                   href="#"
-                  class="block px-4 py-2 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
+                  class="block px-3 py-1 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
                 >
                   Bed 50100005
                 </a>
@@ -192,7 +191,7 @@
               <li>
                 <a
                   href="#"
-                  class="block px-4 py-2 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
+                  class="block px-3 py-1 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
                 >
                   Bed 50100006
                 </a>
@@ -200,7 +199,7 @@
               <li>
                 <a
                   href="#"
-                  class="block px-4 py-2 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
+                  class="block px-3 py-1 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
                 >
                   Bed 50100007
                 </a>
@@ -208,77 +207,84 @@
               <li>
                 <a
                   href="#"
-                  class="block px-4 py-2 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
+                  class="block px-3 py-1 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
                 >
                   Bed 50100008
                 </a>
               </li>
+              <!-- Tambahkan item dropdown lainnya -->
             </ul>
           </div>
         </li>
-        <li class="me-1 px-2">
+        <li class="me-1 px-1">
           <a
             href=""
-            class="inline-flex items-center justify-center p-2 border-b-2 border-transparent rounded-t-lg group transition duration-300 ease-in-out cursor-not-allowed"
+            class="inline-flex items-center justify-center p-1 text-sm border-b-2 border-transparent rounded-t-lg group transition duration-300 ease-in-out cursor-not-allowed"
           >
             INFORMATION
           </a>
         </li>
-        <li class="me-1 px-2">
+        <li class="me-1 px-1">
           <a
             href="/similarity/{{ bed_id }}"
-            class="inline-flex items-center justify-center p-2 border-b-2 border-transparent rounded-t-lg hover:border-cyan-500 hover:text-cyan-500 group transition duration-300 ease-in-out"
+            class="inline-flex items-center justify-center p-1 text-sm border-b-2 border-transparent rounded-t-lg hover:border-cyan-500 hover:text-cyan-500 group transition duration-300 ease-in-out"
           >
             SIMILARITY
           </a>
         </li>
-        <li class="me-1 px-2">
+        <li class="me-1 px-1">
           <a
             href="/prediction/{{ bed_id }}"
-            class="inline-flex items-center justify-center p-2 border-b-2 border-transparent rounded-t-lg hover:border-cyan-500 hover:text-cyan-500 group transition duration-300 ease-in-out"
+            class="inline-flex items-center justify-center p-1 text-sm border-b-2 border-transparent rounded-t-lg hover:border-cyan-500 hover:text-cyan-500 group transition duration-300 ease-in-out"
           >
             PREDICTION
           </a>
         </li>
-        <li class="me-1 px-2">
+        <li class="me-1 px-1">
           <a
-            href=""
-            class="inline-flex items-center justify-center p-2 border-b-2 border-transparent rounded-t-lg hover:border-cyan-500 hover:text-cyan-500 group transition duration-300 ease-in-out"
+            href="/treatments/{{ bed_id }}"
+            class="inline-flex items-center justify-center p-1 text-sm border-b-2 border-transparent rounded-t-lg hover:border-cyan-500 hover:text-cyan-500 group transition duration-300 ease-in-out"
           >
             TREATMENT
           </a>
         </li>
-        <li class="me-1 px-2">
+        <li class="me-1 px-1">
           <a
             href=""
-            class="inline-flex items-center justify-center p-2 border-b-2 border-transparent rounded-t-lg hover:border-cyan-500 hover:text-cyan-500 group transition duration-300 ease-in-out"
+            class="inline-flex items-center justify-center p-1 text-sm border-b-2 border-transparent rounded-t-lg group transition duration-300 ease-in-out cursor-not-allowed"
           >
             SUMMARY
           </a>
         </li>
-        <li class="me-1 px-2">
+        <li class="me-1 px-1">
           <a
             href=""
-            class="inline-flex items-center justify-center p-2 border-b-2 border-transparent rounded-t-lg hover:border-cyan-500 hover:text-cyan-500 group transition duration-300 ease-in-out"
+            class="inline-flex items-center justify-center p-1 text-sm border-b-2 border-transparent rounded-t-lg group transition duration-300 ease-in-out cursor-not-allowed"
           >
             DIAGNOSIS
           </a>
         </li>
-        <li class="me-1 px-2">
+        <li class="me-1 px-1">
+          <a
+            href=""
+            class="inline-flex items-center justify-center p-1 text-sm border-b-2 border-transparent rounded-t-lg group transition duration-300 ease-in-out cursor-not-allowed"
+          >
+            HIGH-ORDER REASONING
+          </a>
+        </li>
+        <li class="me-1 px-1">
           <div
             id="toggle-container"
-            class="relative w-16 h-8 bg-gray-200 dark:bg-gray-800 rounded-full flex items-center p-1 cursor-pointer transition-all duration-300"
+            class="relative w-12 h-6 bg-gray-200 dark:bg-gray-800 rounded-full flex items-center p-1 cursor-pointer transition-all duration-300"
             onclick="toggleDarkMode()"
           >
-            <!-- Toggle circle -->
             <div
               id="toggle-circle"
-              class="w-6 h-6 bg-cyan-500 rounded-full shadow-md transform transition-all duration-300"
+              class="w-5 h-5 bg-cyan-500 rounded-full shadow-md transform transition-all duration-300"
             >
-              <!-- Add icon inside the circle -->
               <svg
                 id="toggle-icon"
-                class="w-5 h-5 m-0.5"
+                class="w-4 h-4 m-0.5"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
               >
