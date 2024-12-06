@@ -90,40 +90,13 @@
 </section>
 
 <script>
-  // Waktu untuk pembaruan data
   let time = 0;
-
-  function generateHeartRateWaveform(t) {
-    const baseline = 75; // Rata-rata heart rate normal (bpm)
-    const amplitude = 5; // Fluktuasi kecil di sekitar baseline (5 bpm)
-    const frequency = 0.1; // Frekuensi gelombang lambat (1 siklus dalam 10 detik)
-    const smoothFactor = 0.02; // Faktor pergerakan yang halus untuk perubahan grafik
-    const noise = Math.random() * 0.5 - 0.25; // Variasi kecil (noise) untuk membuat grafik alami
-
-    const heartRate = baseline + amplitude * Math.sin(frequency * t) + noise;
-    const smoothHeartRate =
-      heartRate * (1 - smoothFactor) + baseline * smoothFactor;
-    return Math.min(Math.max(smoothHeartRate, 50), 120);
-  }
-
-  function generateOxygenSaturationWaveform(t) {
-    const amplitude = 2;
-    const baseline = 98;
-    const frequency = 0.2;
-    const noise = Math.random() * 0.5 - 0.25;
-    return baseline + amplitude * Math.sin(frequency * t + Math.PI / 2) + noise;
-  }
-
-  function generateRespiratoryRateWaveform(t) {
-    const amplitude = 2;
-    const baseline = 20;
-    const frequency = 0.1;
-    const noise = Math.random() * 1 - 0.5;
-    return baseline + amplitude * Math.sin(frequency * t) + noise;
-  }
 
   function initializeChart() {
     const heartRateCtx = document.getElementById("heartRate").getContext("2d");
+    const oxygenSaturationCtx = document.getElementById("oxygenSaturation").getContext("2d");
+    const respiratoryRateCtx = document.getElementById("respiratoryRate").getContext("2d");
+
     const heartRateChart = new Chart(heartRateCtx, {
       type: "line",
       data: {
@@ -134,9 +107,7 @@
             borderWidth: 2,
             fill: false,
             tension: 0.4,
-            data: Array.from({ length: 100 }, (_, i) =>
-              generateHeartRateWaveform(i)
-            ),
+            data: Array.from({ length: 100 }, () => 75),
           },
         ],
       },
@@ -156,9 +127,6 @@
       },
     });
 
-    const oxygenSaturationCtx = document
-      .getElementById("oxygenSaturation")
-      .getContext("2d");
     const oxygenSaturationChart = new Chart(oxygenSaturationCtx, {
       type: "line",
       data: {
@@ -169,9 +137,7 @@
             borderWidth: 2,
             fill: false,
             tension: 0.4,
-            data: Array.from({ length: 100 }, (_, i) =>
-              generateOxygenSaturationWaveform(i)
-            ),
+            data: Array.from({ length: 100 }, () => 98),
           },
         ],
       },
@@ -191,9 +157,6 @@
       },
     });
 
-    const respiratoryRateCtx = document
-      .getElementById("respiratoryRate")
-      .getContext("2d");
     const respiratoryRateChart = new Chart(respiratoryRateCtx, {
       type: "line",
       data: {
@@ -204,9 +167,7 @@
             borderWidth: 2,
             fill: false,
             tension: 0.4,
-            data: Array.from({ length: 100 }, (_, i) =>
-              generateRespiratoryRateWaveform(i)
-            ),
+            data: Array.from({ length: 100 }, () => 20),
           },
         ],
       },
@@ -233,50 +194,78 @@
     };
   }
 
-  window.onload = () => {
-    const { heartRateChart, oxygenSaturationChart, respiratoryRateChart } =
-      initializeChart();
+  function updateCharts(charts, vitalData) {
+    charts.heartRateChart.data.datasets[0].data.push(vitalData.heart_rate);
+    if (charts.heartRateChart.data.datasets[0].data.length > 100) {
+      charts.heartRateChart.data.datasets[0].data.shift();
+    }
+    charts.heartRateChart.update();
 
-    let heartRateData = Array.from({ length: 100 }, () => 60);
-    let oxygenSaturationData = Array.from({ length: 100 }, () => 98);
-    let respiratoryRateData = Array.from({ length: 100 }, () => 20);
+    charts.oxygenSaturationChart.data.datasets[0].data.push(vitalData.oxygen_saturation);
+    if (charts.oxygenSaturationChart.data.datasets[0].data.length > 100) {
+      charts.oxygenSaturationChart.data.datasets[0].data.shift();
+    }
+    charts.oxygenSaturationChart.update();
 
+    charts.respiratoryRateChart.data.datasets[0].data.push(vitalData.respiratory_rate);
+    if (charts.respiratoryRateChart.data.datasets[0].data.length > 100) {
+      charts.respiratoryRateChart.data.datasets[0].data.shift();
+    }
+    charts.respiratoryRateChart.update();
+
+    localStorage.setItem("heartRateData", JSON.stringify(charts.heartRateChart.data.datasets[0].data));
+    localStorage.setItem("oxygenSaturationData", JSON.stringify(charts.oxygenSaturationChart.data.datasets[0].data));
+    localStorage.setItem("respiratoryRateData", JSON.stringify(charts.respiratoryRateChart.data.datasets[0].data));
+
+    localStorage.setItem("heartRateValue", vitalData.heart_rate);
+    localStorage.setItem("oxygenSaturationValue", vitalData.oxygen_saturation);
+    localStorage.setItem("respiratoryRateValue", vitalData.respiratory_rate);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const charts = initializeChart();
+  
+    if (localStorage.getItem("heartRateData")) {
+      charts.heartRateChart.data.datasets[0].data = JSON.parse(localStorage.getItem("heartRateData"));
+      charts.heartRateChart.update();
+    }
+    if (localStorage.getItem("oxygenSaturationData")) {
+      charts.oxygenSaturationChart.data.datasets[0].data = JSON.parse(localStorage.getItem("oxygenSaturationData"));
+      charts.oxygenSaturationChart.update();
+    }
+    if (localStorage.getItem("respiratoryRateData")) {
+      charts.respiratoryRateChart.data.datasets[0].data = JSON.parse(localStorage.getItem("respiratoryRateData"));
+      charts.respiratoryRateChart.update();
+    }
+  
+    if (localStorage.getItem("heartRateValue")) {
+      document.getElementById("heart-rate-value").innerText = Math.round(localStorage.getItem("heartRateValue"));
+    }
+    if (localStorage.getItem("oxygenSaturationValue")) {
+      document.getElementById("oxygen-saturation-value").innerText = Math.round(localStorage.getItem("oxygenSaturationValue"));
+    }
+    if (localStorage.getItem("respiratoryRateValue")) {
+      document.getElementById("respiratory-rate-value").innerText = Math.round(localStorage.getItem("respiratoryRateValue"));
+    }
+  
     setInterval(() => {
-      const heartRate = generateHeartRateWaveform(time);
-      heartRateData.push(heartRate);
-      if (heartRateData.length > 100) {
-        heartRateData.shift();
-      }
-      heartRateChart.data.datasets[0].data = heartRateData;
-      heartRateChart.update();
-      document.getElementById("heart-rate-value").innerText = Math.round(
-        heartRate
-      );
-
-      const oxygenSaturation = generateOxygenSaturationWaveform(time);
-      oxygenSaturationData.push(oxygenSaturation);
-      if (oxygenSaturationData.length > 100) {
-        oxygenSaturationData.shift();
-      }
-      oxygenSaturationChart.data.datasets[0].data = oxygenSaturationData;
-      oxygenSaturationChart.update();
-      document.getElementById("oxygen-saturation-value").innerText = Math.round(
-        oxygenSaturation
-      );
-
-      const respiratoryRate = generateRespiratoryRateWaveform(time);
-      respiratoryRateData.push(respiratoryRate);
-      if (respiratoryRateData.length > 100) {
-        respiratoryRateData.shift();
-      }
-      respiratoryRateChart.data.datasets[0].data = respiratoryRateData;
-      respiratoryRateChart.update();
-      document.getElementById("respiratory-rate-value").innerText = Math.round(
-        respiratoryRate
-      );
-
-      time++;
+      $.ajax({
+        url: `/get-vital-data/{{bed_id}}`,
+        method: "GET",
+        success: function (response) {
+          const vitalData = response;
+          updateCharts(charts, vitalData);
+  
+          document.getElementById("heart-rate-value").innerText = Math.round(vitalData.heart_rate);
+          document.getElementById("oxygen-saturation-value").innerText = Math.round(vitalData.oxygen_saturation);
+          document.getElementById("respiratory-rate-value").innerText = Math.round(vitalData.respiratory_rate);
+        },
+        error: function () {
+          console.error("Gagal mengambil data vital");
+        },
+      });
     }, 100);
-  };
+  });
+  
 </script>
 
