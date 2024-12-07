@@ -2,130 +2,150 @@
 <section
   class="bg-cyan-500 dark:bg-cyan-900 text-white p-4 rounded-lg shadow-md h-[200px] flex flex-col"
 >
-  <h2 class="text-sm font-bold text-left mb-2">Overall SOFA Score</h2>
+  <h2 class="text-sm font-bold text-left mb-2">
+    Overall SOFA Score: <span id="sofa-score-value">3</span>
+  </h2>
   <div
     class="flex-1 flex flex-col items-center justify-between overflow-hidden"
   >
     <!-- Grafik -->
     <div class="flex-1 flex items-center justify-center w-full">
-      <canvas id="sofa-chart" class="w-[90%] h-[70px]"></canvas>
+      <canvas id="sofaScore" class="w-[90%] h-[70px]"></canvas>
     </div>
     <!-- Detail Skor -->
-    <div class="grid grid-cols-3 gap-2 text-[8px] text-center mt-1">
-      <div><span class="font-semibold">Renal:</span> 3</div>
-      <div><span class="font-semibold">Nervous:</span> 3</div>
-      <div><span class="font-semibold">Cardiovascular:</span> 2</div>
-      <div><span class="font-semibold">Liver:</span> 1</div>
-      <div><span class="font-semibold">Respiration:</span> 2</div>
-      <div><span class="font-semibold">Coagulation:</span> 3</div>
-    </div>
+<div class="grid grid-cols-3 gap-2 text-[8px] text-center mt-1">
+  <div>
+    <span class="font-semibold">Renal:</span> 
+    <span id="renal-value">3</span>
+  </div>
+  <div>
+    <span class="font-semibold">Nervous:</span> 
+    <span id="nervous-value">3</span>
+  </div>
+  <div>
+    <span class="font-semibold">Cardiovascular:</span> 
+    <span id="cardiovascular-value">2</span>
+  </div>
+  <div>
+    <span class="font-semibold">Liver:</span> 
+    <span id="liver-value">1</span>
+  </div>
+  <div>
+    <span class="font-semibold">Respiration:</span> 
+    <span id="respiration-value">2</span>
+  </div>
+  <div>
+    <span class="font-semibold">Coagulation:</span> 
+    <span id="coagulation-value">3</span>
+  </div>
+</div>
+
   </div>
 </section>
 
 <script>
-  $(document).ready(function () {
-    // Cek apakah data sudah ada di localStorage
-    let dataPoints = JSON.parse(localStorage.getItem("sofaDataPoints")) || [
-      3, 2, 4, 3, 2, 3, 4,
-    ];
-    let timeLabels = JSON.parse(localStorage.getItem("sofaTimeLabels")) || [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-    ];
+  function initializeSofaChart() {
+    const sofaScoreCtx = document.getElementById("sofaScore").getContext("2d");
 
-    // Fungsi untuk menghasilkan data acak (simulasi SOFA Score)
-    function generateRandomScore(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    // Inisialisasi Grafik SOFA Score
-    const ctx = $("#sofa-chart")[0].getContext("2d");
-    const sofaChart = new Chart(ctx, {
+    const sofaScoreChart = new Chart(sofaScoreCtx, {
       type: "line",
       data: {
-        labels: timeLabels,
+        labels: Array.from({ length: 100 }, () => ""),
         datasets: [
           {
-            label: "SOFA Score",
-            data: dataPoints,
-            pointRadius: 0,
+            borderColor: "white",
+            borderWidth: 2,
             fill: false,
-            borderColor: "#9933FF",
-            backgroundColor: "rgba(79, 209, 197, 0.1)",
-            pointBackgroundColor: "#ffffff",
-            pointRadius: 4,
             tension: 0.4,
+            data: Array.from({ length: 100 }, () => 75),
           },
         ],
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false,
+        animation: false,
         plugins: {
           legend: { display: false },
         },
         scales: {
-          x: {
-            ticks: { color: "#ffffff", font: { size: 8 } },
-            grid: { display: false },
-            display: false,
-          },
-          y: {
-            ticks: { color: "#ffffff", font: { size: 8 } },
-            grid: { color: "rgba(255, 255, 255, 0.1)" },
-            display: false,
-          },
+          x: { display: false },
+          y: { display: false },
+        },
+        elements: {
+          point: { radius: 0 },
         },
       },
     });
 
-    // Fungsi untuk memperbarui skor
-    function updateScores() {
-      const renal = generateRandomScore(0, 4);
-      const nervous = generateRandomScore(0, 4);
-      const cardiovascular = generateRandomScore(0, 4);
-      const liver = generateRandomScore(0, 4);
-      const respiration = generateRandomScore(0, 4);
-      const coagulation = generateRandomScore(0, 4);
+    return {sofaScoreChart}
+  }
 
-      const overallSofaScore =
-        renal + nervous + cardiovascular + liver + respiration + coagulation;
+  function updateSofaCharts(charts, sofaData) {
+    charts.sofaScoreChart.data.datasets[0].data.push(sofaData.sofa_score);
+    if (charts.sofaScoreChart.data.datasets[0].data.length > 100) {
+      charts.sofaScoreChart.data.datasets[0].data.shift();
+    }
+    charts.sofaScoreChart.update();
 
-      return overallSofaScore;
+    localStorage.setItem("sofaScoreData", JSON.stringify(charts.sofaScoreChart.data.datasets[0].data));
+    localStorage.setItem("sofaScoreValue", sofaData.sofa_score);
+    localStorage.setItem("renalValue", sofaData.renal);
+    localStorage.setItem("nervousValue", sofaData.nervous);
+    localStorage.setItem("cardiovascularValue", sofaData.cardiovascular);
+    localStorage.setItem("liverValue", sofaData.liver);
+    localStorage.setItem("respirationValue", sofaData.respiration);
+    localStorage.setItem("coagulationValue", sofaData.coagulation);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const charts = initializeSofaChart();
+
+    if (localStorage.getItem("sofaScoreData")) {
+      charts.sofaScoreChart.data.datasets[0].data = JSON.parse(localStorage.getItem("sofaScoreData"));
+      charts.sofaScoreChart.update();
+    }
+    if (localStorage.getItem("sofaScoreValue")) {
+      document.getElementById("sofa-score-value").innerText = localStorage.getItem("sofaScoreValue");
+    }
+    if (localStorage.getItem("renalValue")) {
+      document.getElementById("renal-value").innerText = localStorage.getItem("renalValue");
+    }
+    if (localStorage.getItem("nervousValue")) {
+      document.getElementById("nervous-value").innerText = localStorage.getItem("nervousValue");
+    }
+    if (localStorage.getItem("cardiovascularValue")) {
+      document.getElementById("cardiovascular-value").innerText = localStorage.getItem("cardiovascularValue");
+    }
+    if (localStorage.getItem("liverValue")) {
+      document.getElementById("liver-value").innerText = localStorage.getItem("liverValue");
+    }
+    if (localStorage.getItem("respirationValue")) {
+      document.getElementById("respiration-value").innerText = localStorage.getItem("respirationValue");
+    }
+    if (localStorage.getItem("coagulationValue")) {
+      document.getElementById("coagulation-value").innerText = localStorage.getItem("coagulationValue");
     }
 
-    // Fungsi untuk memperbarui grafik
-    function updateChart() {
-      const newScore = updateScores(); // Dapatkan data baru
-      const newLabel = parseInt(timeLabels[timeLabels.length - 1]) + 1; // Tambahkan label waktu baru
+    setInterval(() => {
+      $.ajax({
+        url: `/get-sofa-data/{{bed_id}}`,
+        method: "GET",
+        success: function (response) {
+          const sofaData = response;
+          updateSofaCharts(charts, sofaData);
+          document.getElementById("sofa-score-value").innerText = sofaData.sofa_score;
+          document.getElementById("renal-value").innerText = sofaData.renal;
+          document.getElementById("nervous-value").innerText = sofaData.nervous;
+          document.getElementById("cardiovascular-value").innerText = sofaData.cardiovascular;
+          document.getElementById("liver-value").innerText = sofaData.liver;
+          document.getElementById("respiration-value").innerText = sofaData.respiration;
+          document.getElementById("coagulation-value").innerText = sofaData.coagulation;
 
-      // Tambahkan data baru ke grafik
-      dataPoints.push(newScore);
-      timeLabels.push(newLabel.toString());
-
-      // Hapus data lama jika lebih dari 7 titik
-      if (dataPoints.length > 7) {
-        dataPoints.shift();
-        timeLabels.shift();
-      }
-
-      // Perbarui data Chart.js
-      sofaChart.data.labels = timeLabels;
-      sofaChart.data.datasets[0].data = dataPoints;
-
-      sofaChart.update(); // Render ulang grafik
-
-      // Simpan data ke localStorage
-      localStorage.setItem("sofaDataPoints", JSON.stringify(dataPoints));
-      localStorage.setItem("sofaTimeLabels", JSON.stringify(timeLabels));
-    }
-
-    // Interval untuk memperbarui data setiap 2 detik
-    setInterval(updateChart, 2000);
+        },
+        error: function () {
+          console.error("Failed to retrieve sofa data");
+        },
+      });
+    }, 100);
   });
 </script>

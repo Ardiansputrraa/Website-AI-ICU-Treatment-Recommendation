@@ -261,7 +261,7 @@
           document.getElementById("respiratory-rate-value").innerText = Math.round(vitalData.respiratory_rate);
         },
         error: function () {
-          console.error("Gagal mengambil data vital");
+          console.error("Failed to retrieve vital data");
         },
       });
     }, 100);
