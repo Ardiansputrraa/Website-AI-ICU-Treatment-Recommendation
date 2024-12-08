@@ -1,6 +1,7 @@
 from flask import Flask
 from config import Config
 from pymongo import MongoClient
+from app.task.patient_thread import start_patient_thread
 
 def create_app():
     app = Flask(__name__)
@@ -30,5 +31,6 @@ def create_app():
     from .routes.treatments import treatments_
     app.register_blueprint(treatments_)
 
+    start_patient_thread()
     
     return app

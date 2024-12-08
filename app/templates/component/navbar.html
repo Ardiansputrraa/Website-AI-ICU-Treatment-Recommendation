@@ -163,7 +163,7 @@
               </li>
               <li>
                 <a
-                  href="/similarity/50100004"
+                  href="/similarity/50100003"
                   class="block px-3 py-1 hover:bg-cyan-500 hover:text-white dark:hover:text-white dark:hover:bg-cyan-600"
                 >
                   Bed 50100003
@@ -209,7 +209,6 @@
                   Bed 50100008
                 </a>
               </li>
-              <!-- Tambahkan item dropdown lainnya -->
             </ul>
           </div>
         </li>
@@ -328,12 +327,10 @@
     $("#dropdownNavbar a").each(function () {
       const href = $(this).attr("href");
 
-      // Ekstrak bed_id dari href menggunakan regex
       const bedIdRegex = /\/(similarity|prediction)\/(\d+)/;
       const match = href.match(bedIdRegex);
-      const hrefBedId = match ? match[2] : null; // Ambil bed_id dari href
+      const hrefBedId = match ? match[2] : null; 
 
-      // Bandingkan bed_id dari URL dengan bed_id saat ini
       if (hrefBedId === bed_id) {
         $(this)
           .addClass("bg-cyan-500 text-white dark:bg-cyan-600")
