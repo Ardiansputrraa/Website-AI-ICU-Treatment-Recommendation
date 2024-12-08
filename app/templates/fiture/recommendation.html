@@ -2,16 +2,70 @@
   class="col-span-1 text-white bg-cyan-500 dark:bg-cyan-900 p-4 rounded-lg text-sm"
 >
   <h2 class="text-base font-bold pb-4">AI Recommendation</h2>
-  <p>Illnesses: Polycythemia Vera</p>
-  <p>Operations: Appendectomy at age 12</p>
-  <p>Medications: Simvastatin 40mg daily</p>
+  <ul class="list-disc pl-5">
+    <li id="ai_recommendation_value">Illnesses: Polycythemia Vera</li>
+    <li id="ai_recommendation_value_">Illnesses: Polycythemia Vera</li>
+  </ul>
 </section>
 
 <section
   class="col-span-1 text-white bg-cyan-500 dark:bg-cyan-900 p-4 rounded-lg text-sm"
 >
   <h2 class="text-base font-bold pb-4">Clinician Action</h2>
-  <p>Illnesses: Polycythemia Vera</p>
-  <p>Operations: Appendectomy at age 12</p>
-  <p>Medications: Simvastatin 40mg daily</p>
+  <ul class="list-disc pl-5">
+    <li id="physician_action_value">Illnesses: Polycythemia Vera</li>
+    <li id="physician_action_value_">Illnesses: Polycythemia Vera</li>
+  </ul>
 </section>
+
+<script>
+  function updateTreatment(treatmentData) {
+    localStorage.setItem(
+      "aiRecommendation",treatmentData.ai_recommendations[0]
+    );
+    localStorage.setItem(
+      "aiRecommendation_",treatmentData.ai_recommendations[1]
+    );
+    localStorage.setItem(
+      "physicianAction",treatmentData.physician_action[0]
+    );
+    localStorage.setItem(
+      "physicianAction_",treatmentData.physician_action[1]
+    );
+    
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    if (localStorage.getItem("aiRecommendation")) {
+      document.getElementById("ai_recommendation_value").innerText = localStorage.getItem("aiRecommendation");
+    }
+    if (localStorage.getItem("aiRecommendation_")) {
+      document.getElementById("ai_recommendation_value_").innerText = localStorage.getItem("aiRecommendation_");
+    }
+    if (localStorage.getItem("physicianAction")) {
+      document.getElementById("physician_action_value").innerText = localStorage.getItem("physicianAction");
+    }
+    if (localStorage.getItem("physicianAction_")) {
+      document.getElementById("physician_action_value_").innerText = localStorage.getItem("physicianAction_");
+    }
+
+    setInterval(() => {
+      $.ajax({
+        url: `/get-treatment-data/{{bed_id}}`,
+        method: "GET",
+        success: function (response) {
+          const treatmentData = response;
+          console.log(treatmentData)
+          updateTreatment(treatmentData);
+          document.getElementById("ai_recommendation_value").innerText = treatmentData.ai_recommendations[0];
+          document.getElementById("ai_recommendation_value_").innerText = treatmentData.ai_recommendations[1];
+          document.getElementById("physician_action_value").innerText = treatmentData.physician_action[0];
+          document.getElementById("physician_action_value_").innerText = treatmentData.physician_action[1];
+        },
+        error: function () {
+          console.error("Failed to retrieve blood pressure data");
+        },
+      });
+    }, 6000);
+  });
+</script>
