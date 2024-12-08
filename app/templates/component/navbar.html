@@ -4,10 +4,7 @@
   <div
     class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
   >
-    <a
-      href="/"
-      class="flex items-center space-x-3 rtl:space-x-reverse"
-    >
+    <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
       <i
         class="mdi mdi-hospital-box text-3xl mr-3 text-cyan-500 transition duration-75 dark:text-cyan-500"
       ></i>
@@ -150,64 +147,64 @@
             >
               <li>
                 <a
-                  href="#"
-                  class="block px-3 py-1 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
+                  href="/similarity/50100001"
+                  class="block px-3 py-1 hover:bg-cyan-500 hover:text-white dark:hover:text-white dark:hover:bg-cyan-600"
                 >
                   Bed 50100001
                 </a>
               </li>
               <li>
                 <a
-                  href="#"
-                  class="block px-3 py-1 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
+                  href="/similarity/50100002"
+                  class="block px-3 py-1 hover:bg-cyan-500 hover:text-white dark:hover:text-white dark:hover:bg-cyan-600"
                 >
                   Bed 50100002
                 </a>
               </li>
               <li>
                 <a
-                  href="#"
-                  class="block px-3 py-1 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
+                  href="/similarity/50100004"
+                  class="block px-3 py-1 hover:bg-cyan-500 hover:text-white dark:hover:text-white dark:hover:bg-cyan-600"
                 >
                   Bed 50100003
                 </a>
               </li>
               <li>
                 <a
-                  href="#"
-                  class="block px-3 py-1 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
+                  href="/similarity/50100004"
+                  class="block px-3 py-1 hover:bg-cyan-500 hover:text-white dark:hover:text-white dark:hover:bg-cyan-600"
                 >
                   Bed 50100004
                 </a>
               </li>
               <li>
                 <a
-                  href="#"
-                  class="block px-3 py-1 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
+                  href="/similarity/50100005"
+                  class="block px-3 py-1 hover:bg-cyan-500 hover:text-white dark:hover:text-white dark:hover:bg-cyan-600"
                 >
                   Bed 50100005
                 </a>
               </li>
               <li>
                 <a
-                  href="#"
-                  class="block px-3 py-1 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
+                  href="/similarity/50100006"
+                  class="block px-3 py-1 hover:bg-cyan-500 hover:text-white dark:hover:text-white dark:hover:bg-cyan-600"
                 >
                   Bed 50100006
                 </a>
               </li>
               <li>
                 <a
-                  href="#"
-                  class="block px-3 py-1 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
+                  href="/similarity/50100007"
+                  class="block px-3 py-1 hover:bg-cyan-500 hover:text-white dark:hover:text-white dark:hover:bg-cyan-600"
                 >
                   Bed 50100007
                 </a>
               </li>
               <li>
                 <a
-                  href="#"
-                  class="block px-3 py-1 hover:bg-cyan-500 dark:hover:text-white dark:hover:bg-cyan-800"
+                  href="/similarity/50100008"
+                  class="block px-3 py-1 hover:bg-cyan-500 hover:text-white dark:hover:text-white dark:hover:bg-cyan-600"
                 >
                   Bed 50100008
                 </a>
@@ -310,6 +307,7 @@
   $(document).ready(function () {
     const currentPath = window.location.pathname;
 
+    // Highlight item di navbar
     $("#navbar-user a").each(function () {
       const href = $(this).attr("href");
 
@@ -321,6 +319,29 @@
         $(this)
           .removeClass("text-cyan-500 border-cyan-500")
           .addClass("border-transparent");
+      }
+    });
+
+    const bed_id = "{{ bed_id }}";
+
+    // Highlight item di dropdown berdasarkan bed_id
+    $("#dropdownNavbar a").each(function () {
+      const href = $(this).attr("href");
+
+      // Ekstrak bed_id dari href menggunakan regex
+      const bedIdRegex = /\/(similarity|prediction)\/(\d+)/;
+      const match = href.match(bedIdRegex);
+      const hrefBedId = match ? match[2] : null; // Ambil bed_id dari href
+
+      // Bandingkan bed_id dari URL dengan bed_id saat ini
+      if (hrefBedId === bed_id) {
+        $(this)
+          .addClass("bg-cyan-500 text-white dark:bg-cyan-600")
+          .removeClass("dark:hover:bg-cyan-600 dark:hover:text-white");
+      } else {
+        $(this)
+          .removeClass("bg-cyan-500 text-white dark:bg-cyan-600")
+          .addClass("dark:hover:bg-cyan-600 dark:hover:text-white");
       }
     });
   });
