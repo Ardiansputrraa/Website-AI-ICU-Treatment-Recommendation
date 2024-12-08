@@ -169,10 +169,14 @@ def update_patient_data():
         with lock:
             global_time += 1
             icu_beds_values = {
-                "50100001": {"patient_details": {"name": "Ardian", "address": "Jakarta", "date": dateNow()}},
-                "50100002": {"patient_details": {"name": "Dewi", "address": "Bandung", "date": dateNow()}},
-                "50100003": {"patient_details": {"name": "Rizal", "address": "Surabaya", "date": dateNow()}},
-                "50100004": {"patient_details": {"name": "Lia", "address": "Medan", "date": dateNow()}}
+                "50100001": {"patient_details": {"name": "Abdul Kirom", "address": "Jakarta", "date": dateNow()}},
+                "50100002": {"patient_details": {"name": "Dewi Rahmawati", "address": "Bandung", "date": dateNow()}},
+                "50100003": {"patient_details": {"name": "Rizal Abdi", "address": "Surabaya", "date": dateNow()}},
+                "50100004": {"patient_details": {"name": "Lia Rahma", "address": "Medan", "date": dateNow()}},
+                "50100005": {"patient_details": {"name": "Prasetyo Putra", "address": "Bali", "date": dateNow()}},
+                "50100006": {"patient_details": {"name": "Aldo Akfar Rahma", "address": "Padang", "date": dateNow()}},
+                "50100007": {"patient_details": {"name": "Kusmita Suryah", "address": "Balikpapan", "date": dateNow()}},
+                "50100008": {"patient_details": {"name": "Aldy Hamzah", "address": "Pontianak", "date": dateNow()}}
             }
             for bed_id in icu_beds_values:
                 icu_beds_values[bed_id]["vital"] = {
@@ -201,10 +205,14 @@ def initialize_icu_beds():
     global icu_beds_values
     with lock:
         icu_beds_values = {
-            "50100001": {"patient_details": {"name": "Ardian", "address": "Jakarta", "date": dateNow()}},
-            "50100002": {"patient_details": {"name": "Dewi", "address": "Bandung", "date": dateNow()}},
-            "50100003": {"patient_details": {"name": "Rizal", "address": "Surabaya", "date": dateNow()}},
-            "50100004": {"patient_details": {"name": "Lia", "address": "Medan", "date": dateNow()}}
+            "50100001": {"patient_details": {"name": "Abdul Kirom", "address": "Jakarta", "date": dateNow()}},
+            "50100002": {"patient_details": {"name": "Dewi Rahmawati", "address": "Bandung", "date": dateNow()}},
+            "50100003": {"patient_details": {"name": "Rizal Abdi", "address": "Surabaya", "date": dateNow()}},
+            "50100004": {"patient_details": {"name": "Lia Rahma", "address": "Medan", "date": dateNow()}},
+            "50100005": {"patient_details": {"name": "Prasetyo Putra", "address": "Bali", "date": dateNow()}},
+            "50100006": {"patient_details": {"name": "Aldo Akfar Rahma", "address": "Padang", "date": dateNow()}},
+            "50100007": {"patient_details": {"name": "Kusmita Suryah", "address": "Balikpapan", "date": dateNow()}},
+            "50100008": {"patient_details": {"name": "Aldy Hamzah", "address": "Pontianak", "date": dateNow()}}
         }
         for bed_id in icu_beds_values:
             icu_beds_values[bed_id]["vital"] = {
