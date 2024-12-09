@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, current_app, Blueprint, jsonify, redirect, url_for
 import pandas as pd
 import jwt
+from app.services.prediction_service import get_prediction_data
 
 prediction_ = Blueprint('prediction', __name__)
 
@@ -16,3 +17,8 @@ def prediction(bed_id):
         return redirect(url_for("auth.sign_in", msg="Login time has expired!"))
     except jwt.exceptions.DecodeError:
         return redirect(url_for("auth.sign_in", msg="Please login first!"))
+    
+@prediction_.route('/get-prediction-data/<bed_id>', methods=['GET'])
+def get_prediction_data_by_bed(bed_id):
+    result = get_prediction_data(bed_id)
+    return jsonify(result)
