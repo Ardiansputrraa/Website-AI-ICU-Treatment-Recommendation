@@ -7,7 +7,7 @@
     <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400">
       BLOOD PRESSURE
     </h2>
-    <h1 class="text-3xl font-bold text-black dark:text-white inline-block" id="blood-pressure-value">
+    <h1 class="text-3xl font-bold text-black dark:text-white inline-block" id="blood_pressure_value">
       120/80
     </h1>
     <span class="text-sm font-normal inline-block ml-2 text-black dark:text-white">mmHg</span>
@@ -21,7 +21,7 @@
     <div
       class="flex items-center justify-start gap-2 text-black dark:text-white"
     >
-      <span class="text-3xl font-bold" id="temperature-value">37.5</span>
+      <span class="text-3xl font-bold" id="temperature_value">37.5</span>
       <span class="text-3xl font-bold">℃</span>
     </div>
   </div>
@@ -44,12 +44,12 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     if (localStorage.getItem("bloodPressure")) {
-      document.getElementById("blood-pressure-value").innerText = `${Math.round(
+      document.getElementById("blood_pressure_value").innerText = `${Math.round(
         localStorage.getItem("bloodPressureSystolic")
       )}/${Math.round(localStorage.getItem("bloodPressureDiastolic"))}`;
     }
     if (localStorage.getItem("temperature")) {
-      document.getElementById("temperature-value").innerText = localStorage.getItem("temperature");
+      document.getElementById("temperature_value").innerText = localStorage.getItem("temperature");
     }
 
     setInterval(() => {
@@ -61,11 +61,11 @@
           updateBloodPressure(bloodData);
 
           document.getElementById(
-            "blood-pressure-value"
+            "blood_pressure_value"
           ).innerText = `${Math.round(
             bloodData.blood_pressure.systolic
           )}/${Math.round(bloodData.blood_pressure.diastolic)}`;
-          document.getElementById("temperature-value").innerText = bloodData.temperature;
+          document.getElementById("temperature_value").innerText = bloodData.temperature;
         },
         error: function () {
           console.error("Failed to retrieve blood pressure data");

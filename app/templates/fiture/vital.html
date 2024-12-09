@@ -16,7 +16,7 @@
       <div class="flex items-baseline">
         <p
           class="text-4xl font-bold text-black dark:text-white"
-          id="heart-rate-value"
+          id="heart_rate_value"
         >
           60
         </p>
@@ -43,7 +43,7 @@
       <div class="flex items-baseline">
         <p
           class="text-4xl font-bold text-black dark:text-white"
-          id="oxygen-saturation-value"
+          id="oxygen_saturation_value"
         >
           60
         </p>
@@ -69,7 +69,7 @@
       <div class="flex items-baseline">
         <p
           class="text-4xl font-bold text-black dark:text-white"
-          id="respiratory-rate-value"
+          id="respiratory_rate_value"
         >
           60
         </p>
@@ -231,13 +231,13 @@
     }
   
     if (localStorage.getItem("heartRateValue")) {
-      document.getElementById("heart-rate-value").innerText = Math.round(localStorage.getItem("heartRateValue"));
+      document.getElementById("heart_rate_value").innerText = Math.round(localStorage.getItem("heartRateValue"));
     }
     if (localStorage.getItem("oxygenSaturationValue")) {
-      document.getElementById("oxygen-saturation-value").innerText = Math.round(localStorage.getItem("oxygenSaturationValue"));
+      document.getElementById("oxygen_saturation_value").innerText = Math.round(localStorage.getItem("oxygenSaturationValue"));
     }
     if (localStorage.getItem("respiratoryRateValue")) {
-      document.getElementById("respiratory-rate-value").innerText = Math.round(localStorage.getItem("respiratoryRateValue"));
+      document.getElementById("respiratory_rate_value").innerText = Math.round(localStorage.getItem("respiratoryRateValue"));
     }
   
     setInterval(() => {
@@ -248,9 +248,9 @@
           const vitalData = response;
           updateCharts(charts, vitalData);
   
-          document.getElementById("heart-rate-value").innerText = Math.round(vitalData.heart_rate);
-          document.getElementById("oxygen-saturation-value").innerText = Math.round(vitalData.oxygen_saturation);
-          document.getElementById("respiratory-rate-value").innerText = Math.round(vitalData.respiratory_rate);
+          document.getElementById("heart_rate_value").innerText = Math.round(vitalData.heart_rate);
+          document.getElementById("oxygen_saturation_value").innerText = Math.round(vitalData.oxygen_saturation);
+          document.getElementById("respiratory_rate_value").innerText = Math.round(vitalData.respiratory_rate);
         },
         error: function () {
           console.error("Failed to retrieve vital data");
@@ -258,6 +258,5 @@
       });
     }, 100);
   });
-  
 </script>
 

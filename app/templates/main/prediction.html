@@ -31,7 +31,7 @@
             <div class="flex items-baseline mt-2">
               <p
                 class="text-4xl font-bold text-black dark:text-white"
-                id="heart_rate_value"
+                id="heart_rate_predict_value"
               >
                 60
               </p>
@@ -57,11 +57,11 @@
               <div class="flex items-baseline mt-2">
                 <p
                   class="text-4xl font-bold text-black dark:text-white"
-                  id="oxygen_saturation_value"
+                  id="oxygen_saturation_predict_value"
                 >
                   60
                 </p>
-                <p class="text-sm text-black dark:text-white ml-1">bpm</p>
+                <p class="text-sm text-black dark:text-white ml-1">%</p>
               </div>
             </div>
           </div>
@@ -83,11 +83,11 @@
               <div class="flex items-baseline mt-2">
                 <p
                   class="text-4xl font-bold text-black dark:text-white"
-                  id="respiratory_rate_value"
+                  id="respiratory_rate_predict_value"
                 >
                   60
                 </p>
-                <p class="text-sm text-black dark:text-white ml-1">bpm</p>
+                <p class="text-sm text-black dark:text-white ml-1">rpm</p>
               </div>
             </div>
           </div>
@@ -96,11 +96,11 @@
 
       <script>
         function initializePredictChart() {
-          const heartRatePredictionCtx = document.getElementById("heartRatePredict").getContext("2d");
-          const oxygenSaturationPredictionCtx = document.getElementById("oxygenSaturationPredict").getContext("2d");
-          const respiratoryRatePredictionCtx = document.getElementById("respiratoryRatePredict").getContext("2d");
+          const heartRatePredictCtx = document.getElementById("heartRatePredict").getContext("2d");
+          const oxygenSaturationPredictCtx = document.getElementById("oxygenSaturationPredict").getContext("2d");
+          const respiratoryPredictRateCtx = document.getElementById("respiratoryRatePredict").getContext("2d");
       
-          const heartRatePredictChart = new Chart(heartRatePredictionCtx, {
+          const heartRatePredictChart = new Chart(heartRatePredictCtx, {
             type: "line",
             data: {
               labels: Array.from({ length: 100 }, () => ""),
@@ -130,7 +130,7 @@
             },
           });
       
-          const oxygenSaturationPredictChart = new Chart(oxygenSaturationPredictionCtx, {
+          const oxygenSaturationPredictChart = new Chart(oxygenSaturationPredictCtx, {
             type: "line",
             data: {
               labels: Array.from({ length: 100 }, () => ""),
@@ -160,7 +160,7 @@
             },
           });
       
-          const respiratoryRatePredictChart = new Chart(respiratoryRatePredictionCtx, {
+          const respiratoryRatePredictChart = new Chart(respiratoryPredictRateCtx, {
             type: "line",
             data: {
               labels: Array.from({ length: 100 }, () => ""),
@@ -220,27 +220,36 @@
           localStorage.setItem("oxygenSaturationPredictData", JSON.stringify(charts.oxygenSaturationPredictChart.data.datasets[0].data));
           localStorage.setItem("respiratoryRatePredictData", JSON.stringify(charts.respiratoryRatePredictChart.data.datasets[0].data));
       
+          localStorage.setItem("heartRatePredictValue", predictData.heart_rate_predict);
+          localStorage.setItem("oxygenSaturationPredictValue", predictData.oxygen_saturation_predict);
+          localStorage.setItem("respiratoryRatePredictValue", predictData.respiratory_rate_predict);
         }
       
         document.addEventListener("DOMContentLoaded", () => {
           const charts = initializePredictChart();
         
           if (localStorage.getItem("heartRatePredictData")) {
-            charts.heartRatePredictChart.data.datasets[0].data = JSON.parse(localStorage.getItem("heartRatePredictData"));
+            charts.heartRatePredictChart.data.datasets[0].data = JSON.parse(localStorage.getItem("heartRateData"));
             charts.heartRatePredictChart.update();
-            document.getElementById("heart_rate_value").innerText = Math.round(localStorage.getItem("heartRateValue"));
           }
           if (localStorage.getItem("oxygenSaturationPredictData")) {
-            charts.oxygenSaturationPredictChart.data.datasets[0].data = JSON.parse(localStorage.getItem("oxygenSaturationPredictData"));
+            charts.oxygenSaturationPredictChart.data.datasets[0].data = JSON.parse(localStorage.getItem("oxygenSaturationData"));
             charts.oxygenSaturationPredictChart.update();
-            document.getElementById("oxygen_saturation_value").innerText = Math.round(localStorage.getItem("oxygenSaturationValue"));
           }
           if (localStorage.getItem("respiratoryRatePredictData")) {
-            charts.respiratoryRatePredictChart.data.datasets[0].data = JSON.parse(localStorage.getItem("respiratoryRatePredictData"));
+            charts.respiratoryRatePredictChart.data.datasets[0].data = JSON.parse(localStorage.getItem("respiratoryRateData"));
             charts.respiratoryRatePredictChart.update();
-            document.getElementById("respiratory_rate_value").innerText = Math.round(localStorage.getItem("respiratoryRateValue"));
           }
         
+          if (localStorage.getItem("heartRatePredictValue")) {
+            document.getElementById("heart_rate_predict_value").innerText = Math.round(localStorage.getItem("heartRateValue"));
+          }
+          if (localStorage.getItem("oxygenSaturationPredictValue")) {
+            document.getElementById("oxygen_saturation_predict_value").innerText = Math.round(localStorage.getItem("oxygenSaturationValue"));
+          }
+          if (localStorage.getItem("respiratoryRatePredictValue")) {
+            document.getElementById("respiratory_rate_predict_value").innerText = Math.round(localStorage.getItem("respiratoryRateValue"));
+          }
         
           setInterval(() => {
             $.ajax({
@@ -248,19 +257,19 @@
               method: "GET",
               success: function (response) {
                 const predictData = response;
+                console.log(predictData)
                 updatePredictCharts(charts, predictData);
         
-                document.getElementById("heart_rate_value").innerText = Math.round(predictData.heart_rate_predict);
-                document.getElementById("oxygen_saturation_value").innerText = Math.round(predictData.oxygen_saturation_predict);
-                document.getElementById("respiratory_rate_value").innerText = Math.round(predictData.respiratory_rate_predict);
+                document.getElementById("heart_rate_predict_value").innerText = Math.round(predictData.heart_rate_predict);
+                document.getElementById("oxygen_saturation_predict_value").innerText = Math.round(predictData.oxygen_saturation_predict);
+                document.getElementById("respiratory_rate_predict_value").innerText = Math.round(predictData.respiratory_rate_predict);
               },
               error: function () {
                 console.error("Failed to retrieve vital data");
               },
             });
-          }, 200);
+          }, 100);
         });
-        
       </script>
     </main>
 

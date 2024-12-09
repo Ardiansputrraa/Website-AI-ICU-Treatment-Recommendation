@@ -3,7 +3,7 @@
   class="bg-cyan-500 dark:bg-cyan-900 text-white p-4 rounded-lg shadow-md h-[200px] flex flex-col"
 >
   <h2 class="text-sm font-bold text-left mb-2">
-    Overall SOFA Score: <span id="sofa-score-value">3</span>
+    Overall SOFA Score: <span id="sofa_score_value">3</span>
   </h2>
   <div
     class="flex-1 flex flex-col items-center justify-between overflow-hidden"
@@ -16,27 +16,27 @@
 <div class="grid grid-cols-3 gap-2 text-[8px] text-center mt-1">
   <div>
     <span class="font-semibold">Renal:</span> 
-    <span id="renal-value">3</span>
+    <span id="renal_value">3</span>
   </div>
   <div>
     <span class="font-semibold">Nervous:</span> 
-    <span id="nervous-value">3</span>
+    <span id="nervous_value">3</span>
   </div>
   <div>
     <span class="font-semibold">Cardiovascular:</span> 
-    <span id="cardiovascular-value">2</span>
+    <span id="cardiovascular_value">2</span>
   </div>
   <div>
     <span class="font-semibold">Liver:</span> 
-    <span id="liver-value">1</span>
+    <span id="liver_value">1</span>
   </div>
   <div>
     <span class="font-semibold">Respiration:</span> 
-    <span id="respiration-value">2</span>
+    <span id="respiration_value">2</span>
   </div>
   <div>
     <span class="font-semibold">Coagulation:</span> 
-    <span id="coagulation-value">3</span>
+    <span id="coagulation_value">3</span>
   </div>
 </div>
 
@@ -105,25 +105,25 @@
       charts.sofaScoreChart.update();
     }
     if (localStorage.getItem("sofaScoreValue")) {
-      document.getElementById("sofa-score-value").innerText = localStorage.getItem("sofaScoreValue");
+      document.getElementById("sofa_score_value").innerText = localStorage.getItem("sofaScoreValue");
     }
     if (localStorage.getItem("renalValue")) {
-      document.getElementById("renal-value").innerText = localStorage.getItem("renalValue");
+      document.getElementById("renal_value").innerText = localStorage.getItem("renalValue");
     }
     if (localStorage.getItem("nervousValue")) {
-      document.getElementById("nervous-value").innerText = localStorage.getItem("nervousValue");
+      document.getElementById("nervous_value").innerText = localStorage.getItem("nervousValue");
     }
     if (localStorage.getItem("cardiovascularValue")) {
-      document.getElementById("cardiovascular-value").innerText = localStorage.getItem("cardiovascularValue");
+      document.getElementById("cardiovascular_value").innerText = localStorage.getItem("cardiovascularValue");
     }
     if (localStorage.getItem("liverValue")) {
-      document.getElementById("liver-value").innerText = localStorage.getItem("liverValue");
+      document.getElementById("liver_value").innerText = localStorage.getItem("liverValue");
     }
     if (localStorage.getItem("respirationValue")) {
-      document.getElementById("respiration-value").innerText = localStorage.getItem("respirationValue");
+      document.getElementById("respiration_value").innerText = localStorage.getItem("respirationValue");
     }
     if (localStorage.getItem("coagulationValue")) {
-      document.getElementById("coagulation-value").innerText = localStorage.getItem("coagulationValue");
+      document.getElementById("coagulation_value").innerText = localStorage.getItem("coagulationValue");
     }
 
     setInterval(() => {
@@ -133,13 +133,13 @@
         success: function (response) {
           const sofaData = response;
           updateSofaCharts(charts, sofaData);
-          document.getElementById("sofa-score-value").innerText = sofaData.sofa_score;
-          document.getElementById("renal-value").innerText = sofaData.renal;
-          document.getElementById("nervous-value").innerText = sofaData.nervous;
-          document.getElementById("cardiovascular-value").innerText = sofaData.cardiovascular;
-          document.getElementById("liver-value").innerText = sofaData.liver;
-          document.getElementById("respiration-value").innerText = sofaData.respiration;
-          document.getElementById("coagulation-value").innerText = sofaData.coagulation;
+          document.getElementById("sofa_score_value").innerText = sofaData.sofa_score;
+          document.getElementById("renal_value").innerText = sofaData.renal;
+          document.getElementById("nervous_value").innerText = sofaData.nervous;
+          document.getElementById("cardiovascular_value").innerText = sofaData.cardiovascular;
+          document.getElementById("liver_value").innerText = sofaData.liver;
+          document.getElementById("respiration_value").innerText = sofaData.respiration;
+          document.getElementById("coagulation_value").innerText = sofaData.coagulation;
 
         },
         error: function () {

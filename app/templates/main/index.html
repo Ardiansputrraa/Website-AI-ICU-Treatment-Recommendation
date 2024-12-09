@@ -1,150 +1,285 @@
-<script>
-  let time = 0;
+<html>
+  <head>
+    {% include 'component/header.html'%}
+  </head>
+  <body class="dark:bg-gray-950 bg-gray-200">
+    {% include 'component/navbar.html'%}
 
-  function initializeChart() {
-    const heartRateCtx = document.getElementById("heartRate").getContext("2d");
-    const oxygenSaturationCtx = document.getElementById("oxygenSaturation").getContext("2d");
-    const respiratoryRateCtx = document.getElementById("respiratoryRate").getContext("2d");
+    <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 p-4">
+      <!-- Patient Detail -->
+      {% include 'fiture/detail.html'%}
 
-    const heartRateChart = new Chart(heartRateCtx, {
-      type: "line",
-      data: {
-        labels: Array.from({ length: 100 }, () => ""),
-        datasets: [
-          {
-            borderColor: "#9933FF",
-            borderWidth: 2,
-            fill: false,
-            tension: 0.4,
-            data: Array.from({ length: 100 }, () => 75),
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        animation: false,
-        plugins: {
-          legend: { display: false },
-        },
-        scales: {
-          x: { display: false },
-          y: { display: false },
-        },
-        elements: {
-          point: { radius: 0 },
-        },
-      },
-    });
+      <!-- Vitals -->
+      {% include 'fiture/vital.html'%}
 
-    const oxygenSaturationChart = new Chart(oxygenSaturationCtx, {
-      type: "line",
-      data: {
-        labels: Array.from({ length: 100 }, () => ""),
-        datasets: [
-          {
-            borderColor: "#9933FF",
-            borderWidth: 2,
-            fill: false,
-            tension: 0.4,
-            data: Array.from({ length: 100 }, () => 98),
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        animation: false,
-        plugins: {
-          legend: { display: false },
-        },
-        scales: {
-          x: { display: false },
-          y: { display: false },
-        },
-        elements: {
-          point: { radius: 0 },
-        },
-      },
-    });
+      <!-- Prediction -->
+      <section
+        class="col-span-1 md:col-span-6 lg:col-span-4 bg-white dark:bg-gray-950 p-4 rounded-lg"
+      >
+      <!-- HEART RATE -->
+      <div class="mb-4">
+        <p class="text-[12px] mt-2 mb-6 text-gray-900 dark:text-gray-200">
+            HEART RATE
+        </p>
+        <div class="flex items-center">
+          <!-- Grafik -->
+          <div class="flex-grow">
+            <canvas id="heartRatePredict" class="w-full h-[130px] max-h-[130px]"></canvas>
+          </div>
+          <div class="pl-7 flex flex-col items-center justify-center ml-4">
+            <i class="mdi mdi-heart-pulse text-5xl text-red-500"></i>
+            <div class="flex items-baseline mt-2">
+              <p
+                class="text-4xl font-bold text-black dark:text-white"
+                id="heart_rate_predict_value"
+              >
+                60
+              </p>
+              <p class="text-sm text-black dark:text-white ml-1">bpm</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
 
-    const respiratoryRateChart = new Chart(respiratoryRateCtx, {
-      type: "line",
-      data: {
-        labels: Array.from({ length: 100 }, () => ""),
-        datasets: [
-          {
-            borderColor: "#9933FF",
-            borderWidth: 2,
-            fill: false,
-            tension: 0.4,
-            data: Array.from({ length: 100 }, () => 20),
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        animation: false,
-        plugins: {
-          legend: { display: false },
-        },
-        scales: {
-          x: { display: false },
-          y: { display: false },
-        },
-        elements: {
-          point: { radius: 0 },
-        },
-      },
-    });
+        <!-- Oxygen Saturation -->
+        <div class="mb-4">
+          <p class="text-[12px] mt-4 mb-6 text-gray-900 dark:text-gray-200">
+              OXYGEN SATURATION
+          </p>
+          <div class="flex items-center">
+            <!-- Grafik -->
+            <div class="flex-grow">
+              <canvas id="oxygenSaturationPredict" class="w-full h-[130px] max-h-[130px]"></canvas>
+            </div>
+            <div class="pl-7 flex flex-col items-center justify-center ml-4">
+              <i class="mdi mdi-heart-plus-outline text-5xl text-red-500"></i>
+              <div class="flex items-baseline mt-2">
+                <p
+                  class="text-4xl font-bold text-black dark:text-white"
+                  id="oxygen_saturation_predict_value"
+                >
+                  60
+                </p>
+                <p class="text-sm text-black dark:text-white ml-1">bpm</p>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    return {
-      heartRateChart,
-      oxygenSaturationChart,
-      respiratoryRateChart,
-    };
-  }
+      
+        <!-- Respiratory Rate -->
+        <div class="mb-4">
+          <p class="text-[12px] mt-4 mb-6 text-gray-900 dark:text-gray-200">
+            RESPIRATORY RATE
+          </p>
+          <div class="flex items-center">
+            <!-- Grafik -->
+            <div class="flex-grow">
+              <canvas id="respiratoryRatePredict" class="w-full h-[130px] max-h-[130px]"></canvas>
+            </div>
+            <div class="pl-7 flex flex-col items-center justify-center ml-4">
+              <i class="mdi mdi-lungs text-5xl text-red-500"></i>
+              <div class="flex items-baseline mt-2">
+                <p
+                  class="text-4xl font-bold text-black dark:text-white"
+                  id="respiratory_rate_predict_value"
+                >
+                  60
+                </p>
+                <p class="text-sm text-black dark:text-white ml-1">bpm</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-  window.onload = () => {
-    const { heartRateChart, oxygenSaturationChart, respiratoryRateChart } =
-      initializeChart();
-
-    setInterval(() => {
-      $.ajax({
-        url: "/get-waveform-data",
-        method: "GET",
-        success: function (data) {
-          // Update heart rate
-          heartRateChart.data.datasets[0].data.push(data.heart_rate);
-          if (heartRateChart.data.datasets[0].data.length > 100) {
-            heartRateChart.data.datasets[0].data.shift();
+      <script>
+        function initializePredictChart() {
+          const heartRatePredictionCtx = document.getElementById("heartRatePredict").getContext("2d");
+          const oxygenSaturationPredictionCtx = document.getElementById("oxygenSaturationPredict").getContext("2d");
+          const respiratoryRatePredictionCtx = document.getElementById("respiratoryRatePredict").getContext("2d");
+      
+          const heartRatePredictChart = new Chart(heartRatePredictionCtx, {
+            type: "line",
+            data: {
+              labels: Array.from({ length: 100 }, () => ""),
+              datasets: [
+                {
+                  borderColor: "#F09319",
+                  borderWidth: 2,
+                  fill: false,
+                  tension: 0.4,
+                  data: Array.from({ length: 100 }, () => 75),
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              animation: false,
+              plugins: {
+                legend: { display: false },
+              },
+              scales: {
+                x: { display: false },
+                y: { display: false },
+              },
+              elements: {
+                point: { radius: 0 },
+              },
+            },
+          });
+      
+          const oxygenSaturationPredictChart = new Chart(oxygenSaturationPredictionCtx, {
+            type: "line",
+            data: {
+              labels: Array.from({ length: 100 }, () => ""),
+              datasets: [
+                {
+                  borderColor: "#FFE31A",
+                  borderWidth: 2,
+                  fill: false,
+                  tension: 0.4,
+                  data: Array.from({ length: 100 }, () => 98),
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              animation: false,
+              plugins: {
+                legend: { display: false },
+              },
+              scales: {
+                x: { display: false },
+                y: { display: false },
+              },
+              elements: {
+                point: { radius: 0 },
+              },
+            },
+          });
+      
+          const respiratoryRatePredictChart = new Chart(respiratoryRatePredictionCtx, {
+            type: "line",
+            data: {
+              labels: Array.from({ length: 100 }, () => ""),
+              datasets: [
+                {
+                  borderColor: "#4CCD99",
+                  borderWidth: 2,
+                  fill: false,
+                  tension: 0.4,
+                  data: Array.from({ length: 100 }, () => 20),
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              animation: false,
+              plugins: {
+                legend: { display: false },
+              },
+              scales: {
+                x: { display: false },
+                y: { display: false },
+              },
+              elements: {
+                point: { radius: 0 },
+              },
+            },
+          });
+      
+          return {
+            heartRatePredictChart,
+            oxygenSaturationPredictChart,
+            respiratoryRatePredictChart,
+          };
+        }
+      
+        function updatePredictCharts(charts, predictData) {
+          charts.heartRatePredictChart.data.datasets[0].data.push(predictData.heart_rate_predict);
+          if (charts.heartRatePredictChart.data.datasets[0].data.length > 100) {
+            charts.heartRatePredictChart.data.datasets[0].data.shift();
           }
-          heartRateChart.update();
-          document.getElementById("heart-rate-value").innerText = Math.round(
-            data.heart_rate
-          );
-
-          // Update oxygen saturation
-          oxygenSaturationChart.data.datasets[0].data.push(
-            data.oxygen_saturation
-          );
-          if (oxygenSaturationChart.data.datasets[0].data.length > 100) {
-            oxygenSaturationChart.data.datasets[0].data.shift();
+          charts.heartRatePredictChart.update();
+      
+          charts.oxygenSaturationPredictChart.data.datasets[0].data.push(predictData.oxygen_saturation_predict);
+          if (charts.oxygenSaturationPredictChart.data.datasets[0].data.length > 100) {
+            charts.oxygenSaturationPredictChart.data.datasets[0].data.shift();
           }
-          oxygenSaturationChart.update();
-          document.getElementById("oxygen-saturation-value").innerText =
-            Math.round(data.oxygen_saturation);
-
-          // Update respiratory rate
-          respiratoryRateChart.data.datasets[0].data.push(data.respiratory_rate);
-          if (respiratoryRateChart.data.datasets[0].data.length > 100) {
-            respiratoryRateChart.data.datasets[0].data.shift();
+          charts.oxygenSaturationPredictChart.update();
+      
+          charts.respiratoryRatePredictChart.data.datasets[0].data.push(predictData.respiratory_rate_predict);
+          if (charts.respiratoryRatePredictChart.data.datasets[0].data.length > 100) {
+            charts.respiratoryRatePredictChart.data.datasets[0].data.shift();
           }
-          respiratoryRateChart.update();
-          document.getElementById("respiratory-rate-value").innerText =
-            Math.round(data.respiratory_rate);
-        },
-      });
-    }, 100);
-  };
-</script>
+          charts.respiratoryRatePredictChart.update();
+      
+          localStorage.setItem("heartRatePredictData", JSON.stringify(charts.heartRatePredictChart.data.datasets[0].data));
+          localStorage.setItem("oxygenSaturationPredictData", JSON.stringify(charts.oxygenSaturationPredictChart.data.datasets[0].data));
+          localStorage.setItem("respiratoryRatePredictData", JSON.stringify(charts.respiratoryRatePredictChart.data.datasets[0].data));
+      
+        }
+      
+        document.addEventListener("DOMContentLoaded", () => {
+          const charts = initializePredictChart();
+        
+          if (localStorage.getItem("heartRatePredictData")) {
+            charts.heartRatePredictChart.data.datasets[0].data = JSON.parse(localStorage.getItem("heartRatePredictData"));
+            charts.heartRatePredictChart.update();
+            document.getElementById("heart_rate_predict_value").innerText = Math.round(localStorage.getItem("heartRateValue"));
+          }
+          if (localStorage.getItem("oxygenSaturationPredictData")) {
+            charts.oxygenSaturationPredictChart.data.datasets[0].data = JSON.parse(localStorage.getItem("oxygenSaturationPredictData"));
+            charts.oxygenSaturationPredictChart.update();
+            document.getElementById("oxygen_saturation_predict_value").innerText = Math.round(localStorage.getItem("oxygenSaturationValue"));
+          }
+          if (localStorage.getItem("respiratoryRatePredictData")) {
+            charts.respiratoryRatePredictChart.data.datasets[0].data = JSON.parse(localStorage.getItem("respiratoryRatePredictData"));
+            charts.respiratoryRatePredictChart.update();
+            document.getElementById("respiratory_rate_predict_value").innerText = Math.round(localStorage.getItem("respiratoryRateValue"));
+          }
+        
+        
+          setInterval(() => {
+            $.ajax({
+              url: `/get-prediction-data/{{bed_id}}`,
+              method: "GET",
+              success: function (response) {
+                const predictData = response;
+                console.log(predictData)
+                updatePredictCharts(charts, predictData);
+        
+                document.getElementById("heart_rate_predict_value").innerText = Math.round(predictData.heart_rate_predict);
+                document.getElementById("oxygen_saturation_predict_value").innerText = Math.round(predictData.oxygen_saturation_predict);
+                document.getElementById("respiratory_rate_predict_value").innerText = Math.round(predictData.respiratory_rate_predict);
+              },
+              error: function () {
+                console.error("Failed to retrieve vital data");
+              },
+            });
+          }, 100);
+        });
+        
+      </script>
+    </main>
 
+    <footer class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4">
+      <!-- History -->
+      {% include 'fiture/history.html'%}
 
+      <!-- BLOOD PRESSURE -->
+      {% include 'fiture/blood-presurre.html'%}
+
+      <!-- SOFA Score -->
+      {% include 'fiture/sofa.html'%}
+
+      <!-- Similar -->
+      {% include 'fiture/similar.html'%}
+
+      <!-- Recommendation -->
+      {% include 'fiture/recommendation.html'%}
+    </footer>
+  </body>
+</html>
