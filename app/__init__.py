@@ -30,6 +30,9 @@ def create_app():
     
     from .routes.treatments import treatments_
     app.register_blueprint(treatments_)
+    
+    from .routes.summary import summary_
+    app.register_blueprint(summary_)
 
     start_patient_thread()
     
