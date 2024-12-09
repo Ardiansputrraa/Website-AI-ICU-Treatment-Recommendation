@@ -55,7 +55,6 @@
         method: "GET",
         success: function (response) {
           const treatmentData = response;
-          console.log(treatmentData)
           updateTreatment(treatmentData);
           document.getElementById("ai_recommendation_value").innerText = treatmentData.ai_recommendations[0];
           document.getElementById("ai_recommendation_value_").innerText = treatmentData.ai_recommendations[1];
