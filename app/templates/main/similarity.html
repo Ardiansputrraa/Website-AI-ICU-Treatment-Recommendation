@@ -189,12 +189,13 @@
                 <td class="p-2">${similarityData[i]["weight"]}</td>
                 <td class="p-2">${similarityData[i]["height"]}</td>
                 <td class="p-2">
-                    <button
+                    <a
+                      href="/summary/{{bed_id}}/${similarityData[i]["stay_id"]}"
                       class="flex items-center gap-1 text-cyan-500 hover:text-cyan-600 transition duration-200"
                     >
                       <i class="mdi mdi-eye text-lg"></i>
                       <span class="font-medium">View</span>
-                    </button>
+                    </a>
                   </td>
               </tr>`;
                 $("#table_similarity").append(table_temp);
