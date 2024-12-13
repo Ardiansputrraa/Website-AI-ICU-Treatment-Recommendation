@@ -1,7 +1,10 @@
 from flask import Flask
 from config import Config
 from pymongo import MongoClient
+from flask_socketio import SocketIO
 from app.task.patient_thread import start_patient_thread
+from app.services.prediction_service import load_hr_data_predict, load_rr_data_predict, load_oxygen_data_predict
+
 
 def create_app():
     app = Flask(__name__)
@@ -9,6 +12,10 @@ def create_app():
     
     client = MongoClient(app.config['MONGODB_URI'])
     app.db = client[app.config['DBNAME']]
+    
+    load_hr_data_predict('app/data/selected_data.csv')
+    load_oxygen_data_predict('app/data/selected_data.csv')
+    load_rr_data_predict('app/data/selected_data.csv')
     
     from .routes.auth import auth_
     app.register_blueprint(auth_)
@@ -25,8 +32,9 @@ def create_app():
     from .routes.prediction import prediction_
     app.register_blueprint(prediction_)
     
-    from .routes.patient import patient_
+    from .routes.patient import patient_, patientSocketio
     app.register_blueprint(patient_)
+    patientSocketio.init_app(app)
     
     from .routes.treatments import treatments_
     app.register_blueprint(treatments_)
