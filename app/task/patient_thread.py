@@ -13,14 +13,14 @@ def dateNow():
     return formatted_date
 
 patients = [
-    {"name": "Abdul Kirom", "address": "Jakarta"},
-    {"name": "Dewi Rahmawati", "address": "Bandung"},
-    {"name": "Rizal Abdi", "address": "Surabaya"},
-    {"name": "Lia Rahma", "address": "Medan"},
-    {"name": "Prasetyo Putra", "address": "Bali"},
-    {"name": "Aldo Akfar Rahma", "address": "Padang"},
-    {"name": "Kusmita Suryah", "address": "Balikpapan"},
-    {"name": "Aldy Hamzah", "address": "Pontianak"},
+    {"name": "Abdul Kirom", "age": "60 years old", "body_period": "169 cm 73 kg"},
+    {"name": "Dewi Rahmawati", "age": "45 years old", "body_period": "172 cm 68 kg"},
+    {"name": "Rizal Abdi", "age": "30 years old", "body_period": "160 cm 55 kg"},
+    {"name": "Lia Rahma", "age": "39 years old", "body_period": "180 cm 80 kg"},
+    {"name": "Prasetyo Putra", "age": "55 years old", "body_period": "176 cm 65 kg"},
+    {"name": "Aldo Akfar Rahma", "age": "49 years old", "body_period": "174 cm 73 kg"},
+    {"name": "Kusmita Suryah", "age": "48 years old", "body_period": "166 cm 63 kg"},
+    {"name": "Aldy Hamzah", "age": "68 years old", "body_period": "175 cm 80 kg"},
 ]
 
 
@@ -36,8 +36,8 @@ def update_patient_data():
             icu_beds_values[bed_id] = {
                 "patient_details": {
                     "name": patient["name"],
-                    "address": patient["address"],
-                    "date": dateNow(),
+                    "age": patient["age"],
+                    "body_period": patient["body_period"],
                 },
                 "vital": {
                     "heart_rate": generate_heart_rate(),
