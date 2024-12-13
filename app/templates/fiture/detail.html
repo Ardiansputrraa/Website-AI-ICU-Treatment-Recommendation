@@ -11,17 +11,17 @@
   </div>
   <div class="flex items-center pt-1">
     <i
-      class="mdi mdi-home text-2xl transition duration-75 text-cyan-500 mr-2"
+      class="mdi mdi-run-fast text-2xl transition duration-75 text-cyan-500 mr-2"
     ></i>
-    <p class="dark:text-gray-300 text-gray-800 text-sm" id="address_value">
+    <p class="dark:text-gray-300 text-gray-800 text-sm" id="age_value">
       123 Kings Road Brisbane
     </p>
   </div>
   <div class="flex items-center pt-1">
     <i
-      class="mdi mdi-clock-time-eight text-2xl text-cyan-500 transition duration-75 mr-2"
+      class="mdi mdi-human-male-height text-2xl transition duration-75 text-cyan-500 mr-2"
     ></i>
-    <p class="dark:text-gray-300 text-gray-800 text-sm" id="date_value">Tue 3 Mar 2022</p>
+    <p class="dark:text-gray-300 text-gray-800 text-sm" id="body_period_vale">Tue 3 Mar 2022</p>
   </div>
   <img
     src="{{url_for('static', filename='src/images/assets/x-ray.png')}}"
@@ -46,19 +46,19 @@
 <script>
   function updatePatientDetails(patient_details) {
     localStorage.setItem("name",patient_details.name);
-    localStorage.setItem("address",patient_details.address);
-    localStorage.setItem("date",patient_details.date);
+    localStorage.setItem("age",patient_details.age);
+    localStorage.setItem("body_period",patient_details.body_period);
   }
 
   document.addEventListener("DOMContentLoaded", () => {
     if (localStorage.getItem("name")) {
       document.getElementById("name_value").innerText = localStorage.getItem("name");
     }
-    if (localStorage.getItem("address")) {
-      document.getElementById("address_value").innerText = localStorage.getItem("address");
+    if (localStorage.getItem("age")) {
+      document.getElementById("age_value").innerText = localStorage.getItem("age");
     }
-    if (localStorage.getItem("date")) {
-      document.getElementById("date_value").innerText = localStorage.getItem("date");
+    if (localStorage.getItem("body_period")) {
+      document.getElementById("body_period_vale").innerText = localStorage.getItem("body_period");
     }
 
     setInterval(() => {
@@ -69,8 +69,8 @@
           const patient_details = response;
           updatePatientDetails(patient_details);
           document.getElementById("name_value").innerText = patient_details.name;
-          document.getElementById("address_value").innerText = patient_details.address;
-          document.getElementById("date_value").innerText = patient_details.date;
+          document.getElementById("age_value").innerText = patient_details.age;
+          document.getElementById("body_period_vale").innerText = patient_details.body_period;
         },
         error: function () {
           console.error("Failed to retrieve patient details data");

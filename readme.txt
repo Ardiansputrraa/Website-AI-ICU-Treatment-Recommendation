@@ -12,6 +12,8 @@ install beberapa library yang dibutuhkan untuk virtual environment
 - pip install python-dotenv
 - pip install pydantic
 - pip install scikit-learn
+- pip install flask-socketio
+
 
 selanjutnya run file app.py
 
