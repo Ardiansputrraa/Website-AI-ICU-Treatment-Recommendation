@@ -44,38 +44,33 @@
 </section>
 
 <script>
-  function updatePatientDetails(patient_details) {
-    localStorage.setItem("name",patient_details.name);
-    localStorage.setItem("age",patient_details.age);
-    localStorage.setItem("body_period",patient_details.body_period);
-  }
 
   document.addEventListener("DOMContentLoaded", () => {
-    if (localStorage.getItem("name")) {
-      document.getElementById("name_value").innerText = localStorage.getItem("name");
-    }
-    if (localStorage.getItem("age")) {
-      document.getElementById("age_value").innerText = localStorage.getItem("age");
-    }
-    if (localStorage.getItem("body_period")) {
-      document.getElementById("body_period_vale").innerText = localStorage.getItem("body_period");
-    }
+
+    const socket = io();
+
+    socket.on("patient_data", (data) => {
+      if (data.bed_id == "{{ bed_id }}") {
+        console.log("Data Vital Diterima:", data);
+        localStorage.setItem(
+          "name",
+          data.patient_detail.name
+        );
+        localStorage.setItem(
+          "age",
+          data.patient_detail.age
+        );
+        localStorage.setItem(
+          "body_period",
+          data.patient_detail.body_period
+        );
+      }
+    });
 
     setInterval(() => {
-      $.ajax({
-        url: `/get-patient-detail/{{bed_id}}`,
-        method: "GET",
-        success: function (response) {
-          const patient_details = response;
-          updatePatientDetails(patient_details);
-          document.getElementById("name_value").innerText = patient_details.name;
-          document.getElementById("age_value").innerText = patient_details.age;
-          document.getElementById("body_period_vale").innerText = patient_details.body_period;
-        },
-        error: function () {
-          console.error("Failed to retrieve patient details data");
-        },
-      });
-    }, 100);
+          document.getElementById("name_value").innerText = localStorage.getItem("name");
+          document.getElementById("age_value").innerText = localStorage.getItem("age");
+          document.getElementById("body_period_vale").innerText = localStorage.getItem("body_period");
+    }, 1);
   });
 </script>

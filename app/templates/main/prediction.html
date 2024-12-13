@@ -257,7 +257,6 @@
               method: "GET",
               success: function (response) {
                 const predictData = response;
-                console.log(predictData)
                 updatePredictCharts(charts, predictData);
         
                 document.getElementById("heart_rate_predict_value").innerText = Math.round(predictData.heart_rate_predict);

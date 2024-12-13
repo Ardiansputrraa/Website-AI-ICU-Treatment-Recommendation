@@ -1,30 +1,41 @@
-import random
-import math
-from app.data_global import icu_beds_values
+import csv
+from app.data_global import icu_beds_values, hr_data, rr_data, oxygen_data
 
+def load_hr_data_predict(csv_file):
+    global hr_data
+    with open(csv_file, mode='r') as file:
+        reader = csv.DictReader(file)
+        hr_data = [float(row['HR']) for row in reader] 
+        
+def load_oxygen_data_predict(csv_file):
+    global oxygen_data
+    with open(csv_file, mode='r') as file:
+        reader = csv.DictReader(file)
+        oxygen_data = [float(row['SpO2']) for row in reader] 
+        
+def load_rr_data_predict(csv_file):
+    global rr_data
+    with open(csv_file, mode='r') as file:
+        reader = csv.DictReader(file)
+        rr_data = [float(row['RR']) for row in reader] 
+        
 def generate_heart_rate_predict(global_time):
-    # baseline = 75
-    # amplitude = 5
-    # frequency = 0.1
-    # noise = random.uniform(-0.25, 0.25)
-    # return max(min(baseline + amplitude * math.sin(frequency * global_time) + noise, 120), 50)
-    return random.randint(60, 100)
+    if not hr_data:
+        raise ValueError("HR data is not loaded. Please call load_hr_data first.")
+    index = global_time % len(hr_data)  
+    return round(hr_data[index]) 
 
 def generate_oxygen_saturation_predict(global_time):
-    # amplitude = 2
-    # baseline = 98
-    # frequency = 0.2
-    # noise = random.uniform(-0.25, 0.25)
-    # return baseline + amplitude * math.sin(frequency * global_time + math.pi / 2) + noise
-    return random.randint(90, 100)
+    if not oxygen_data:
+        raise ValueError("SpO2 data is not loaded. Please call load_oxygen_data first.")
+    index = global_time % len(oxygen_data)  
+    return round(oxygen_data[index]) 
 
 def generate_respiratory_rate_predict(global_time):
-    # amplitude = 2
-    # baseline = 20
-    # frequency = 0.1
-    # noise = random.uniform(-0.5, 0.5)
-    # return baseline + amplitude * math.sin(frequency * global_time) + noise
-    return random.randint(15, 25)
+    if not rr_data:
+        raise ValueError("RR data is not loaded. Please call load_rr_data first.")
+    index = global_time % len(rr_data)  
+    return round(rr_data[index])
 
 
 def get_prediction_data(bed_id):

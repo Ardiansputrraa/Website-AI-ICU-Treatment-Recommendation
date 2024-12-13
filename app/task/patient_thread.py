@@ -1,16 +1,11 @@
 import threading
 import time
-from datetime import datetime
+from app.routes.patient import patientSocketio
 from app.services.vital_service import generate_heart_rate, generate_oxygen_saturation, generate_respiratory_rate, \
     generate_blood_pressure, generate_temperature, icu_beds_values
 from app.services.prediction_service import generate_heart_rate_predict, generate_oxygen_saturation_predict, generate_respiratory_rate_predict
 from app.services.sofa_service import calculate_sofa_score, renal, nervous, cardiovascular, liver, respiration, coagulation
 from app.services.treatment_service import random_physician_action, random_ai_recommendation
-
-def dateNow():
-    current_date = datetime.now()
-    formatted_date = current_date.strftime('%a, %d %b %Y')
-    return formatted_date
 
 patients = [
     {"name": "Abdul Kirom", "age": "60 years old", "body_period": "169 cm 73 kg"},
@@ -34,17 +29,15 @@ def update_patient_data():
             bed_id = f"5010000{i}"
             patient = patients[i - 1]
             icu_beds_values[bed_id] = {
-                "patient_details": {
+                "patient_detail": {
                     "name": patient["name"],
                     "age": patient["age"],
                     "body_period": patient["body_period"],
                 },
                 "vital": {
-                    "heart_rate": generate_heart_rate(),
-                    "oxygen_saturation": generate_oxygen_saturation(),
-                    "respiratory_rate": generate_respiratory_rate(),
-                    "blood_pressure": generate_blood_pressure(global_time),
-                    "temperature": generate_temperature(global_time),
+                    "heart_rate": generate_heart_rate(global_time),
+                    "oxygen_saturation": generate_oxygen_saturation(global_time),
+                    "respiratory_rate": generate_respiratory_rate(global_time),
                 },
                 "prediction": {
                     "heart_rate_predict": generate_heart_rate_predict(global_time),
@@ -69,6 +62,8 @@ def update_patient_data():
                     "ai_recommendations": random_ai_recommendation(),
                 },
             }
+            patientSocketio.emit('patient_data', {"bed_id": bed_id, "patient_detail": icu_beds_values[bed_id]["patient_detail"]})
+            patientSocketio.emit('vital_data', {"bed_id": bed_id, "vital": icu_beds_values[bed_id]["vital"]})
         time.sleep(1)
         
 def start_patient_thread():
