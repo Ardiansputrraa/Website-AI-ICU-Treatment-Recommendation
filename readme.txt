@@ -8,7 +8,7 @@ aktifkan virtual environment
 
 install beberapa library yang dibutuhkan untuk virtual environment
 - pip install Flask requests pymongo dnspython certifi pyjwt pandas
-- pip install flask-cors
+- pip install flask-cors gunicorn 
 - pip install python-dotenv
 - pip install pydantic
 - pip install scikit-learn
