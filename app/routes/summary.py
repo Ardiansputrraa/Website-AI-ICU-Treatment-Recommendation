@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, current_app, Blueprint, jsonify, redirect, url_for
-import json
 import jwt
+from app.middleware.authenticate import token_required
 
 summary_ = Blueprint('summary', __name__)
 
@@ -18,6 +18,7 @@ def summary(bed_id, stay_id):
         return redirect(url_for("auth.sign_in", msg="Please login first!"))
     
 @summary_.route('/get-summary/<stay_id>', methods=["GET"])
+@token_required
 def get_summary_data(stay_id):
     try:
         if not stay_id:

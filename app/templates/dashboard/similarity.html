@@ -9,7 +9,7 @@
       <!-- Patient Detail -->
       {% include 'patient_monitoring/detail.html'%}
 
-      <!-- Vitals -->
+      <!-- Vital -->
       {% include 'patient_monitoring/vital.html'%}
 
       <!-- Similarity Search -->
@@ -62,13 +62,7 @@
           <p class="text-sm font-semibold mb-5 dark:text-white text-black">
             Customise patient details for search:
           </p>
-          <div class="grid grid-cols-5 gap-2">
-            <input
-              id="search_by_age"
-              type="text"
-              placeholder="Age"
-              class="p-2 bg-gray-50 border border-cyan-500 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 dark:bg-gray-900 dark:border-cyan-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-600 dark:focus:border-cyan-600"
-            />
+          <div class="grid grid-cols-4 gap-4">
             <select
               id="search_by_gender"
               class="p-2 bg-gray-50 border border-cyan-500 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 dark:bg-gray-900 dark:border-cyan-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-600 dark:focus:border-cyan-600"
@@ -77,55 +71,88 @@
               <option>Male</option>
               <option>Female</option>
             </select>
-            <input
-              id="search_by_weight"
-              type="text"
-              placeholder="Weight"
-              class="p-2 bg-gray-50 border border-cyan-500 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 dark:bg-gray-900 dark:border-cyan-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-600 dark:focus:border-cyan-600"
-            />
-            <input
-              id="search_by_height"
-              type="text"
-              placeholder="Height"
-              class="p-2 bg-gray-50 border border-cyan-500 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 dark:bg-gray-900 dark:border-cyan-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-600 dark:focus:border-cyan-600"
-            />
+            <div class="grid grid-cols-2 gap-2">
+              <input
+                id="search_by_age_start"
+                type="text"
+                placeholder="Start Age"
+                class="p-2 bg-gray-50 border border-cyan-500 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 dark:bg-gray-900 dark:border-cyan-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-600 dark:focus:border-cyan-600"
+              />
+              <input
+                id="search_by_age_end"
+                type="text"
+                placeholder="End Age"
+                class="p-2 bg-gray-50 border border-cyan-500 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 dark:bg-gray-900 dark:border-cyan-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-600 dark:focus:border-cyan-600"
+              />
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <input
+                id="search_by_weight_start"
+                type="text"
+                placeholder="Start Weight"
+                class="p-2 bg-gray-50 border border-cyan-500 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 dark:bg-gray-900 dark:border-cyan-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-600 dark:focus:border-cyan-600"
+              />
+              <input
+                id="search_by_weight_end"
+                type="text"
+                placeholder="End Weight"
+                class="p-2 bg-gray-50 border border-cyan-500 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 dark:bg-gray-900 dark:border-cyan-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-600 dark:focus:border-cyan-600"
+              />
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <input
+                id="search_by_height_start"
+                type="text"
+                placeholder="Start Height"
+                class="p-2 bg-gray-50 border border-cyan-500 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 dark:bg-gray-900 dark:border-cyan-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-600 dark:focus:border-cyan-600"
+              />
+              <input
+                id="search_by_height_end"
+                type="text"
+                placeholder="End Height"
+                class="p-2 bg-gray-50 border border-cyan-500 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 dark:bg-gray-900 dark:border-cyan-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-600 dark:focus:border-cyan-600"
+              />
+            </div>
           </div>
         </div>
       </section>
       <script>
         document.addEventListener("DOMContentLoaded", () => {
           getDataSimilarity();
-
+      
           const filters = {
-            age: "",
+            age_start: "",
+            age_end: "",
             gender: "",
-            weight: "",
-            height: "",
+            weight_start: "",
+            weight_end: "",
+            height_start: "",
+            height_end: "",
           };
-
-          function applyFilters() {
+      
+          function searchDataSimilarity() {
             $.ajax({
               url: "/search-data-similarity",
               method: "POST",
               data: filters,
               success: function (response) {
                 $("#table_similarity").empty();
-
+      
                 if (response.length > 0) {
                   response.forEach((item, index) => {
                     let tableRow = `
                       <tr class="border-t border-gray-700 dark:text-white">
                         <td class="p-2">${index + 1}</td>
-                        <td class="p-2">${item.name}</td>
-                        <td class="p-2">${item.age}</td>
-                        <td class="p-2">${item.gender}</td>
-                        <td class="p-2">${item.weight}</td>
-                        <td class="p-2">${item.height}</td>
+                        <td class="p-2">${item.name || "-"}</td>
+                        <td class="p-2">${item.age || "-"}</td>
+                        <td class="p-2">${item.gender || "-"}</td>
+                        <td class="p-2">${item.weight || "-"}</td>
+                        <td class="p-2">${item.height || "-"}</td>
                         <td class="p-2">
-                          <button class="flex items-center gap-1 text-cyan-500 hover:text-cyan-600 transition duration-200">
+                          <a href="/summary/{{bed_id}}/${item.stay_id}" class="flex items-center gap-1 text-cyan-500 hover:text-cyan-600 transition duration-200">
                             <i class="mdi mdi-eye text-lg"></i>
                             <span class="font-medium">View</span>
-                          </button>
+                          </a>
                         </td>
                       </tr>
                     `;
@@ -146,12 +173,25 @@
               },
             });
           }
-
-          $("#search_by_age").on("input", function () {
-            filters.age = $(this).val().trim();
-            applyFilters();
+      
+          $("#search_by_age_start, #search_by_age_end").on("input", function () {
+            filters.age_start = $("#search_by_age_start").val().trim();
+            filters.age_end = $("#search_by_age_end").val().trim();
+            searchDataSimilarity();
           });
-
+      
+          $("#search_by_weight_start, #search_by_weight_end").on("input", function () {
+            filters.weight_start = $("#search_by_weight_start").val().trim();
+            filters.weight_end = $("#search_by_weight_end").val().trim();
+            searchDataSimilarity();
+          });
+      
+          $("#search_by_height_start, #search_by_height_end").on("input", function () {
+            filters.height_start = $("#search_by_height_start").val().trim();
+            filters.height_end = $("#search_by_height_end").val().trim();
+            searchDataSimilarity();
+          });
+      
           $("#search_by_gender").on("change", function () {
             const selectedGender = $(this).val().trim();
             if (selectedGender === "Gender") {
@@ -159,20 +199,10 @@
             } else {
               filters.gender = selectedGender;
             }
-            applyFilters();
-          });
-
-          $("#search_by_weight").on("input", function () {
-            filters.weight = $(this).val().trim();
-            applyFilters();
-          });
-
-          $("#search_by_height").on("input", function () {
-            filters.height = $(this).val().trim();
-            applyFilters();
+            searchDataSimilarity();
           });
         });
-
+      
         function getDataSimilarity() {
           $("#table_similarity").empty();
           $.ajax({
@@ -181,23 +211,20 @@
             success: function (response) {
               let similarityData = response;
               for (let i = 0; i < similarityData.length; i++) {
-                let table_temp = `<<tr class="border-t border-gray-700 dark:text-white">
-                <td class="p-2">${i + 1}</td>
-                <td class="p-2">${similarityData[i]["name"]}</td>
-                <td class="p-2">${similarityData[i]["age"]}</td>
-                <td class="p-2">${similarityData[i]["gender"]}</td>
-                <td class="p-2">${similarityData[i]["weight"]}</td>
-                <td class="p-2">${similarityData[i]["height"]}</td>
-                <td class="p-2">
-                    <a
-                      href="/summary/{{bed_id}}/${similarityData[i]["stay_id"]}"
-                      class="flex items-center gap-1 text-cyan-500 hover:text-cyan-600 transition duration-200"
-                    >
+                let table_temp = `<tr class="border-t border-gray-700 dark:text-white">
+                  <td class="p-2">${i + 1}</td>
+                  <td class="p-2">${similarityData[i]["name"] || "-"}</td>
+                  <td class="p-2">${similarityData[i]["age"] || "-"}</td>
+                  <td class="p-2">${similarityData[i]["gender"] || "-"}</td>
+                  <td class="p-2">${similarityData[i]["weight"] || "-"}</td>
+                  <td class="p-2">${similarityData[i]["height"] || "-"}</td>
+                  <td class="p-2">
+                    <a href="/summary/{{bed_id}}/${similarityData[i]["stay_id"]}" class="flex items-center gap-1 text-cyan-500 hover:text-cyan-600 transition duration-200">
                       <i class="mdi mdi-eye text-lg"></i>
                       <span class="font-medium">View</span>
                     </a>
                   </td>
-              </tr>`;
+                </tr>`;
                 $("#table_similarity").append(table_temp);
               }
             },
@@ -207,13 +234,14 @@
           });
         }
       </script>
+      
     </main>
 
     <footer class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4">
       <!-- History -->
       {% include 'patient_monitoring/history.html'%}
 
-      <!-- BLOOD PRESSURE -->
+      <!-- Blood Pressure -->
       {% include 'patient_monitoring/blood-presurre.html'%}
 
       <!-- SOFA Score -->

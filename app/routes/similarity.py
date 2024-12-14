@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, current_app, Blueprint, jsonify, redirect, url_for
-import json
 import jwt
+from app.middleware.authenticate import token_required
 
 similarity_ = Blueprint('similarity', __name__)
 
@@ -18,30 +18,40 @@ def similarity(bed_id):
         return redirect(url_for("auth.sign_in", msg="Please login first!"))
     
 @similarity_.route('/get-data-similarity', methods=['GET'])
+@token_required
 def get_data_similarity():
     result = list(current_app.db.similarity_patient.find({}, {'_id' : False}))      
     return jsonify(result)
 
 @similarity_.route('/search-data-similarity', methods=['POST'])
+@token_required
 def search_data_similarity():
     filters = request.form.to_dict()  
     query = {}
 
-    if filters.get("age"):
-        query["age"] = filters["age"]
-
     if filters.get("gender"):
         query["gender"] = filters["gender"]  
 
-    if filters.get("weight"):
-        query["weight"] = filters["weight"] 
+    def add_range_filter(field_name):
+        start_value = filters.get(f"{field_name}_start")
+        end_value = filters.get(f"{field_name}_end")
+        
+        if start_value or end_value:
+            range_query = {}
+            if start_value:
+                range_query["$gte"] = str(start_value)
+            if end_value:
+                range_query["$lte"] = str(end_value)
+            query[field_name] = range_query
 
-    if filters.get("height"):
-        query["height"] = filters["height"]  
+    add_range_filter("age")
+    add_range_filter("weight")
+    add_range_filter("height")
 
     try:
         result = list(current_app.db.similarity_patient.find(query, {"_id": False}))
         return jsonify(result)
     except Exception as e:
         return jsonify({"error": f"Error querying database: {str(e)}"}), 500
+
 

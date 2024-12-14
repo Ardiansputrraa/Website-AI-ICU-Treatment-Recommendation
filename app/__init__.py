@@ -28,13 +28,14 @@ def create_app():
     from .routes.similarity import similarity_
     app.register_blueprint(similarity_)
     
-    from .routes.vital_prediction import prediction_, predictionSocketio
+    from .routes.vital_prediction import prediction_
     app.register_blueprint(prediction_)
-    predictionSocketio.init_app(app)
     
-    from .routes.patient_monitorin import patient_, patientSocketio
-    app.register_blueprint(patient_)
-    patientSocketio.init_app(app)
+    from .websockets.vital_prediction_socket import vitalPredictionSocketio
+    vitalPredictionSocketio.init_app(app)
+    
+    from .websockets.patient_monitoring_socket import patientMonitoringSocketio
+    patientMonitoringSocketio.init_app(app)
     
     from .routes.patient_treatment import treatments_
     app.register_blueprint(treatments_)

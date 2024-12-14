@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, current_app, Blueprint, jsonify, redirect, url_for
 from werkzeug.utils import secure_filename
 import jwt
-import os
+from app.middleware.authenticate import token_required
 
 profile_ = Blueprint('profile', __name__)
 
@@ -19,6 +19,7 @@ def profile():
         return redirect(url_for("auth.sign_in", msg="Please login first!"))
     
 @profile_.route('/update-profile', methods=["POST"])
+@token_required
 def update_profile():
     SECRET_KEY = current_app.config['SECRET_KEY']
     token_receive = request.cookies.get("mytoken")
@@ -38,6 +39,6 @@ def update_profile():
         current_app.db.users.update_one({"email": payload["id"]}, {"$set": newDoc})
         return jsonify({"msg": "Profile successfully updated!"})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-        return redirect(url_for("dashboard"))
+        return redirect(url_for("profile"))
     
     
