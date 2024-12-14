@@ -67,6 +67,7 @@ def update_patient_data():
             patientSocketio.emit('blood_data', {"bed_id": bed_id, "blood": icu_beds_values[bed_id]["blood"]})
             patientSocketio.emit('sofa_data', {"bed_id": bed_id, "sofa": icu_beds_values[bed_id]["sofa"]})
             patientSocketio.emit('treatment_recommendation_data', {"bed_id": bed_id, "treatment": icu_beds_values[bed_id]["treatment"]})
+            patientSocketio.emit('prediction_data', {"bed_id": bed_id, "prediction": icu_beds_values[bed_id]["prediction"]})
         time.sleep(1)
         
 def start_patient_thread():
