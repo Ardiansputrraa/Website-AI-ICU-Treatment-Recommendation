@@ -284,20 +284,20 @@
 
     const socket = io();
 
-    socket.on("vital_data", (data) => {
-      if (data.bed_id == "{{ bed_id }}") {
-        console.log("Data Vital Diterima:", data);
+    socket.on("vital_data", (vital_data) => {
+      if (vital_data.bed_id == "{{ bed_id }}") {
+        console.log("Data Vital Diterima:", vital_data);
         localStorage.setItem(
           "heartRateValue",
-          Math.round(data.vital.heart_rate)
+          Math.round(vital_data.vital.heart_rate)
         );
         localStorage.setItem(
           "oxygenSaturationValue",
-          Math.round(data.vital.oxygen_saturation)
+          Math.round(vital_data.vital.oxygen_saturation)
         );
         localStorage.setItem(
           "respiratoryRateValue",
-          Math.round(data.vital.respiratory_rate)
+          Math.round(vital_data.vital.respiratory_rate)
         );
       }
     });
