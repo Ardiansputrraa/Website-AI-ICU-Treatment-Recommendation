@@ -3,7 +3,7 @@ from config import Config
 from pymongo import MongoClient
 from flask_socketio import SocketIO
 from app.task.patient_thread import start_patient_thread
-from app.services.prediction_service import load_hr_data_predict, load_rr_data_predict, load_oxygen_data_predict
+from app.services.vital_prediction_service import load_hr_data_predict, load_rr_data_predict, load_oxygen_data_predict
 
 
 def create_app():
@@ -29,14 +29,14 @@ def create_app():
     from .routes.similarity import similarity_
     app.register_blueprint(similarity_)
     
-    from .routes.prediction import prediction_
+    from .routes.vital_prediction import prediction_
     app.register_blueprint(prediction_)
     
-    from .routes.patient import patient_, patientSocketio
+    from .routes.patient_monitorin import patient_, patientSocketio
     app.register_blueprint(patient_)
     patientSocketio.init_app(app)
     
-    from .routes.treatments import treatments_
+    from .routes.patient_treatment import treatments_
     app.register_blueprint(treatments_)
     
     from .routes.summary import summary_
