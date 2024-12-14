@@ -64,6 +64,7 @@ def update_patient_data():
             }
             patientSocketio.emit('patient_data', {"bed_id": bed_id, "patient_detail": icu_beds_values[bed_id]["patient_detail"]})
             patientSocketio.emit('vital_data', {"bed_id": bed_id, "vital": icu_beds_values[bed_id]["vital"]})
+            patientSocketio.emit('blood_data', {"bed_id": bed_id, "blood": icu_beds_values[bed_id]["blood"]})
         time.sleep(1)
         
 def start_patient_thread():

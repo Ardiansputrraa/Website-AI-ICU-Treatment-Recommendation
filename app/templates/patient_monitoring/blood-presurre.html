@@ -7,10 +7,16 @@
     <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400">
       BLOOD PRESSURE
     </h2>
-    <h1 class="text-3xl font-bold text-black dark:text-white inline-block" id="blood_pressure_value">
+    <h1
+      class="text-3xl font-bold text-black dark:text-white inline-block"
+      id="blood_pressure_value"
+    >
       120/80
     </h1>
-    <span class="text-sm font-normal inline-block ml-2 text-black dark:text-white">mmHg</span>
+    <span
+      class="text-sm font-normal inline-block ml-2 text-black dark:text-white"
+      >mmHg</span
+    >
   </div>
 
   <!-- TEMPERATURE -->
@@ -28,49 +34,25 @@
 </section>
 
 <script>
-  function updateBloodPressure(bloodData) {
-    localStorage.setItem(
-      "bloodPressure",
-      `${Math.round(bloodData.blood_pressure.systolic)}/${Math.round(
-        bloodData.blood_pressure.diastolic
-      )}`
-    );
-    localStorage.setItem(
-      "temperature",
-      `${Math.round(bloodData.temperature)}`
-    );
-    
-  }
-
   document.addEventListener("DOMContentLoaded", () => {
-    if (localStorage.getItem("bloodPressure")) {
-      document.getElementById("blood_pressure_value").innerText = `${Math.round(
-        localStorage.getItem("bloodPressureSystolic")
-      )}/${Math.round(localStorage.getItem("bloodPressureDiastolic"))}`;
-    }
-    if (localStorage.getItem("temperature")) {
-      document.getElementById("temperature_value").innerText = localStorage.getItem("temperature");
-    }
+    const socket = io();
+
+    socket.on("blood_data", (blood_data) => {
+      if (blood_data.bed_id == "{{ bed_id }}") {
+        localStorage.setItem(
+          "bloodPressureValue",
+          `${Math.round(blood_data.blood.blood_pressure.systolic)}/${Math.round(
+            blood_data.blood.blood_pressure.diastolic
+          )}`
+        );
+        localStorage.setItem("temperatureValue", blood_data.blood.temperature);
+      }
+    });
+
 
     setInterval(() => {
-      $.ajax({
-        url: `/get-blood-data/{{bed_id}}`,
-        method: "GET",
-        success: function (response) {
-          const bloodData = response;
-          updateBloodPressure(bloodData);
-
-          document.getElementById(
-            "blood_pressure_value"
-          ).innerText = `${Math.round(
-            bloodData.blood_pressure.systolic
-          )}/${Math.round(bloodData.blood_pressure.diastolic)}`;
-          document.getElementById("temperature_value").innerText = bloodData.temperature;
-        },
-        error: function () {
-          console.error("Failed to retrieve blood pressure data");
-        },
-      });
+      document.getElementById("blood_pressure_value").innerText = localStorage.getItem("bloodPressureValue");
+          document.getElementById("temperature_value").innerText = localStorage.getItem("temperatureValue");
     }, 100);
   });
 </script>

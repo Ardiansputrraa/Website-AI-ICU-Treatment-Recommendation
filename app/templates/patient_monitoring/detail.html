@@ -49,20 +49,19 @@
 
     const socket = io();
 
-    socket.on("patient_data", (data) => {
-      if (data.bed_id == "{{ bed_id }}") {
-        console.log("Data Vital Diterima:", data);
+    socket.on("patient_data", (patient_data) => {
+      if (patient_data.bed_id == "{{ bed_id }}") {
         localStorage.setItem(
           "name",
-          data.patient_detail.name
+          patient_data.patient_detail.name
         );
         localStorage.setItem(
           "age",
-          data.patient_detail.age
+          patient_data.patient_detail.age
         );
         localStorage.setItem(
           "body_period",
-          data.patient_detail.body_period
+          patient_data.patient_detail.body_period
         );
       }
     });
