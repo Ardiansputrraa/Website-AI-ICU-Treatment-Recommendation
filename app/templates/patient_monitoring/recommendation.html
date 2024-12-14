@@ -19,52 +19,40 @@
 </section>
 
 <script>
-  function updateTreatment(treatmentData) {
-    localStorage.setItem(
-      "aiRecommendation",treatmentData.ai_recommendations[0]
-    );
-    localStorage.setItem(
-      "aiRecommendation_",treatmentData.ai_recommendations[1]
-    );
-    localStorage.setItem(
-      "physicianAction",treatmentData.physician_action[0]
-    );
-    localStorage.setItem(
-      "physicianAction_",treatmentData.physician_action[1]
-    );
-    
-  }
-
   document.addEventListener("DOMContentLoaded", () => {
-    if (localStorage.getItem("aiRecommendation")) {
-      document.getElementById("ai_recommendation_value").innerText = localStorage.getItem("aiRecommendation");
-    }
-    if (localStorage.getItem("aiRecommendation_")) {
-      document.getElementById("ai_recommendation_value_").innerText = localStorage.getItem("aiRecommendation_");
-    }
-    if (localStorage.getItem("physicianAction")) {
-      document.getElementById("physician_action_value").innerText = localStorage.getItem("physicianAction");
-    }
-    if (localStorage.getItem("physicianAction_")) {
-      document.getElementById("physician_action_value_").innerText = localStorage.getItem("physicianAction_");
-    }
+
+    const socket = io();
+
+    socket.on("treatment_recommendation_data", (treatment_recommendation_data) => {
+      if (treatment_recommendation_data.bed_id == "{{ bed_id }}") {
+        localStorage.setItem(
+          "aiRecommendation",
+          treatment_recommendation_data.treatment.ai_recommendations[0]
+        );
+        localStorage.setItem(
+          "aiRecommendation_",
+          treatment_recommendation_data.treatment.ai_recommendations[1]
+        );
+        localStorage.setItem(
+          "physicianAction",
+          treatment_recommendation_data.treatment.physician_action[0]
+        );
+        localStorage.setItem(
+          "physicianAction_",
+          treatment_recommendation_data.treatment.physician_action[1]
+        );
+      }
+    });
 
     setInterval(() => {
-      $.ajax({
-        url: `/get-treatment-data/{{bed_id}}`,
-        method: "GET",
-        success: function (response) {
-          const treatmentData = response;
-          updateTreatment(treatmentData);
-          document.getElementById("ai_recommendation_value").innerText = treatmentData.ai_recommendations[0];
-          document.getElementById("ai_recommendation_value_").innerText = treatmentData.ai_recommendations[1];
-          document.getElementById("physician_action_value").innerText = treatmentData.physician_action[0];
-          document.getElementById("physician_action_value_").innerText = treatmentData.physician_action[1];
-        },
-        error: function () {
-          console.error("Failed to retrieve blood pressure data");
-        },
-      });
-    }, 6000);
+      document.getElementById("ai_recommendation_value").innerText =
+        localStorage.getItem("aiRecommendation");
+      document.getElementById("ai_recommendation_value_").innerText =
+        localStorage.getItem("aiRecommendation_");
+      document.getElementById("physician_action_value").innerText =
+        localStorage.getItem("physicianAction");
+      document.getElementById("physician_action_value_").innerText =
+        localStorage.getItem("physicianAction_");
+    }, 3000);
   });
 </script>

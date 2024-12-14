@@ -13,33 +13,32 @@
       <canvas id="sofaScore" class="w-[90%] h-[70px]"></canvas>
     </div>
     <!-- Detail Skor -->
-<div class="grid grid-cols-3 gap-2 text-[8px] text-center mt-1">
-  <div>
-    <span class="font-semibold">Renal:</span> 
-    <span id="renal_value">3</span>
-  </div>
-  <div>
-    <span class="font-semibold">Nervous:</span> 
-    <span id="nervous_value">3</span>
-  </div>
-  <div>
-    <span class="font-semibold">Cardiovascular:</span> 
-    <span id="cardiovascular_value">2</span>
-  </div>
-  <div>
-    <span class="font-semibold">Liver:</span> 
-    <span id="liver_value">1</span>
-  </div>
-  <div>
-    <span class="font-semibold">Respiration:</span> 
-    <span id="respiration_value">2</span>
-  </div>
-  <div>
-    <span class="font-semibold">Coagulation:</span> 
-    <span id="coagulation_value">3</span>
-  </div>
-</div>
-
+    <div class="grid grid-cols-3 gap-2 text-[8px] text-center mt-1">
+      <div>
+        <span class="font-semibold">Renal:</span>
+        <span id="renal_value">3</span>
+      </div>
+      <div>
+        <span class="font-semibold">Nervous:</span>
+        <span id="nervous_value">3</span>
+      </div>
+      <div>
+        <span class="font-semibold">Cardiovascular:</span>
+        <span id="cardiovascular_value">2</span>
+      </div>
+      <div>
+        <span class="font-semibold">Liver:</span>
+        <span id="liver_value">1</span>
+      </div>
+      <div>
+        <span class="font-semibold">Respiration:</span>
+        <span id="respiration_value">2</span>
+      </div>
+      <div>
+        <span class="font-semibold">Coagulation:</span>
+        <span id="coagulation_value">3</span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -50,14 +49,14 @@
     const sofaScoreChart = new Chart(sofaScoreCtx, {
       type: "line",
       data: {
-        labels: Array.from({ length: 100 }, () => ""),
+        labels: Array.from({ length: 35 }, () => ""),
         datasets: [
           {
             borderColor: "white",
             borderWidth: 2,
             fill: false,
             tension: 0.4,
-            data: Array.from({ length: 100 }, () => 75),
+            data: Array.from({ length: 35 }, () => 75),
           },
         ],
       },
@@ -77,75 +76,62 @@
       },
     });
 
-    return {sofaScoreChart}
+    return { sofaScoreChart };
   }
 
-  function updateSofaCharts(charts, sofaData) {
-    charts.sofaScoreChart.data.datasets[0].data.push(sofaData.sofa_score);
-    if (charts.sofaScoreChart.data.datasets[0].data.length > 100) {
-      charts.sofaScoreChart.data.datasets[0].data.shift();
-    }
-    charts.sofaScoreChart.update();
-
-    localStorage.setItem("sofaScoreData", JSON.stringify(charts.sofaScoreChart.data.datasets[0].data));
-    localStorage.setItem("sofaScoreValue", sofaData.sofa_score);
-    localStorage.setItem("renalValue", sofaData.renal);
-    localStorage.setItem("nervousValue", sofaData.nervous);
-    localStorage.setItem("cardiovascularValue", sofaData.cardiovascular);
-    localStorage.setItem("liverValue", sofaData.liver);
-    localStorage.setItem("respirationValue", sofaData.respiration);
-    localStorage.setItem("coagulationValue", sofaData.coagulation);
-  }
 
   document.addEventListener("DOMContentLoaded", () => {
     const charts = initializeSofaChart();
 
-    if (localStorage.getItem("sofaScoreData")) {
-      charts.sofaScoreChart.data.datasets[0].data = JSON.parse(localStorage.getItem("sofaScoreData"));
-      charts.sofaScoreChart.update();
-    }
-    if (localStorage.getItem("sofaScoreValue")) {
-      document.getElementById("sofa_score_value").innerText = localStorage.getItem("sofaScoreValue");
-    }
-    if (localStorage.getItem("renalValue")) {
-      document.getElementById("renal_value").innerText = localStorage.getItem("renalValue");
-    }
-    if (localStorage.getItem("nervousValue")) {
-      document.getElementById("nervous_value").innerText = localStorage.getItem("nervousValue");
-    }
-    if (localStorage.getItem("cardiovascularValue")) {
-      document.getElementById("cardiovascular_value").innerText = localStorage.getItem("cardiovascularValue");
-    }
-    if (localStorage.getItem("liverValue")) {
-      document.getElementById("liver_value").innerText = localStorage.getItem("liverValue");
-    }
-    if (localStorage.getItem("respirationValue")) {
-      document.getElementById("respiration_value").innerText = localStorage.getItem("respirationValue");
-    }
-    if (localStorage.getItem("coagulationValue")) {
-      document.getElementById("coagulation_value").innerText = localStorage.getItem("coagulationValue");
-    }
+    const socket = io();
+
+    socket.on("sofa_data", (sofa_data) => {
+      if (sofa_data.bed_id == "{{ bed_id }}") {
+        charts.sofaScoreChart.data.datasets[0].data.push(
+          sofa_data.sofa.sofa_score
+        );
+        if (charts.sofaScoreChart.data.datasets[0].data.length > 35) {
+          charts.sofaScoreChart.data.datasets[0].data.shift();
+        }
+        charts.sofaScoreChart.update();
+
+        localStorage.setItem(
+          "sofaScoreData",
+          JSON.stringify(charts.sofaScoreChart.data.datasets[0].data)
+        );
+
+        localStorage.setItem("sofaScoreValue", sofa_data.sofa.sofa_score);
+        localStorage.setItem("renalValue", sofa_data.sofa.renal);
+        localStorage.setItem("nervousValue", sofa_data.sofa.nervous);
+        localStorage.setItem(
+          "cardiovascularValue",
+          sofa_data.sofa.cardiovascular
+        );
+        localStorage.setItem("liverValue", sofa_data.sofa.liver);
+        localStorage.setItem("respirationValue", sofa_data.sofa.respiration);
+        localStorage.setItem("coagulationValue", sofa_data.sofa.coagulation);
+      }
+    });
 
     setInterval(() => {
-      $.ajax({
-        url: `/get-sofa-data/{{bed_id}}`,
-        method: "GET",
-        success: function (response) {
-          const sofaData = response;
-          updateSofaCharts(charts, sofaData);
-          document.getElementById("sofa_score_value").innerText = sofaData.sofa_score;
-          document.getElementById("renal_value").innerText = sofaData.renal;
-          document.getElementById("nervous_value").innerText = sofaData.nervous;
-          document.getElementById("cardiovascular_value").innerText = sofaData.cardiovascular;
-          document.getElementById("liver_value").innerText = sofaData.liver;
-          document.getElementById("respiration_value").innerText = sofaData.respiration;
-          document.getElementById("coagulation_value").innerText = sofaData.coagulation;
-
-        },
-        error: function () {
-          console.error("Failed to retrieve sofa data");
-        },
-      });
+      charts.sofaScoreChart.data.datasets[0].data = JSON.parse(
+        localStorage.getItem("sofaScoreData")
+      );
+      charts.sofaScoreChart.update();
+      document.getElementById("sofa_score_value").innerText =
+        localStorage.getItem("sofaScoreValue");
+      document.getElementById("renal_value").innerText =
+        localStorage.getItem("renalValue");
+      document.getElementById("nervous_value").innerText =
+        localStorage.getItem("nervousValue");
+      document.getElementById("cardiovascular_value").innerText =
+        localStorage.getItem("cardiovascularValue");
+      document.getElementById("liver_value").innerText =
+        localStorage.getItem("liverValue");
+      document.getElementById("respiration_value").innerText =
+        localStorage.getItem("respirationValue");
+      document.getElementById("coagulation_value").innerText =
+        localStorage.getItem("coagulationValue");
     }, 100);
   });
 </script>

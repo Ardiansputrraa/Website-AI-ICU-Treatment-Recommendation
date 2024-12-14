@@ -1,8 +1,6 @@
 from flask import jsonify, Blueprint
 from flask_socketio import SocketIO, emit
 from app.data_global import icu_beds_values
-from app.services.patient_sofa_service import get_sofa_data
-from app.services.treatment_recommendation_service import get_treatment_recommendation
 
 patient_ = Blueprint('patient', __name__)
 patientSocketio = SocketIO()
@@ -26,17 +24,19 @@ def handle_blood_data_request(data):
     blood_data = icu_beds_values[bed_id]["blood"]
     emit('blood_data', blood_data)
     
-@patient_.route('/get-blood-data/<bed_id>', methods=['GET'])
-def get_blood_data_by_bed(bed_id):
-    result = icu_beds_values[bed_id]["blood"]
-    return jsonify(result)
-
-@patient_.route('/get-sofa-data/<bed_id>', methods=['GET'])
-def get_sofa_data_by_bed(bed_id):
-    result = get_sofa_data(bed_id)
-    return jsonify(result)
+@patientSocketio.on('get_sofa_data')
+def handle_sofa_data_request(data):
+    bed_id = data.get('bed_id')
+    sofa_data = icu_beds_values[bed_id]["sofa"]
+    emit('sofa_data', sofa_data)
+    
+@patientSocketio.on('get_treatment_recommendation_data')
+def handle_treatment_recommendation_data_request(data):
+    bed_id = data.get('bed_id')
+    treatment_recommendation_data = icu_beds_values[bed_id]["treatment_recommendation"]
+    emit('treatment_recommendation_data', treatment_recommendation_data)
 
 @patient_.route('/get-treatment-data/<bed_id>', methods=['GET'])
 def get_treatment_data_by_bed(bed_id):
-    result = get_treatment_recommendation(bed_id)
+    result = icu_beds_values[bed_id]["treatment"]
     return jsonify(result)
