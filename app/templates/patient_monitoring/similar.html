@@ -6,31 +6,26 @@
   <div class="flex-1 flex flex-col items-center justify-center">
     <!-- Grafik -->
     <div class="w-full h-[100px]">
-      <canvas id="similarPatientsGraph"></canvas>
+      <canvas id="similarPatients"></canvas>
     </div>
   </div>
   <p class="text-xs text-center mt-2">Diagnosis for diseases and illness</p>
 </section>
 
 <script>
-  $(document).ready(function () {
-    // Data Dummy untuk Grafik
-    const graphData = [30, 40, 35, 45, 38, 50, 42];
-    const graphLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
-
-    // Inisialisasi Grafik
-    const ctx = $("#similarPatientsGraph")[0].getContext("2d");
-    new Chart(ctx, {
+  function initializeSimilarPatientsChart() {
+    const similarPatientsCtx = $("#similarPatients")[0].getContext("2d");
+    const similarPatientsChart = new Chart(similarPatientsCtx, {
       type: "line",
       data: {
-        labels: graphLabels,
+        labels: Array.from({ length: 15 }, () => ""),
         datasets: [
           {
-            data: graphData,
             borderColor: "white",
             backgroundColor: "transparent",
             pointRadius: 0,
             tension: 0.4,
+            data: Array.from({ length: 15 }, () => 75),
           },
         ],
       },
@@ -41,14 +36,23 @@
           legend: { display: false },
         },
         scales: {
-          x: {
-            display: false,
-          },
-          y: {
-            display: false,
-          },
+          x: { display: false },
+          y: { display: false },
         },
       },
     });
+    return { similarPatientsChart }; 
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const { similarPatientsChart } = initializeSimilarPatientsChart();
+
+    setInterval(() => {
+      const sofaScoreData = JSON.parse(localStorage.getItem("sofaScoreData")) || [];
+      if (Array.isArray(sofaScoreData)) {
+        similarPatientsChart.data.datasets[0].data = sofaScoreData;
+        similarPatientsChart.update();
+      }
+    }, 100);
   });
 </script>
