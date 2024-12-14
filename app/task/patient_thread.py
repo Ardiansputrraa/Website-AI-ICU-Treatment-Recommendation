@@ -1,6 +1,7 @@
 import threading
 import time
-from app.routes.patient_monitorin import patientSocketio
+from app.websockets.patient_monitoring_socket import patientMonitoringSocketio
+from app.websockets.vital_prediction_socket import vitalPredictionSocketio
 from app.services.patient_vital_service import generate_heart_rate, generate_oxygen_saturation, generate_respiratory_rate, \
     generate_blood_pressure, generate_temperature, icu_beds_values
 from app.services.vital_prediction_service import generate_heart_rate_predict, generate_oxygen_saturation_predict, generate_respiratory_rate_predict
@@ -62,12 +63,12 @@ def update_patient_data():
                     "ai_recommendations": random_ai_recommendation(),
                 },
             }
-            patientSocketio.emit('patient_data', {"bed_id": bed_id, "patient_detail": icu_beds_values[bed_id]["patient_detail"]})
-            patientSocketio.emit('vital_data', {"bed_id": bed_id, "vital": icu_beds_values[bed_id]["vital"]})
-            patientSocketio.emit('blood_data', {"bed_id": bed_id, "blood": icu_beds_values[bed_id]["blood"]})
-            patientSocketio.emit('sofa_data', {"bed_id": bed_id, "sofa": icu_beds_values[bed_id]["sofa"]})
-            patientSocketio.emit('treatment_recommendation_data', {"bed_id": bed_id, "treatment": icu_beds_values[bed_id]["treatment"]})
-            patientSocketio.emit('prediction_data', {"bed_id": bed_id, "prediction": icu_beds_values[bed_id]["prediction"]})
+            patientMonitoringSocketio.emit('patient_data', {"bed_id": bed_id, "patient_detail": icu_beds_values[bed_id]["patient_detail"]})
+            patientMonitoringSocketio.emit('vital_data', {"bed_id": bed_id, "vital": icu_beds_values[bed_id]["vital"]})
+            patientMonitoringSocketio.emit('blood_data', {"bed_id": bed_id, "blood": icu_beds_values[bed_id]["blood"]})
+            patientMonitoringSocketio.emit('sofa_data', {"bed_id": bed_id, "sofa": icu_beds_values[bed_id]["sofa"]})
+            patientMonitoringSocketio.emit('treatment_recommendation_data', {"bed_id": bed_id, "treatment": icu_beds_values[bed_id]["treatment"]})
+            vitalPredictionSocketio.emit('prediction_data', {"bed_id": bed_id, "prediction": icu_beds_values[bed_id]["prediction"]})
         time.sleep(1)
         
 def start_patient_thread():

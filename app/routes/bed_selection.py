@@ -17,11 +17,3 @@ def home():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("auth.sign_in", msg="Please login first!"))
     
-
-@home_.route('/index')
-def index():   
-        return render_template('main/index.html')
-
-@home_.route('/login')
-def login():   
-        return render_template('main/bed-selection.html')

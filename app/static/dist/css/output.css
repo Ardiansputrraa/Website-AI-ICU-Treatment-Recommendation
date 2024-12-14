@@ -1390,10 +1390,6 @@ input:checked + .toggle-bg {
   height: 70px;
 }
 
-.h-auto {
-  height: auto;
-}
-
 .max-h-96 {
   max-height: 24rem;
 }
@@ -1601,6 +1597,14 @@ input:checked + .toggle-bg {
   grid-template-columns: repeat(7, minmax(0, 1fr));
 }
 
+.grid-cols-9 {
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+
+.grid-cols-8 {
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
 .flex-col {
   flex-direction: column;
 }
@@ -1741,6 +1745,10 @@ input:checked + .toggle-bg {
 
 .rounded-md {
   border-radius: 0.375rem;
+}
+
+.rounded {
+  border-radius: 0.25rem;
 }
 
 .rounded-b-lg {
@@ -2787,16 +2795,8 @@ input:checked + .toggle-bg {
     width: auto;
   }
 
-  .sm\:w-\[70\%\] {
-    width: 70%;
-  }
-
   .sm\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .sm\:flex-row {
-    flex-direction: row;
   }
 
   .sm\:p-6 {

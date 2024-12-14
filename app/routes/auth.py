@@ -2,13 +2,15 @@ from datetime import datetime, timedelta
 from flask import Flask, request, render_template, current_app, Blueprint, jsonify, redirect, url_for, make_response
 import hashlib
 import jwt
+from app.middleware.authenticate import token_required
 
 auth_ = Blueprint('auth', __name__)
 
 
 @auth_.route('/sign-in')
 def sign_in():
-    return render_template('auth/login.html')
+    msg = request.args.get("msg")  
+    return render_template('auth/login.html', msg=msg)
 
 @auth_.route("/sign-in/check", methods=["POST"])
 def sign_in_check():
@@ -58,6 +60,7 @@ def sign_up():
     
 
 @auth_.route("/sign-up/save", methods=["POST"])
+@token_required
 def sign_up_save():
     
     username = request.form['username']
@@ -99,6 +102,7 @@ def forget_password():
     return render_template('auth/forget-password.html')
 
 @auth_.route("/logout", methods=["DELETE"])
+@token_required
 def logout():
     try:
         response = {"message": "Token successfully deleted"}
