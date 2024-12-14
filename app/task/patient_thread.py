@@ -1,11 +1,11 @@
 import threading
 import time
-from app.routes.patient import patientSocketio
-from app.services.vital_service import generate_heart_rate, generate_oxygen_saturation, generate_respiratory_rate, \
+from app.routes.patient_monitorin import patientSocketio
+from app.services.patient_vital_service import generate_heart_rate, generate_oxygen_saturation, generate_respiratory_rate, \
     generate_blood_pressure, generate_temperature, icu_beds_values
-from app.services.prediction_service import generate_heart_rate_predict, generate_oxygen_saturation_predict, generate_respiratory_rate_predict
-from app.services.sofa_service import calculate_sofa_score, renal, nervous, cardiovascular, liver, respiration, coagulation
-from app.services.treatment_service import random_physician_action, random_ai_recommendation
+from app.services.vital_prediction_service import generate_heart_rate_predict, generate_oxygen_saturation_predict, generate_respiratory_rate_predict
+from app.services.patient_sofa_service import calculate_sofa_score, renal, nervous, cardiovascular, liver, respiration, coagulation
+from app.services.treatment_recommendation_service import random_physician_action, random_ai_recommendation
 
 patients = [
     {"name": "Abdul Kirom", "age": "60 years old", "body_period": "169 cm 73 kg"},

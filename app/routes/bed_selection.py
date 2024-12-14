@@ -11,7 +11,7 @@ def home():
     try:
         payload = jwt.decode(myToken, SECRET_KEY, algorithms=["HS256"])
         user_info = current_app.db.users.find_one({"email": payload["id"]})
-        return render_template('main/bed-selection.html', user_info=user_info)
+        return render_template('home/bed-selection.html', user_info=user_info)
     except jwt.ExpiredSignatureError:
         return redirect(url_for("auth.sign_in", msg="Login time has expired!"))
     except jwt.exceptions.DecodeError:
