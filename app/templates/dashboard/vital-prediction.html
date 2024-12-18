@@ -102,7 +102,7 @@
       </section>
 
       <script>
-        let timePredict = 0;
+        let timePredict = localStorage.getItem("global_time_predict");
 
         function generateHeartRatePredictWaveform(t) {
           const baseline = 75;
@@ -338,6 +338,10 @@
                 Math.round(prediction_data.prediction.respiratory_rate_predict)
               );
             }
+            localStorage.setItem(
+              "global_time_predict",
+              Math.round(timePredict)
+            );
           });
 
           setInterval(() => {
@@ -363,7 +367,9 @@
               "respiratory_rate_predict_value"
             ).innerText = localStorage.getItem("respiratoryRatePredictValue");
             timePredict++;
+            console.log(timePredict);
           }, 100);
+          
         });
       </script>
     </main>

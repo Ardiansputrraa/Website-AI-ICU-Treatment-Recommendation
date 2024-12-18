@@ -38,3 +38,10 @@ def handle_treatment_recommendation_data_request(data):
     bed_id = data.get('bed_id')
     treatment_recommendation_data = icu_beds_values[bed_id]["treatment_recommendation"]
     emit('treatment_recommendation_data', treatment_recommendation_data)
+
+@patientMonitoringSocketio.on('get_prediction_data')
+@token_required
+def handle_prediction_data_request(data):
+    bed_id = data.get('bed_id')
+    prediction_data = icu_beds_values[bed_id]["prediction"]
+    emit('prediction_data', prediction_data)
