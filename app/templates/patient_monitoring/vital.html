@@ -90,7 +90,7 @@
 </section>
 
 <script>
-  let time = 0;
+  let time = localStorage.getItem("global_time");
 
   function generateHeartRateWaveform(t) {
     const baseline = 75;
@@ -258,6 +258,11 @@
       "respiratoryRateData",
       JSON.stringify(charts.respiratoryRateChart.data.datasets[0].data)
     );
+    localStorage.setItem(
+          "global_time",
+          Math.round(time)
+        );
+    
   }
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -286,7 +291,6 @@
 
     socket.on("vital_data", (vital_data) => {
       if (vital_data.bed_id == "{{ bed_id }}") {
-        console.log("Data Vital Diterima:", vital_data);
         localStorage.setItem(
           "heartRateValue",
           Math.round(vital_data.vital.heart_rate)
@@ -300,6 +304,7 @@
           Math.round(vital_data.vital.respiratory_rate)
         );
       }
+      
     });
 
     setInterval(() => {
@@ -316,6 +321,7 @@
       document.getElementById("respiratory_rate_value").innerText =
         localStorage.getItem("respiratoryRateValue");
       time++;
+      
     }, 100);
   });
 </script>

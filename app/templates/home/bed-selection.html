@@ -3,6 +3,12 @@
     {% include 'component/header.html'%}
 
     <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        let time = 0;
+        localStorage.setItem("global_time_predict", Math.round(time));
+        localStorage.setItem("global_time", Math.round(time));
+      });
+
       function logout() {
         $.ajax({
           url: "/logout",

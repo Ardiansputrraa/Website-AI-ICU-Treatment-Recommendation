@@ -31,17 +31,21 @@ def create_app():
     from .routes.vital_prediction import prediction_
     app.register_blueprint(prediction_)
     
-    from .websockets.vital_prediction_socket import vitalPredictionSocketio
-    vitalPredictionSocketio.init_app(app)
-    
-    from .websockets.patient_monitoring_socket import patientMonitoringSocketio
-    patientMonitoringSocketio.init_app(app)
     
     from .routes.patient_treatment import treatments_
     app.register_blueprint(treatments_)
     
     from .routes.summary import summary_
     app.register_blueprint(summary_)
+    
+    from .routes.predict import predict_
+    app.register_blueprint(predict_)
+    
+    from .websockets.vital_prediction_socket import vitalPredictionSocketio
+    vitalPredictionSocketio.init_app(app)
+    
+    from .websockets.patient_monitoring_socket import patientMonitoringSocketio
+    patientMonitoringSocketio.init_app(app)
 
     start_patient_thread()
     

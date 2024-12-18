@@ -61,9 +61,3 @@ def random_ai_recommendation():
         [">0.450 ug/kg/h dose of vasopressor", ">635 ml dose of iv fluid"],
     ]
     return random.choice(ai_recommendations)
-
-def get_treatment_recommendation(bed_id):
-    global icu_beds_values
-    if bed_id in icu_beds_values:
-        return icu_beds_values[bed_id]["treatment"]
-    return {"error": "Bed ID tidak ditemukan"}
