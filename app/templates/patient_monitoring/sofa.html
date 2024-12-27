@@ -79,38 +79,37 @@
     return { sofaScoreChart };
   }
 
-
   document.addEventListener("DOMContentLoaded", () => {
     const charts = initializeSofaChart();
 
-    const socket = io();
+    const socket = io("/sofa_patient");
 
-    socket.on("sofa_data", (sofa_data) => {
-      if (sofa_data.bed_id == "{{ bed_id }}") {
-        charts.sofaScoreChart.data.datasets[0].data.push(
-          sofa_data.sofa.sofa_score
-        );
-        if (charts.sofaScoreChart.data.datasets[0].data.length > 35) {
-          charts.sofaScoreChart.data.datasets[0].data.shift();
-        }
-        charts.sofaScoreChart.update();
+    socket.on("connect", () => {
+      console.log("Connected to WebSocket");
+      socket.emit("start_sofa_patient");
+    });
 
-        localStorage.setItem(
-          "sofaScoreData",
-          JSON.stringify(charts.sofaScoreChart.data.datasets[0].data)
-        );
+    socket.on("sofa_patient_data", (sofa_data) => {
+      console.log("Sofa Signs Data:", sofa_data);
 
-        localStorage.setItem("sofaScoreValue", sofa_data.sofa.sofa_score);
-        localStorage.setItem("renalValue", sofa_data.sofa.renal);
-        localStorage.setItem("nervousValue", sofa_data.sofa.nervous);
-        localStorage.setItem(
-          "cardiovascularValue",
-          sofa_data.sofa.cardiovascular
-        );
-        localStorage.setItem("liverValue", sofa_data.sofa.liver);
-        localStorage.setItem("respirationValue", sofa_data.sofa.respiration);
-        localStorage.setItem("coagulationValue", sofa_data.sofa.coagulation);
+      charts.sofaScoreChart.data.datasets[0].data.push(sofa_data.sofa_score);
+
+      if (charts.sofaScoreChart.data.datasets[0].data.length > 35) {
+        charts.sofaScoreChart.data.datasets[0].data.shift(); 
       }
+      charts.sofaScoreChart.update(); 
+
+      localStorage.setItem(
+        "sofaScoreData",
+        JSON.stringify(charts.sofaScoreChart.data.datasets[0].data)
+      );
+      localStorage.setItem("sofaScoreValue", sofa_data.sofa_score);
+      localStorage.setItem("renalValue", sofa_data.renal);
+      localStorage.setItem("nervousValue", sofa_data.nervous);
+      localStorage.setItem("cardiovascularValue", sofa_data.cardiovascular);
+      localStorage.setItem("liverValue", sofa_data.liver);
+      localStorage.setItem("respirationValue", sofa_data.respiration);
+      localStorage.setItem("coagulationValue", sofa_data.coagulation);
     });
 
     setInterval(() => {

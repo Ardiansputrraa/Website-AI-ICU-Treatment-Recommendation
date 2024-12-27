@@ -321,23 +321,28 @@
             charts.respiratoryRatePredictChart.update();
           }
 
-          const socket = io();
+          const socket = io("/vital_patient_prediction");
 
-          socket.on("prediction_data", (prediction_data) => {
-            if (prediction_data.bed_id == "{{ bed_id }}") {
-              localStorage.setItem(
-                "heartRatePredictValue",
-                Math.round(prediction_data.prediction.heart_rate_predict)
-              );
-              localStorage.setItem(
-                "oxygenSaturationPredictValue",
-                Math.round(prediction_data.prediction.oxygen_saturation_predict)
-              );
-              localStorage.setItem(
-                "respiratoryRatePredictValue",
-                Math.round(prediction_data.prediction.respiratory_rate_predict)
-              );
-            }
+          socket.on("connect", () => {
+            console.log("Connected to data vital prediction");
+            socket.emit("get_data_prediction_vital_patient");
+          });
+
+          socket.on("data_prediction_vital_patient", (prediction_data) => {
+            console.log("Received data vital prediction:", prediction_data);
+
+            localStorage.setItem(
+              "heartRatePredictValue",
+              Math.round(prediction_data.heart_rate)
+            );
+            localStorage.setItem(
+              "oxygenSaturationPredictValue",
+              Math.round(prediction_data.oxygen_saturation)
+            );
+            localStorage.setItem(
+              "respiratoryRatePredictValue",
+              Math.round(prediction_data.respiratory_rate)
+            );
             localStorage.setItem(
               "global_time_predict",
               Math.round(timePredict)
@@ -367,9 +372,7 @@
               "respiratory_rate_predict_value"
             ).innerText = localStorage.getItem("respiratoryRatePredictValue");
             timePredict++;
-            console.log(timePredict);
           }, 100);
-          
         });
       </script>
     </main>
