@@ -258,11 +258,7 @@
       "respiratoryRateData",
       JSON.stringify(charts.respiratoryRateChart.data.datasets[0].data)
     );
-    localStorage.setItem(
-          "global_time",
-          Math.round(time)
-        );
-    
+    localStorage.setItem("global_time", Math.round(time));
   }
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -287,31 +283,46 @@
       charts.respiratoryRateChart.update();
     }
 
-    const socket = io();
+    const socket = io("/vital_patient");
 
-    socket.on("vital_data", (vital_data) => {
-      if (vital_data.bed_id == "{{ bed_id }}") {
-        localStorage.setItem(
-          "heartRateValue",
-          Math.round(vital_data.vital.heart_rate)
-        );
-        localStorage.setItem(
-          "oxygenSaturationValue",
-          Math.round(vital_data.vital.oxygen_saturation)
-        );
-        localStorage.setItem(
-          "respiratoryRateValue",
-          Math.round(vital_data.vital.respiratory_rate)
-        );
-      }
-      
+    socket.on("connect", () => {
+      console.log("Connected to data vital patient");
+      socket.emit("get_data_vital_patient", { icustayid: "{{ bed_id }}" });
     });
+
+    socket.on("data_vital_patient", (vital_data) => {
+      console.log("Data Vital Patient:", vital_data);
+      localStorage.setItem(
+        "heartRateValue",
+        Math.round(vital_data.HR)
+      );
+      localStorage.setItem(
+        "oxygenSaturationValue",
+        Math.round(vital_data.SpO2)
+      );
+      localStorage.setItem(
+        "respiratoryRateValue",
+        Math.round(vital_data.RR)
+      );
+
+      localStorage.setItem(
+          "bloodPressureValue",
+          `${Math.round(vital_data.SysBP)}/${Math.round(
+            vital_data.DiaBP
+          )}`
+        );
+        localStorage.setItem("temperatureValue", Math.round(vital_data.Temp_C));
+    });
+
 
     setInterval(() => {
       const hr = generateHeartRateWaveform(time);
       const rr = generateRespiratoryRateWaveform(time);
       const oxygen_saturation = generateOxygenSaturationWaveform(time);
       updateCharts(charts, hr, rr, oxygen_saturation);
+      time++;
+    }, 100);
+    setInterval(() => {
       document.getElementById("heart_rate_value").innerText =
         localStorage.getItem("heartRateValue");
 
@@ -320,8 +331,7 @@
 
       document.getElementById("respiratory_rate_value").innerText =
         localStorage.getItem("respiratoryRateValue");
-      time++;
       
-    }, 100);
+    }, 1);
   });
 </script>

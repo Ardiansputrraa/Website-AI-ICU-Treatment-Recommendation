@@ -1,47 +1,52 @@
-from flask_socketio import SocketIO, emit
-from app.data_global import icu_beds_values
+from app.extensions import socketio
+from flask import Blueprint
+import csv
+from flask_socketio import emit
+from app.services.monitoring_patient_service import read_data_vital_patient, read_detail_patient
 from app.middleware.authenticate import token_required
 
-patientMonitoringSocketio = SocketIO()
+patientMonitoringSocketio = Blueprint('patient_monitoring', __name__)
 
-@patientMonitoringSocketio.on('get_patient_data')
-@token_required
-def handle_patient_data_request(data):
-    bed_id = data.get('bed_id')
-    patient_data = icu_beds_values[bed_id]["patient_details"]
-    emit('patient_data', patient_data)
-    
-@patientMonitoringSocketio.on('get_vital_data')
-@token_required
-def handle_vital_data_request(data):
-    bed_id = data.get('bed_id')
-    vital_data = icu_beds_values[bed_id]["vital"]
-    emit('vital_data', vital_data)
+file_path_dataset = 'app/data/df_with_readable_charttime.csv'
 
-@patientMonitoringSocketio.on('get_blood_data')
-@token_required
-def handle_blood_data_request(data):
-    bed_id = data.get('bed_id')
-    blood_data = icu_beds_values[bed_id]["blood"]
-    emit('blood_data', blood_data)
-    
-@patientMonitoringSocketio.on('get_sofa_data')
-@token_required
-def handle_sofa_data_request(data):
-    bed_id = data.get('bed_id')
-    sofa_data = icu_beds_values[bed_id]["sofa"]
-    emit('sofa_data', sofa_data)
-    
-@patientMonitoringSocketio.on('get_treatment_recommendation_data')
-@token_required
-def handle_treatment_recommendation_data_request(data):
-    bed_id = data.get('bed_id')
-    treatment_recommendation_data = icu_beds_values[bed_id]["treatment_recommendation"]
-    emit('treatment_recommendation_data', treatment_recommendation_data)
+data_vital_patient = {}
 
-@patientMonitoringSocketio.on('get_prediction_data')
-@token_required
-def handle_prediction_data_request(data):
-    bed_id = data.get('bed_id')
-    prediction_data = icu_beds_values[bed_id]["prediction"]
-    emit('prediction_data', prediction_data)
+@socketio.on('connect', namespace='/detail_patient')
+def handle_connect():
+    emit('message', {'status': 'Connected to patient detail'})
+
+
+@socketio.on('get_detail_patient', namespace='/detail_patient')
+def handle_get_data(data):
+    icustayid = data.get('icustayid')
+    detail_patient = read_detail_patient(float(icustayid))
+    emit('detail_patient_data', detail_patient)
+    
+@socketio.on('connect', namespace='/vital_patient')
+def handle_connect():
+    emit('message', {'status': 'Connected to data vital patient'})
+
+@socketio.on('get_data_vital_patient', namespace='/vital_patient')
+def handle_get_data(data):
+    global data_vital_patient
+    icustayid = data.get('icustayid')
+
+    if icustayid not in data_vital_patient:
+        data_vital_patient[icustayid] = 0
+
+    vital_data = read_data_vital_patient(file_path_dataset, icustayid)
+
+    while True:
+        index = data_vital_patient[icustayid]
+
+        if len(vital_data) == 0:
+            emit('data_vital_patient', {'error': 'No data available for this patient'})
+            break
+
+        row = vital_data[index]
+
+        emit('data_vital_patient', row)
+
+        socketio.sleep(10) 
+
+        data_vital_patient[icustayid] = (index + 1) % len(vital_data)

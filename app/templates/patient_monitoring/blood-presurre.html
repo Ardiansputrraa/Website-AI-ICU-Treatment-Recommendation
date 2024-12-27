@@ -35,24 +35,10 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const socket = io();
-
-    socket.on("blood_data", (blood_data) => {
-      if (blood_data.bed_id == "{{ bed_id }}") {
-        localStorage.setItem(
-          "bloodPressureValue",
-          `${Math.round(blood_data.blood.blood_pressure.systolic)}/${Math.round(
-            blood_data.blood.blood_pressure.diastolic
-          )}`
-        );
-        localStorage.setItem("temperatureValue", blood_data.blood.temperature);
-      }
-    });
-
 
     setInterval(() => {
       document.getElementById("blood_pressure_value").innerText = localStorage.getItem("bloodPressureValue");
           document.getElementById("temperature_value").innerText = localStorage.getItem("temperatureValue");
-    }, 100);
+    }, 10);
   });
 </script>
