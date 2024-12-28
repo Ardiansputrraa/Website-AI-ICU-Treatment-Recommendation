@@ -2,7 +2,7 @@ from app.data_global import icu_beds_values
 import random
 
 
-def random_physician_action():
+def physician_action(index):
     physician_action = [
         ["0 ug/kg/h dose of vasopressor", "0 ml dose of iv fluid"],
         [">0-0.110 ug/kg/h dose of vasopressor", "0 ml dose of iv fluid"],
@@ -30,9 +30,9 @@ def random_physician_action():
         ["0.225-0.450 ug/kg/h dose of vasopressor", ">635 ml dose of iv fluid"],
         [">0.450 ug/kg/h dose of vasopressor", ">635 ml dose of iv fluid"],
     ]
-    return random.choice(physician_action)
+    return physician_action[index]
 
-def random_ai_recommendation():
+def ai_recommendation(index):
     ai_recommendations = [
         ["0 ug/kg/h dose of vasopressor", "0 ml dose of iv fluid"],
         [">0-0.110 ug/kg/h dose of vasopressor", "0 ml dose of iv fluid"],
@@ -60,4 +60,4 @@ def random_ai_recommendation():
         ["0.225-0.450 ug/kg/h dose of vasopressor", ">635 ml dose of iv fluid"],
         [">0.450 ug/kg/h dose of vasopressor", ">635 ml dose of iv fluid"],
     ]
-    return random.choice(ai_recommendations)
+    return ai_recommendations[index]

@@ -286,12 +286,12 @@
     const socket = io("/vital_patient");
 
     socket.on("connect", () => {
-      console.log("Connected to data vital patient");
+      console.log("Connected to data vital patient bed icu {{ bed_id }}");
       socket.emit("get_data_vital_patient", { icustayid: "{{ bed_id }}" });
     });
 
     socket.on("data_vital_patient", (vital_data) => {
-      console.log("Data Vital Patient:", vital_data);
+      console.log("Received data vital patient:", vital_data);
       localStorage.setItem(
         "heartRateValue",
         Math.round(vital_data.HR)
