@@ -7,9 +7,11 @@ from app.middleware.authenticate import token_required
 
 patientMonitoringSocketio = Blueprint('patient_monitoring', __name__)
 
-file_path_dataset = 'app/data/df_with_readable_charttime.csv'
+file_path_dataset_vital_patient = 'app/data/selected_data.csv'
+file_path_dataset_sofal_patient = 'app/data/sofa_indicators.csv'
 
 data_vital_patient = {}
+data_sofa_patient = {}
 
 @socketio.on('connect', namespace='/detail_patient')
 def handle_connect():
@@ -34,7 +36,7 @@ def handle_get_data(data):
     if icustayid not in data_vital_patient:
         data_vital_patient[icustayid] = 0
 
-    vital_data = read_data_vital_patient(file_path_dataset, icustayid)
+    vital_data = read_data_vital_patient(file_path_dataset_vital_patient, icustayid)
 
     while True:
         index = data_vital_patient[icustayid]
@@ -50,3 +52,32 @@ def handle_get_data(data):
         socketio.sleep(10) 
 
         data_vital_patient[icustayid] = (index + 1) % len(vital_data)
+        
+@socketio.on('connect', namespace='/sofa_patient')
+def handle_connect():
+    emit('message', {'status': 'Connected to data sofa score patient'})
+
+@socketio.on('get_data_sofa_patient', namespace='/sofa_patient')
+def handle_get_data(data):
+    global data_sofa_patient
+    icustayid = data.get('icustayid')
+
+    if icustayid not in data_sofa_patient:
+        data_sofa_patient[icustayid] = 0
+
+    sofa_data = read_data_vital_patient(file_path_dataset_sofal_patient, icustayid)
+
+    while True:
+        index = data_sofa_patient[icustayid]
+
+        if len(sofa_data) == 0:
+            emit('data_sofa_patient', {'error': 'No data available for this patient'})
+            break
+
+        row = sofa_data[index]
+
+        emit('data_sofa_patient', row)
+
+        socketio.sleep(10) 
+
+        data_sofa_patient[icustayid] = (index + 1) % len(sofa_data)

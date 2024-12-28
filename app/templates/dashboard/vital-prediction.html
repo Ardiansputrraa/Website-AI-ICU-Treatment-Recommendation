@@ -324,7 +324,7 @@
           const socket = io("/vital_patient_prediction");
 
           socket.on("connect", () => {
-            console.log("Connected to data vital prediction");
+            console.log("Connected to data vital prediction bed icu {{ bed_id }}");
             socket.emit("get_data_prediction_vital_patient");
           });
 

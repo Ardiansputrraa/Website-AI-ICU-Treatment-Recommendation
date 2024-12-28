@@ -85,32 +85,20 @@
     const socket = io("/sofa_patient");
 
     socket.on("connect", () => {
+      console.log("Connected to data sofa score patient bed icu {{ bed_id }}");
+      socket.emit("get_data_sofa_patient", { icustayid: "{{ bed_id }}" });
+    });
+
+    socket.on("data_sofa_patient", (sofa_data) => {
+      console.log("Received data sofa patient:", sofa_data);
+    });
+
+    socket.on("connect", () => {
       console.log("Connected to WebSocket");
       socket.emit("start_sofa_patient");
     });
 
-    socket.on("sofa_patient_data", (sofa_data) => {
-      console.log("Sofa Signs Data:", sofa_data);
-
-      charts.sofaScoreChart.data.datasets[0].data.push(sofa_data.sofa_score);
-
-      if (charts.sofaScoreChart.data.datasets[0].data.length > 35) {
-        charts.sofaScoreChart.data.datasets[0].data.shift(); 
-      }
-      charts.sofaScoreChart.update(); 
-
-      localStorage.setItem(
-        "sofaScoreData",
-        JSON.stringify(charts.sofaScoreChart.data.datasets[0].data)
-      );
-      localStorage.setItem("sofaScoreValue", sofa_data.sofa_score);
-      localStorage.setItem("renalValue", sofa_data.renal);
-      localStorage.setItem("nervousValue", sofa_data.nervous);
-      localStorage.setItem("cardiovascularValue", sofa_data.cardiovascular);
-      localStorage.setItem("liverValue", sofa_data.liver);
-      localStorage.setItem("respirationValue", sofa_data.respiration);
-      localStorage.setItem("coagulationValue", sofa_data.coagulation);
-    });
+    
 
     setInterval(() => {
       charts.sofaScoreChart.data.datasets[0].data = JSON.parse(
