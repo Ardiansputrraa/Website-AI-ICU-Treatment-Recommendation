@@ -2,7 +2,8 @@ from app.extensions import socketio
 from flask import Blueprint
 import csv
 from flask_socketio import emit
-from app.services.monitoring_patient_service import read_data_vital_patient, read_detail_patient
+from app.services.monitoring_patient_service import read_detail_patient, sofa_respiratory, sofa_coagulation, sofa_liver, sofa_cardiovascular, sofa_neurological, sofa_renal, calculate_sofa_score
+from app.services.read_csv_services import read_data_csv
 from app.middleware.authenticate import token_required
 
 patientMonitoringSocketio = Blueprint('patient_monitoring', __name__)
@@ -36,7 +37,7 @@ def handle_get_data(data):
     if icustayid not in data_vital_patient:
         data_vital_patient[icustayid] = 0
 
-    vital_data = read_data_vital_patient(file_path_dataset_vital_patient, icustayid)
+    vital_data = read_data_csv(file_path_dataset_vital_patient, icustayid)
 
     while True:
         index = data_vital_patient[icustayid]
@@ -65,7 +66,7 @@ def handle_get_data(data):
     if icustayid not in data_sofa_patient:
         data_sofa_patient[icustayid] = 0
 
-    sofa_data = read_data_vital_patient(file_path_dataset_sofal_patient, icustayid)
+    sofa_data = read_data_csv(file_path_dataset_sofal_patient, icustayid)
 
     while True:
         index = data_sofa_patient[icustayid]
@@ -75,9 +76,27 @@ def handle_get_data(data):
             break
 
         row = sofa_data[index]
+        
+        respiratory = sofa_respiratory(float(row['Respiratory']))
+        coagulation = sofa_coagulation(float(row['Coagulation']))
+        liver = sofa_liver(float(row['Liver']))
+        cardiovascular = sofa_cardiovascular(float(row['Cardiovascular']))
+        neurological = sofa_neurological(float(row['Neurological']))
+        renal = sofa_renal(float(row['Renal']))
+        sofa_score = calculate_sofa_score(respiratory, coagulation, liver, cardiovascular, neurological, renal)
 
-        emit('data_sofa_patient', row)
+        update_sofa_data = {
+            'sofa_score': sofa_score,
+            'respiratory': respiratory,
+            'coagulation': coagulation,
+            'liver': liver,
+            'cardiovascular': cardiovascular,
+            'neurological': neurological,
+            'renal': renal
+        }
+    
+        emit('data_sofa_patient', update_sofa_data)
 
-        socketio.sleep(10) 
+        socketio.sleep(1) 
 
         data_sofa_patient[icustayid] = (index + 1) % len(sofa_data)

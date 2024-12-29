@@ -49,14 +49,14 @@
     const sofaScoreChart = new Chart(sofaScoreCtx, {
       type: "line",
       data: {
-        labels: Array.from({ length: 35 }, () => ""),
+        labels: Array.from({ length: 20 }, () => ""),
         datasets: [
           {
             borderColor: "white",
             borderWidth: 2,
             fill: false,
-            tension: 0.4,
-            data: Array.from({ length: 35 }, () => 75),
+            tension: 0,
+            data: Array.from({ length: 20 }, () => 75),
           },
         ],
       },
@@ -91,14 +91,27 @@
 
     socket.on("data_sofa_patient", (sofa_data) => {
       console.log("Received data sofa patient:", sofa_data);
+      charts.sofaScoreChart.data.datasets[0].data.push(sofa_data.sofa_score);
+
+      if (charts.sofaScoreChart.data.datasets[0].data.length > 20) {
+        charts.sofaScoreChart.data.datasets[0].data.shift(); 
+      }
+      charts.sofaScoreChart.update(); 
+
+      localStorage.setItem(
+        "sofaScoreData",
+        JSON.stringify(charts.sofaScoreChart.data.datasets[0].data)
+      );
+      localStorage.setItem("sofaScoreValue", sofa_data.sofa_score);
+      localStorage.setItem("renalValue", sofa_data.renal);
+      localStorage.setItem("nervousValue", sofa_data.neurological);
+      localStorage.setItem("cardiovascularValue", sofa_data.cardiovascular);
+      localStorage.setItem("liverValue", sofa_data.liver);
+      localStorage.setItem("respirationValue", sofa_data.respiratory);
+      localStorage.setItem("coagulationValue", sofa_data.coagulation);
+
     });
 
-    socket.on("connect", () => {
-      console.log("Connected to WebSocket");
-      socket.emit("start_sofa_patient");
-    });
-
-    
 
     setInterval(() => {
       charts.sofaScoreChart.data.datasets[0].data = JSON.parse(
