@@ -1,16 +1,12 @@
-import random
-import math
-import csv
-
 patients = {
-    11.0: {"name": "Abdul Kirom", "age": "60 years old", "body_period": "169 cm 73 kg"},
-    12.0: {"name": "Dewi Rahmawati", "age": "45 years old", "body_period": "172 cm 68 kg"},
-    13.0: {"name": "Rizal Abdi", "age": "30 years old", "body_period": "160 cm 55 kg"},
-    14.0: {"name": "Lia Rahma", "age": "39 years old", "body_period": "180 cm 80 kg"},
-    15.0: {"name": "Prasetyo Putra", "age": "55 years old", "body_period": "176 cm 65 kg"},
-    16.0: {"name": "Aldo Akfar Rahma", "age": "49 years old", "body_period": "174 cm 73 kg"},
-    17.0: {"name": "Kusmita Suryah", "age": "48 years old", "body_period": "166 cm 63 kg"},
-    18.0: {"name": "Aldy Hamzah", "age": "68 years old", "body_period": "175 cm 80 kg"},
+    50100001: {"name": "Abdul Kirom", "age": "60 years old", "body_period": "169 cm 73 kg"},
+    50100002: {"name": "Dewi Rahmawati", "age": "45 years old", "body_period": "172 cm 68 kg"},
+    50100003: {"name": "Rizal Abdi", "age": "30 years old", "body_period": "160 cm 55 kg"},
+    50100004: {"name": "Lia Rahma", "age": "39 years old", "body_period": "180 cm 80 kg"},
+    50100005: {"name": "Prasetyo Putra", "age": "55 years old", "body_period": "176 cm 65 kg"},
+    50100006: {"name": "Aldo Akfar Rahma", "age": "49 years old", "body_period": "174 cm 73 kg"},
+    50100007: {"name": "Kusmita Suryah", "age": "48 years old", "body_period": "166 cm 63 kg"},
+    50100008: {"name": "Aldy Hamzah", "age": "68 years old", "body_period": "175 cm 80 kg"},
 }
 
 def read_detail_patient(icustayid):
@@ -20,14 +16,6 @@ def read_detail_patient(icustayid):
     else:
         return {"error": "Patient not found"}
 
-def read_data_vital_patient(file_path, icustayid):
-    data = []
-    with open(file_path, mode='r') as file:
-        csv_reader = csv.DictReader(file)
-        for row in csv_reader:
-            if float(row['icustayid']) == float(icustayid):
-                data.append(row)
-    return data
 
 def sofa_respiratory(pao2_fio2_ratio, ventilasi_mekanis=False):
     if pao2_fio2_ratio >= 400:
@@ -115,13 +103,6 @@ def sofa_renal(creatinine, urine_output=None):
         return 0
 
 
-def calculate_sofa_score(pao2_fio2_ratio, ventilasi_mekanis, platelet_count, bilirubin, map_value, vasopressor, gcs, creatinine, urine_output=None):
-    respiratory_score = sofa_respiratory(pao2_fio2_ratio, ventilasi_mekanis)
-    coagulation_score = sofa_coagulation(platelet_count)
-    liver_score = sofa_liver(bilirubin)
-    cardiovascular_score = sofa_cardiovascular(map_value, vasopressor)
-    neurological_score = sofa_neurological(gcs)
-    renal_score = sofa_renal(creatinine, urine_output)
-    
-    total_score = respiratory_score + coagulation_score + liver_score + cardiovascular_score + neurological_score + renal_score
-    return total_score
+def calculate_sofa_score(sofa_respiratory, sofa_coagulation, sofa_liver, sofa_cardiovascular, sofa_neurological, sofa_renal):
+    sofa_score = sofa_respiratory + sofa_coagulation + sofa_liver + sofa_cardiovascular + sofa_neurological + sofa_renal
+    return sofa_score
