@@ -1,8 +1,4 @@
-from app.data_global import icu_beds_values
-import random
-
-
-def physician_action(index):
+def physicianAction(index):
     physician_action = [
         ["0 ug/kg/h dose of vasopressor", "0 ml dose of iv fluid"],
         [">0-0.110 ug/kg/h dose of vasopressor", "0 ml dose of iv fluid"],
@@ -32,7 +28,7 @@ def physician_action(index):
     ]
     return physician_action[index]
 
-def ai_recommendation(index):
+def aiRecommendation(index):
     ai_recommendations = [
         ["0 ug/kg/h dose of vasopressor", "0 ml dose of iv fluid"],
         [">0-0.110 ug/kg/h dose of vasopressor", "0 ml dose of iv fluid"],

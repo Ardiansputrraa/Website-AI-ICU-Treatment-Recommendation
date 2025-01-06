@@ -49,14 +49,14 @@
     const sofaScoreChart = new Chart(sofaScoreCtx, {
       type: "line",
       data: {
-        labels: Array.from({ length: 20 }, () => ""),
+        labels: Array.from({ length: 25 }, () => ""),
         datasets: [
           {
             borderColor: "white",
             borderWidth: 2,
             fill: false,
             tension: 0,
-            data: Array.from({ length: 20 }, () => 75),
+            data: Array.from({ length: 25 }, () => 75),
           },
         ],
       },
@@ -93,7 +93,7 @@
       console.log("Received data sofa patient:", sofa_data);
       charts.sofaScoreChart.data.datasets[0].data.push(sofa_data.sofa_score);
 
-      if (charts.sofaScoreChart.data.datasets[0].data.length > 20) {
+      if (charts.sofaScoreChart.data.datasets[0].data.length > 25) {
         charts.sofaScoreChart.data.datasets[0].data.shift(); 
       }
       charts.sofaScoreChart.update(); 

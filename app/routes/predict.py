@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 import torch
 from flask_cors import CORS
 from app.data.deepQnet_v2 import Dist_DQN
+from app.services.treatment_recommendation_service import physicianAction, aiRecommendation 
 
 predict_ = Blueprint('predict', __name__)
 
@@ -37,8 +38,8 @@ def predict():
         rec_action = OptimalAction[current_state][0]
 
         return jsonify({
-            "Physician_Action": int(physician_action),
-            "Recommended_Action": int(rec_action)
+            "Physician_Action": physicianAction(int(physician_action)),
+            "Recommended_Action": aiRecommendation(int(rec_action))
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 400
@@ -93,7 +94,7 @@ def predict_qnet():
             predicted_action = torch.argmax(q_values).item()
 
         return jsonify({
-            "recommended_action_model_qnet": int(predicted_action)
+            "recommended_action_model_qnet": aiRecommendation(int(predicted_action))
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 400
