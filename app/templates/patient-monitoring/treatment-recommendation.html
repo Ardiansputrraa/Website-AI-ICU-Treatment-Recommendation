@@ -1,20 +1,10 @@
 <section
-  class="col-span-1 text-white bg-cyan-500 dark:bg-cyan-900 p-4 rounded-lg text-sm"
+  class="col-span-2 md:col-span-2 lg:col-span-2 sm:col-span-2 text-white bg-cyan-500 dark:bg-cyan-900 p-4 rounded-lg text-sm"
 >
   <h2 class="text-base font-bold pb-4">AI Recommendation</h2>
   <ul class="list-disc pl-5">
-    <li id="ai_recommendation_value">Illnesses: Polycythemia Vera</li>
-    <li id="ai_recommendation_value_">Illnesses: Polycythemia Vera</li>
-  </ul>
-</section>
-
-<section
-  class="col-span-1 text-white bg-cyan-500 dark:bg-cyan-900 p-4 rounded-lg text-sm"
->
-  <h2 class="text-base font-bold pb-4">Clinician Action</h2>
-  <ul class="list-disc pl-5">
-    <li id="physician_action_value">Illnesses: Polycythemia Vera</li>
-    <li id="physician_action_value_">Illnesses: Polycythemia Vera</li>
+    <li id="ai_recommendation_value" class="mb-4 font-semibold text-sm">Illnesses: Polycythemia Vera</li>
+    <li id="ai_recommendation_value_" class="font-semibold text-sm">Illnesses: Polycythemia Vera</li>
   </ul>
 </section>
 
@@ -29,7 +19,26 @@
 
     socket.on("data_monitoring_patient", (patient_data) => {
       console.log("Received data monitoring patient:", patient_data);
-      
+      $.ajax({
+        type: "POST",
+        url: "/predict-qnet",
+        contentType: "application/json",
+        data: JSON.stringify(patient_data),
+        success: function (response) {
+          console.log(response.recommended_action_model_qnet);
+          localStorage.setItem(
+            "aiRecommendation",
+            response.recommended_action_model_qnet
+          );
+          localStorage.setItem(
+            "aiRecommendation_",
+            response.recommended_action_model_qnet
+          );
+        },
+        error: function (error) {
+          console.error("Terjadi kesalahan:", error.responseJSON.error);
+        },
+      });
     });
 
     setInterval(() => {
@@ -37,10 +46,6 @@
         localStorage.getItem("aiRecommendation");
       document.getElementById("ai_recommendation_value_").innerText =
         localStorage.getItem("aiRecommendation_");
-      document.getElementById("physician_action_value").innerText =
-        localStorage.getItem("physicianAction");
-      document.getElementById("physician_action_value_").innerText =
-        localStorage.getItem("physicianAction_");
     }, 100);
   });
 </script>

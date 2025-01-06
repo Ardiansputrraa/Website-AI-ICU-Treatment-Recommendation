@@ -35,6 +35,6 @@ def handle_get_data(data):
 
         emit('data_monitoring_patient', row)
 
-        socketio.sleep(10) 
+        socketio.sleep(1) 
 
         data_monitoring_patient[icustayid] = (index + 1) % len(vital_data)
