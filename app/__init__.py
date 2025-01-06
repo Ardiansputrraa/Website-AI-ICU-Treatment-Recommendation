@@ -42,6 +42,8 @@ def create_app():
     
     from .websockets.data_prediction_socket import dataPredictionSocketio
     app.register_blueprint(dataPredictionSocketio)
-
+    
+    from .websockets.treatment_recommendation_socket import treatmentRecommendationSocketio
+    app.register_blueprint(treatmentRecommendationSocketio)
     
     return app

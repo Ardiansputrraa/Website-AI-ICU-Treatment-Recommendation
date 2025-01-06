@@ -20,28 +20,16 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
+    const socket = io("/monitoring_patient");
 
-    const socket = io();
+    socket.on("connect", () => {
+      console.log("Connected to data monitoring patient bed icu {{ bed_id }}");
+      socket.emit("get_data_monitoring_patient", { icustayid: "{{ bed_id }}" });
+    });
 
-    socket.on("treatment_recommendation_data", (treatment_recommendation_data) => {
-      if (treatment_recommendation_data.bed_id == "{{ bed_id }}") {
-        localStorage.setItem(
-          "aiRecommendation",
-          treatment_recommendation_data.treatment.ai_recommendations[0]
-        );
-        localStorage.setItem(
-          "aiRecommendation_",
-          treatment_recommendation_data.treatment.ai_recommendations[1]
-        );
-        localStorage.setItem(
-          "physicianAction",
-          treatment_recommendation_data.treatment.physician_action[0]
-        );
-        localStorage.setItem(
-          "physicianAction_",
-          treatment_recommendation_data.treatment.physician_action[1]
-        );
-      }
+    socket.on("data_monitoring_patient", (patient_data) => {
+      console.log("Received data monitoring patient:", patient_data);
+      
     });
 
     setInterval(() => {
