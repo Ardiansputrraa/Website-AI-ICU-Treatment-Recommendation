@@ -1,6 +1,5 @@
 from app.extensions import socketio
 from flask import Blueprint
-import csv
 from flask_socketio import emit
 from app.services.monitoring_patient_service import read_detail_patient, sofa_respiratory, sofa_coagulation, sofa_liver, sofa_cardiovascular, sofa_neurological, sofa_renal, calculate_sofa_score
 from app.services.read_csv_services import read_data_csv
