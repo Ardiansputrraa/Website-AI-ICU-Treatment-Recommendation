@@ -14,185 +14,45 @@
 
       <!-- Treatment Recommendation -->
       <section
-        class="col-span-1 md:col-span-6 lg:col-span-4 bg-slate-300 dark:bg-slate-800 p-4 rounded-lg"
+        class="col-span-1 md:col-span-6 gap-8 lg:col-span-4 bg-slate-300 dark:bg-slate-800 p-4 rounded-lg"
       >
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-          <!-- Recommended Treatments -->
-          <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow">
+      <h2 class="text-2xl font-bold mb-6 text-black dark:text-white p-4">
+        Treatment Recommendation
+      </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
+          <!-- Prediction Personalize -->
+          <div class="bg-white dark:bg-gray-900 p-8 rounded-lg shadow-xl text-black dark:text-white">
             <h3 class="text-xl font-semibold text-black dark:text-white mb-4">
-              Recommended Treatments
+              Prediction Personalize
             </h3>
-            <table class="w-full border-collapse">
-              <thead>
-                <tr class="bg-gray-200 dark:bg-gray-700">
-                  <th
-                    class="p-2 text-left text-sm font-bold text-black dark:text-white"
-                  >
-                    Drug Name
-                  </th>
-                  <th
-                    class="p-2 text-left text-sm font-bold text-black dark:text-white"
-                  >
-                    Strength
-                  </th>
-                  <th
-                    class="p-2 text-left text-sm font-bold text-black dark:text-white"
-                  >
-                    Dose
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="border-t dark:border-gray-800">
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    Tacrolimus
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    1mg Capsule
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">2mg</td>
-                </tr>
-                <tr class="border-t dark:border-gray-800">
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    Warfarin
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    5mg Tablet
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">5mg</td>
-                </tr>
-                <tr class="border-t dark:border-gray-800">
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    Heparin Sodium
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    25000 unit Premix Bag
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    25000 unit
-                  </td>
-                </tr>
-                <tr class="border-t dark:border-gray-800">
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    Furosemide
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    20mg Tablet
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">20mg</td>
-                </tr>
-                <tr class="border-t dark:border-gray-800">
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    Warfarin
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    Check with MD for Dose
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">1 dose</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="mt-4 flex items-center">
-              <input
-                type="text"
-                placeholder="Diagnosis details"
-                class="w-full p-2 bbg-gray-50 border border-cyan-500 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 dark:bg-gray-800 dark:border-cyan-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-600 dark:focus:border-cyan-600"
-              />
-              <button
-                class="ml-2 px-4 py-2 bg-cyan-500 dark:bg-cyan-600 text-white text-sm rounded-md hover:bg-cyan-600 dark:hover:bg-cyan-700"
-              >
-                SAVE
-              </button>
-            </div>
+            <ul class="list-disc pl-5 mt-6">
+              <li id="ai_recommendation_personalize" class="mb-4 font-semibold text-sm">Illnesses: Polycythemia Vera</li>
+              <li id="ai_recommendation_personalize_" class="font-semibold text-sm">Illnesses: Polycythemia Vera</li>
+            </ul>
           </div>
 
-          <!-- Recommended Medicines -->
-          <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow">
+          <!-- Prediction Generalize -->
+          <div class="bg-white dark:bg-gray-900 p-8 rounded-lg shadow-xl text-black dark:text-white">
             <h3 class="text-xl font-semibold text-black dark:text-white mb-4">
-              Recommended Medicines
+              Prediction Generalize
             </h3>
-            <table class="w-full border-collapse">
-              <thead>
-                <tr class="bg-gray-200 dark:bg-gray-700">
-                  <th
-                    class="p-2 text-left text-sm font-bold text-black dark:text-white"
-                  >
-                    Drug Name
-                  </th>
-                  <th
-                    class="p-2 text-left text-sm font-bold text-black dark:text-white"
-                  >
-                    Strength
-                  </th>
-                  <th
-                    class="p-2 text-left text-sm font-bold text-black dark:text-white"
-                  >
-                    Dose
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="border-t dark:border-gray-800">
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    Tacrolimus
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    1mg Capsule
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">2mg</td>
-                </tr>
-                <tr class="border-t dark:border-gray-800">
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    Warfarin
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    5mg Tablet
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">5mg</td>
-                </tr>
-                <tr class="border-t dark:border-gray-800">
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    Heparin Sodium
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    25000 unit Premix Bag
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    25000 unit
-                  </td>
-                </tr>
-                <tr class="border-t dark:border-gray-800">
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    Furosemide
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    20mg Tablet
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">20mg</td>
-                </tr>
-                <tr class="border-t dark:border-gray-800">
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    Warfarin
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">
-                    Check with MD for Dose
-                  </td>
-                  <td class="p-2 text-sm text-black dark:text-white">1 dose</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="mt-4 flex items-center">
-              <input
-                type="text"
-                placeholder="Diagnosis details"
-                class="w-full p-2 bbg-gray-50 border border-cyan-500 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 dark:bg-gray-800 dark:border-cyan-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-600 dark:focus:border-cyan-600"
-              />
-              <button
-                class="ml-2 px-4 py-2 bg-cyan-500 dark:bg-cyan-600 text-white text-sm rounded-md hover:bg-cyan-600 dark:hover:bg-cyan-700"
-              >
-                SAVE
-              </button>
-            </div>
+            <ul class="list-disc pl-5 mt-6">
+              <li id="ai_recommendation_generalize" class="mb-4 font-semibold text-sm">Illnesses: Polycythemia Vera</li>
+              <li id="ai_recommendation_generalize_" class="font-semibold text-sm">Illnesses: Polycythemia Vera</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-6 mt-4 p-4">
+          <!-- Recommended Treatments -->
+          <div class="bg-white dark:bg-gray-900 p-8 rounded-lg shadow-xl text-black dark:text-white">
+            <h3 class="text-xl font-semibold text-black dark:text-white mb-4">
+              Clincian Action
+            </h3>
+            <ul class="list-disc pl-5 mt-6">
+              <li id="ai_recommendation_clincian" class="mb-4 font-semibold text-sm">Illnesses: Polycythemia Vera</li>
+              <li id="ai_recommendation_clincian_" class="font-semibold text-sm">Illnesses: Polycythemia Vera</li>
+            </ul>
           </div>
         </div>
       </section>
@@ -216,3 +76,24 @@
     </footer>
   </body>
 </html>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    setInterval(() => {
+      document.getElementById("ai_recommendation_personalize").innerText =
+        localStorage.getItem("aiRecommendationPersonalize");
+      document.getElementById("ai_recommendation_personalize_").innerText =
+        localStorage.getItem("aiRecommendationPersonalize_");
+
+        document.getElementById("ai_recommendation_generalize").innerText =
+        localStorage.getItem("aiRecommendationGeneralize");
+      document.getElementById("ai_recommendation_generalize_").innerText =
+        localStorage.getItem("aiRecommendationGeneralize_");
+
+        document.getElementById("ai_recommendation_clincian").innerText =
+        localStorage.getItem("clincianAction");
+      document.getElementById("ai_recommendation_clincian_").innerText =
+        localStorage.getItem("clincianAction_");
+    }, 10);
+  });
+</script>

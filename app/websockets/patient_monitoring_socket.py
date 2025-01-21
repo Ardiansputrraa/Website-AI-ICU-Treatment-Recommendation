@@ -96,6 +96,9 @@ def handle_get_data(data):
     
         emit('data_sofa_patient', update_sofa_data)
 
-        socketio.sleep(1) 
+        if sofa_score > 6:
+            emit('notification', {'message': 'Sofa Score melebihi batas!', 'sofa_score': sofa_score})
+            
+        socketio.sleep(10) 
 
         data_sofa_patient[icustayid] = (index + 1) % len(sofa_data)

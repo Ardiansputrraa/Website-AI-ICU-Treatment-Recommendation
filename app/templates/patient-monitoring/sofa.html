@@ -43,95 +43,130 @@
 </section>
 
 <script>
-  function initializeSofaChart() {
-    const sofaScoreCtx = document.getElementById("sofaScore").getContext("2d");
+    function initializeSofaChart() {
+      const sofaScoreCtx = document.getElementById("sofaScore").getContext("2d");
 
-    const sofaScoreChart = new Chart(sofaScoreCtx, {
-      type: "line",
-      data: {
-        labels: Array.from({ length: 25 }, () => ""),
-        datasets: [
-          {
-            borderColor: "white",
-            borderWidth: 2,
-            fill: false,
-            tension: 0,
-            data: Array.from({ length: 25 }, () => 75),
+      const sofaScoreChart = new Chart(sofaScoreCtx, {
+        type: "line",
+        data: {
+          labels: Array.from({ length: 25 }, () => ""),
+          datasets: [
+            {
+              borderColor: "white",
+              borderWidth: 2,
+              fill: false,
+              tension: 0,
+              data: Array.from({ length: 25 }, () => 75),
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          animation: false,
+          plugins: {
+            legend: { display: false },
           },
-        ],
-      },
-      options: {
-        responsive: true,
-        animation: false,
-        plugins: {
-          legend: { display: false },
+          scales: {
+            x: { display: false },
+            y: { display: false },
+          },
+          elements: {
+            point: { radius: 0 },
+          },
         },
-        scales: {
-          x: { display: false },
-          y: { display: false },
-        },
-        elements: {
-          point: { radius: 0 },
-        },
-      },
+      });
+
+      return { sofaScoreChart };
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const charts = initializeSofaChart();
+
+      const socket = io("/sofa_patient");
+
+      socket.on("connect", () => {
+        console.log("Connected to data sofa score patient bed icu {{ bed_id }}");
+        socket.emit("get_data_sofa_patient", { icustayid: "{{ bed_id }}" });
+      });
+
+      socket.on("data_sofa_patient", (sofa_data) => {
+        console.log("Received data sofa patient:", sofa_data);
+        charts.sofaScoreChart.data.datasets[0].data.push(sofa_data.sofa_score);
+
+        if (charts.sofaScoreChart.data.datasets[0].data.length > 25) {
+          charts.sofaScoreChart.data.datasets[0].data.shift();
+        }
+        charts.sofaScoreChart.update();
+
+        localStorage.setItem(
+          "sofaScoreData",
+          JSON.stringify(charts.sofaScoreChart.data.datasets[0].data)
+        );
+        localStorage.setItem("sofaScoreValue", sofa_data.sofa_score);
+        localStorage.setItem("renalValue", sofa_data.renal);
+        localStorage.setItem("nervousValue", sofa_data.neurological);
+        localStorage.setItem("cardiovascularValue", sofa_data.cardiovascular);
+        localStorage.setItem("liverValue", sofa_data.liver);
+        localStorage.setItem("respirationValue", sofa_data.respiratory);
+        localStorage.setItem("coagulationValue", sofa_data.coagulation);
+
+          showNotification(sofa_data.sofa_score);
+
+
+      });
+
+
+      setInterval(() => {
+        charts.sofaScoreChart.data.datasets[0].data = JSON.parse(
+          localStorage.getItem("sofaScoreData")
+        );
+        charts.sofaScoreChart.update();
+        document.getElementById("sofa_score_value").innerText =
+          localStorage.getItem("sofaScoreValue");
+        document.getElementById("renal_value").innerText =
+          localStorage.getItem("renalValue");
+        document.getElementById("nervous_value").innerText =
+          localStorage.getItem("nervousValue");
+        document.getElementById("cardiovascular_value").innerText =
+          localStorage.getItem("cardiovascularValue");
+        document.getElementById("liver_value").innerText =
+          localStorage.getItem("liverValue");
+        document.getElementById("respiration_value").innerText =
+          localStorage.getItem("respirationValue");
+        document.getElementById("coagulation_value").innerText =
+          localStorage.getItem("coagulationValue");
+      }, 10);
     });
 
-    return { sofaScoreChart };
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const charts = initializeSofaChart();
-
-    const socket = io("/sofa_patient");
-
-    socket.on("connect", () => {
-      console.log("Connected to data sofa score patient bed icu {{ bed_id }}");
-      socket.emit("get_data_sofa_patient", { icustayid: "{{ bed_id }}" });
-    });
-
-    socket.on("data_sofa_patient", (sofa_data) => {
-      console.log("Received data sofa patient:", sofa_data);
-      charts.sofaScoreChart.data.datasets[0].data.push(sofa_data.sofa_score);
-
-      if (charts.sofaScoreChart.data.datasets[0].data.length > 25) {
-        charts.sofaScoreChart.data.datasets[0].data.shift(); 
+    function showNotification(sofaScore) {
+      if (sofaScore > 8) {
+        const audio = new Audio('{{ url_for("static", filename="src/audio/notification.mp3") }}');
+      audio.play();
+    
+      Swal.fire({
+        title: "Emergency!",
+        text: `Patient in room icu ${id} is on critical condition`,
+        icon: "warning",
+        showConfirmButton: false,  
+        allowOutsideClick: false,
+        timer: 0,
+        customClass: {
+          title: "text-xl font-bold text-black dark:text-white",
+          content: "text-sm text-gray-700 dark:text-white",
+          popup: "bg-gray-100 dark:bg-gray-900 border-none rounded-lg shadow-lg",
+        },
+      });
+        const checkCondition = setInterval(() => {
+          if (sofaScore <= 8) {
+            clearInterval(checkCondition); 
+            Swal.close();
+            audio.pause(); 
+          }
+        }, 10); 
+      } else {
+        Swal.close();
+        audio.pause();
       }
-      charts.sofaScoreChart.update(); 
-
-      localStorage.setItem(
-        "sofaScoreData",
-        JSON.stringify(charts.sofaScoreChart.data.datasets[0].data)
-      );
-      localStorage.setItem("sofaScoreValue", sofa_data.sofa_score);
-      localStorage.setItem("renalValue", sofa_data.renal);
-      localStorage.setItem("nervousValue", sofa_data.neurological);
-      localStorage.setItem("cardiovascularValue", sofa_data.cardiovascular);
-      localStorage.setItem("liverValue", sofa_data.liver);
-      localStorage.setItem("respirationValue", sofa_data.respiratory);
-      localStorage.setItem("coagulationValue", sofa_data.coagulation);
-
-    });
-
-
-    setInterval(() => {
-      charts.sofaScoreChart.data.datasets[0].data = JSON.parse(
-        localStorage.getItem("sofaScoreData")
-      );
-      charts.sofaScoreChart.update();
-      document.getElementById("sofa_score_value").innerText =
-        localStorage.getItem("sofaScoreValue");
-      document.getElementById("renal_value").innerText =
-        localStorage.getItem("renalValue");
-      document.getElementById("nervous_value").innerText =
-        localStorage.getItem("nervousValue");
-      document.getElementById("cardiovascular_value").innerText =
-        localStorage.getItem("cardiovascularValue");
-      document.getElementById("liver_value").innerText =
-        localStorage.getItem("liverValue");
-      document.getElementById("respiration_value").innerText =
-        localStorage.getItem("respirationValue");
-      document.getElementById("coagulation_value").innerText =
-        localStorage.getItem("coagulationValue");
-    }, 100);
-  });
+    }
+    
 </script>
