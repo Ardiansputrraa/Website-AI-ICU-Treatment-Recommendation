@@ -1,14 +1,36 @@
 <section
-  class="col-span-2 md:col-span-2 lg:col-span-2 sm:col-span-2 text-white bg-cyan-500 dark:bg-cyan-900 p-4 rounded-lg text-sm"
+  class="bg-cyan-500 dark:bg-cyan-900 text-white p-4 rounded-lg shadow-md h-[200px] flex flex-col"
 >
-  <h2 class="text-base font-bold pb-4">AI Recommendation</h2>
+  <h2 class="text-base font-bold pb-4">AI Recommendation Personalize</h2>
   <ul class="list-disc pl-5">
-    <li id="ai_recommendation_value" class="mb-4 font-semibold text-sm">Illnesses: Polycythemia Vera</li>
-    <li id="ai_recommendation_value_" class="font-semibold text-sm">Illnesses: Polycythemia Vera</li>
+    <li id="ai_recommendation_value" class="mb-4 font-semibold text-sm">
+      Illnesses: Polycythemia Vera
+    </li>
+    <li id="ai_recommendation_value_" class="font-semibold text-sm">
+      Illnesses: Polycythemia Vera
+    </li>
+  </ul>
+</section>
+
+<section
+  class="bg-cyan-500 dark:bg-cyan-900 text-white p-4 rounded-lg shadow-md h-[200px] flex flex-col"
+>
+  <h2 class="text-base font-bold pb-4">AI Recommendation Generalize</h2>
+  <ul class="list-disc pl-5">
+    <li
+      id="ai_recommendation_value_generalize"
+      class="mb-4 font-semibold text-sm"
+    >
+      Illnesses: Polycythemia Vera
+    </li>
+    <li id="ai_recommendation_value_generalize_" class="font-semibold text-sm">
+      Illnesses: Polycythemia Vera
+    </li>
   </ul>
 </section>
 
 <script>
+  let dataInput = {};
   document.addEventListener("DOMContentLoaded", () => {
     const socket = io("/monitoring_patient");
 
@@ -21,18 +43,107 @@
       console.log("Received data monitoring patient:", patient_data);
       $.ajax({
         type: "POST",
-        url: "/predict-qnet",
+        url: "/predict-personalize",
         contentType: "application/json",
         data: JSON.stringify(patient_data),
         success: function (response) {
-          console.log(response.recommended_action_model_qnet);
+          console.log(response.recommended_action_model_personalize);
           localStorage.setItem(
-            "aiRecommendation",
-            response.recommended_action_model_qnet
+            "aiRecommendationPersonalize",
+            response.recommended_action_model_personalize[0]
           );
           localStorage.setItem(
-            "aiRecommendation_",
-            response.recommended_action_model_qnet
+            "aiRecommendationPersonalize_",
+            response.recommended_action_model_personalize[1]
+          );
+        },
+        error: function (error) {
+          console.error("Terjadi kesalahan:", error.responseJSON.error);
+        },
+      });
+
+      $.ajax({
+        type: "POST",
+        url: "/predict-generalize",
+        contentType: "application/json",
+        data: JSON.stringify(patient_data),
+        success: function (response) {
+          console.log(response.recommended_action_model_generalize);
+          localStorage.setItem(
+            "aiRecommendationGeneralize",
+            response.recommended_action_model_generalize[0]
+          );
+          localStorage.setItem(
+            "aiRecommendationGeneralize_",
+            response.recommended_action_model_generalize[1]
+          );
+        },
+        error: function (error) {
+          console.error("Terjadi kesalahan:", error.responseJSON.error);
+        },
+      });
+      dataInput = {
+        gender: patient_data.gender,
+        mechvent: patient_data.mechvent,
+        max_dose_vaso: patient_data.max_dose_vaso,
+        re_admission: patient_data.re_admission,
+        age: patient_data.age,
+        Weight_kg: patient_data.Weight_kg,
+        GCS: patient_data.GCS,
+        HR: patient_data.HR,
+        SysBP: patient_data.SysBP,
+        MeanBP: patient_data.MeanBP,
+        DiaBP: patient_data.DiaBP,
+        RR: patient_data.RR,
+        Temp_C: patient_data.Temp_C,
+        FiO2_1: patient_data.FiO2_1,
+        Potassium: patient_data.Potassium,
+        Sodium: patient_data.Sodium,
+        Chloride: patient_data.Chloride,
+        Glucose: patient_data.Glucose,
+        Magnesium: patient_data.Magnesium,
+        Calcium: patient_data.Calcium,
+        Hb: patient_data.Hb,
+        WBC_count: patient_data.WBC_count,
+        Platelets_count: patient_data.Platelets_count,
+        PTT: patient_data.PTT,
+        PT: patient_data.PT,
+        Arterial_pH: patient_data.Arterial_pH,
+        paO2: patient_data.paO2,
+        paCO2: patient_data.paCO2,
+        Arterial_BE: patient_data.Arterial_BE,
+        HCO3: patient_data.HCO3,
+        Arterial_lactate: patient_data.Arterial_lactate,
+        SOFA: patient_data.SOFA,
+        SIRS: patient_data.SIRS,
+        Shock_Index: patient_data.Shock_Index,
+        PaO2_FiO2: patient_data.PaO2_FiO2,
+        cumulated_balance: patient_data.cumulated_balance,
+        SpO2: patient_data.SpO2,
+        BUN: patient_data.BUN,
+        Creatinine: patient_data.Creatinine,
+        SGOT: patient_data.SGOT,
+        SGPT: patient_data.SGPT,
+        Total_bili: patient_data.Total_bili,
+        INR: patient_data.INR,
+        input_total: patient_data.input_total,
+        input_4hourly: patient_data.input_4hourly,
+        output_total: patient_data.output_total,
+        output_4hourly: patient_data.output_4hourly,
+      };
+      $.ajax({
+        type: "POST",
+        url: "/predict",
+        contentType: "application/json",
+        data: JSON.stringify(dataInput),
+        success: function (response) {
+          localStorage.setItem(
+            "clincianAction",
+            response.Physician_Action[0]
+          );
+          localStorage.setItem(
+            "clincianAction_",
+            response.Physician_Action[1]
           );
         },
         error: function (error) {
@@ -43,9 +154,14 @@
 
     setInterval(() => {
       document.getElementById("ai_recommendation_value").innerText =
-        localStorage.getItem("aiRecommendation");
+        localStorage.getItem("aiRecommendationPersonalize");
       document.getElementById("ai_recommendation_value_").innerText =
-        localStorage.getItem("aiRecommendation_");
-    }, 100);
+        localStorage.getItem("aiRecommendationPersonalize_");
+
+      document.getElementById("ai_recommendation_value_generalize").innerText =
+        localStorage.getItem("aiRecommendationGeneralize");
+      document.getElementById("ai_recommendation_value_generalize_").innerText =
+        localStorage.getItem("aiRecommendationGeneralize_");
+    }, 10);
   });
 </script>
