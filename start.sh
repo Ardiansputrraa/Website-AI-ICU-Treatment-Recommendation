@@ -14,5 +14,9 @@ fi
 
 $VIRTUALENV/bin/pip install -r requirements.txt
 
+if [ -f tailwind.config.js ]; then
+  echo "Building Tailwind CSS..."
+  npx tailwindcss -i ./src/input.css -o ./static/output.css --watch &
+fi
+
 $VIRTUALENV/bin/python3 app.py
-Footer
