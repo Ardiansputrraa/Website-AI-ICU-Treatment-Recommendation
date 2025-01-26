@@ -77,23 +77,3 @@
   </body>
 </html>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    setInterval(() => {
-      document.getElementById("ai_recommendation_personalize").innerText =
-        localStorage.getItem("aiRecommendationPersonalize");
-      document.getElementById("ai_recommendation_personalize_").innerText =
-        localStorage.getItem("aiRecommendationPersonalize_");
-
-        document.getElementById("ai_recommendation_generalize").innerText =
-        localStorage.getItem("aiRecommendationGeneralize");
-      document.getElementById("ai_recommendation_generalize_").innerText =
-        localStorage.getItem("aiRecommendationGeneralize_");
-
-        document.getElementById("ai_recommendation_clincian").innerText =
-        localStorage.getItem("clincianAction");
-      document.getElementById("ai_recommendation_clincian_").innerText =
-        localStorage.getItem("clincianAction_");
-    }, 10);
-  });
-</script>
