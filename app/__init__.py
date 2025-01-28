@@ -7,7 +7,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     
-    client = MongoClient(app.config['MONGODB_URI'])
+    client = MongoClient(app.config['MONGODB_URL'])
     app.db = client[app.config['DBNAME']]
     
     from .routes.auth import auth_
