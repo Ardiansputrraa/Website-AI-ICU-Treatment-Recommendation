@@ -1,7 +1,6 @@
 from flask import Blueprint
 from flask_socketio import emit
 from app.services.data_prediction_service import generate_heart_rate, generate_oxygen_saturation, generate_respiratory_rate
-from app.middleware.authenticate import token_required
 from app.extensions import socketio
 import time
 
@@ -28,4 +27,4 @@ def handle_get_data():
         emit('data_prediction_vital_patient', data, namespace='/vital_patient_prediction')
 
         global_time += 1
-        time.sleep(1)  
+        time.sleep(5)  

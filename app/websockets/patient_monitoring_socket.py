@@ -3,7 +3,6 @@ from flask import Blueprint
 from flask_socketio import emit
 from app.services.monitoring_patient_service import read_detail_patient, sofa_respiratory, sofa_coagulation, sofa_liver, sofa_cardiovascular, sofa_neurological, sofa_renal, calculate_sofa_score
 from app.services.read_csv_services import read_data_csv
-from app.middleware.authenticate import token_required
 
 patientMonitoringSocketio = Blueprint('patient_monitoring', __name__)
 
@@ -49,7 +48,7 @@ def handle_get_data(data):
 
         emit('data_vital_patient', row)
 
-        socketio.sleep(10) 
+        socketio.sleep(5) 
 
         data_vital_patient[icustayid] = (index + 1) % len(vital_data)
         
@@ -99,6 +98,6 @@ def handle_get_data(data):
         if sofa_score > 6:
             emit('notification', {'message': 'Sofa Score melebihi batas!', 'sofa_score': sofa_score})
             
-        socketio.sleep(10) 
+        socketio.sleep(5) 
 
         data_sofa_patient[icustayid] = (index + 1) % len(sofa_data)

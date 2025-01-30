@@ -13,7 +13,7 @@
       <canvas id="sofaScore" class="w-[90%] h-[70px]"></canvas>
     </div>
     <!-- Detail Skor -->
-    <div class="grid grid-cols-3 gap-2 text-[8px] text-center mt-1">
+    <div class="grid grid-cols-3 gap-2 text-[6px] text-center mt-1">
       <div>
         <span class="font-semibold">Renal:</span>
         <span id="renal_value">3</span>
@@ -41,6 +41,8 @@
     </div>
   </div>
 </section>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     function initializeSofaChart() {
@@ -138,35 +140,45 @@
       }, 10);
     });
 
+    let audio = null;
+
     function showNotification(sofaScore) {
       if (sofaScore > 8) {
-        const audio = new Audio('{{ url_for("static", filename="src/audio/notification.mp3") }}');
-      audio.play();
+        audio = new Audio('{{ url_for("static", filename="src/audio/notification.mp3") }}');
+        audio.play();
     
-      Swal.fire({
-        title: "Emergency!",
-        text: `Patient in room icu ${id} is on critical condition`,
-        icon: "warning",
-        showConfirmButton: false,  
-        allowOutsideClick: false,
-        timer: 0,
-        customClass: {
-          title: "text-xl font-bold text-black dark:text-white",
-          content: "text-sm text-gray-700 dark:text-white",
-          popup: "bg-gray-100 dark:bg-gray-900 border-none rounded-lg shadow-lg",
-        },
-      });
+        Swal.fire({
+          title: "Emergency!",
+          text: `Patient in room ICU this in critical condition`,
+          icon: "warning",
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          timer: 0,
+          customClass: {
+            title: "text-xl font-bold text-black dark:text-white",
+            content: "text-sm text-gray-700 dark:text-white",
+            popup: "bg-gray-100 dark:bg-gray-900 border-none rounded-lg shadow-lg",
+          },
+        });
+    
         const checkCondition = setInterval(() => {
           if (sofaScore <= 8) {
-            clearInterval(checkCondition); 
+            clearInterval(checkCondition);
             Swal.close();
-            audio.pause(); 
+            if (audio) {
+              audio.pause();
+              audio.currentTime = 0;
+            }
           }
-        }, 10); 
+        }, 100);
       } else {
         Swal.close();
-        audio.pause();
+        if (audio) {
+          audio.pause();
+          audio.currentTime = 0;
+        }
       }
     }
+    
     
 </script>
