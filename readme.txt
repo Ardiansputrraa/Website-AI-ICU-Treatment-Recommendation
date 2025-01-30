@@ -8,11 +8,9 @@ aktifkan virtual environment
 
 install beberapa library yang dibutuhkan untuk virtual environment
 - pip install Flask requests pymongo dnspython certifi pyjwt pandas
-- pip install flask-cors gunicorn 
-- pip install python-dotenv
-- pip install pydantic
-- pip install scikit-learn
-- pip install flask-socketio
+- pip install flask-cors gunicorn python-dotenv pydantic flask-socketio
+- pip install scikit-learn==1.6.0
+- pip install torch torchvision torchaudio
 
 
 selanjutnya run file app.py

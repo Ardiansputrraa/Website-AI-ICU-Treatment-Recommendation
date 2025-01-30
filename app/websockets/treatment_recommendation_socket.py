@@ -2,7 +2,6 @@ from app.extensions import socketio
 from flask import Blueprint
 from flask_socketio import emit
 from app.services.read_csv_services import read_data_csv
-from app.middleware.authenticate import token_required
 
 treatmentRecommendationSocketio = Blueprint('treatment_recommendation', __name__)
 
@@ -35,6 +34,6 @@ def handle_get_data(data):
 
         emit('data_monitoring_patient', row)
 
-        socketio.sleep(1) 
+        socketio.sleep(5) 
 
         data_monitoring_patient[icustayid] = (index + 1) % len(vital_data)
