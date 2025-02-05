@@ -32,9 +32,7 @@
 <script>
   let dataInput = {};
   document.addEventListener("DOMContentLoaded", () => {
-    const socket = io("/monitoring_patient", {
-      transports: ["websocket", "polling"]
-  });
+    const socket = io("/monitoring_patient");
 
     socket.on("connect", () => {
       console.log("Connected to data monitoring patient bed icu {{ bed_id }}");
