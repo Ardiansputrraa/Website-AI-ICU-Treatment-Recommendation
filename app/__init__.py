@@ -46,3 +46,5 @@ def create_app():
     app.register_blueprint(treatmentRecommendationSocketio)
     
     return app
+
+app = create_app()
