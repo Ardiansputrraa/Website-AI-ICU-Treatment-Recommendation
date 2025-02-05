@@ -25,7 +25,6 @@ def create_app():
     from .routes.vital_prediction import prediction_
     app.register_blueprint(prediction_)
     
-    
     from .routes.patient_treatment import treatments_
     app.register_blueprint(treatments_)
     
@@ -35,8 +34,8 @@ def create_app():
     from .routes.predict import predict_
     app.register_blueprint(predict_)
     
-    socketio.init_app(app)
-    
+    socketio.init_app(app, cors_allowed_origins="*", engineio_logger=True, logger=True)
+
     from .websockets.patient_monitoring_socket import patientMonitoringSocketio
     app.register_blueprint(patientMonitoringSocketio)
     
@@ -47,5 +46,3 @@ def create_app():
     app.register_blueprint(treatmentRecommendationSocketio)
     
     return app
-
-# app = create_app()
