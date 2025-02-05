@@ -4,9 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-    SECRET_KEY = os.environ.get("SECRET_KEY")
-    TOKEN_KEY = os.environ.get("TOKEN_KEY")
-    MONGODB_URL = os.environ.get("MONGODB_URL")
-  
-    DBNAME = os.environ.get("DB_NAME")
-
+    SECRET_KEY = os.getenv("SECRET_KEY")
+    TOKEN_KEY = os.getenv("TOKEN_KEY")
+    MONGODB_URL = os.getenv("MONGODB_URL")  
+    DBNAME = os.getenv("DB_NAME")
