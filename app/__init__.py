@@ -2,11 +2,12 @@ from flask import Flask
 from config import Config
 from app.extensions import socketio
 from pymongo import MongoClient
+from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-    
+    CORS(app, resources={r"/*": {"origins": "*"}})
     client = MongoClient(app.config['MONGODB_URL'])
     app.db = client[app.config['DBNAME']]
     
